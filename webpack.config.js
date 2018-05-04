@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 module.exports = {
   target: "web",
@@ -44,6 +45,7 @@ module.exports = {
   plugins: [
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new StyleLintPlugin()
+    new StyleLintPlugin(),
+    new LiveReloadPlugin()
   ]
 };
