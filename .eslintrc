@@ -3,6 +3,8 @@
   "rules": {
     "comma-dangle": ["error", "never"],
     "no-console": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "global-require": "off"
   }
 }

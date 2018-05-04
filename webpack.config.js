@@ -6,7 +6,7 @@ module.exports = {
   cache: true,
   entry: [
     './src/main.js',
-    'webpack-hot-middleware/client?path=http://localhost:3030/__webpack_hmr'
+    'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr'
   ],
   output: {
     filename: 'build.js'
