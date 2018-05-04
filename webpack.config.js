@@ -1,5 +1,7 @@
+const webpack = require('webpack');
+
 module.exports = {
-  entry: './src/azaaz.js',
+  entry: './src/main.js',
   output: {
     filename: 'build.js'
   },
@@ -9,5 +11,9 @@ module.exports = {
         test: /\.js$/
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin()
+  ]
 };
