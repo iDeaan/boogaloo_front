@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node_modules/.bin/webpack --config webpack.config.js --display-error-details",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "stylelint": "stylelint '**/*.scss'",
+    "stylelint-fix": "stylelint --fix '**/*.scss'"
   },
   "author": "iDeaan",
   "license": "ISC",
