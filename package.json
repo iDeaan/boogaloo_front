@@ -1,0 +1,21 @@
+{
+  "name": "boogaloo_front",
+  "version": "1.0.0",
+  "description": "Boogaloo Front ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node_modules/.bin/webpack --config webpack.config.js --display-error-details",
+    "dev": "nodemon ./bin/www"
+  },
+  "author": "iDeaan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.1.2"
+  }
+}
