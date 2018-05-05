@@ -15,7 +15,7 @@ export default class App extends Component {
         <div className="app-content">
           <Menu />
           <div className="content">
-            HELLO WORLD
+            {this.props.children}
           </div>
         </div>
       </div>
