@@ -13,6 +13,9 @@ import {
     Route,
     browserHistory
 } from 'react-router-dom';
+
+import routes from './routes';
+
 // import { Router, Route, browserHistory } from 'react-router'
 // import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
@@ -37,7 +40,7 @@ import {
 // );
 
 ReactDOM.render(
-  <Foo />,
+  routes(),
   document.getElementById('root')
 );
 /* eslint-enable */

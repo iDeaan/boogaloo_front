@@ -14,14 +14,18 @@ import Foo from './src/components/Foo';
 import Html from './src/helpers/Html';
 
 
+import routes from './src/routes';
+console.log('routes', routes())
+// @TODO: move to src
+
 // app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('dist'));
 // app.use(express.static('public'));
 // app.use(express.static(__dirname + '/public'));
-app.get('/', function(req, res) {
+app.get('*', function(req, res) {
   res.send(renderToString(
     <Html>
-      <Foo />
+      {routes(true, req)}
     </Html>
   ));
 });
