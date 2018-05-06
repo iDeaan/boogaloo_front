@@ -4,14 +4,14 @@ const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 module.exports = {
   target: "web",
-  cache: true,
   entry: [
-    './src/main.js',
+    './src/client.js',
     'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr'
   ],
   output: {
     filename: 'build.js'
   },
+  // hot: true,
   module: {
     rules: [
       {

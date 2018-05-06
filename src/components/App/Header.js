@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 
 export default class Header extends PureComponent {
   render() {
-    require('./Header.scss');
+    // require('./Header.scss');
     return (
       <header className="app-header">
         <div className="logo">

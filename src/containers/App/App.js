@@ -8,7 +8,7 @@ export default class App extends Component {
   }
 
   render() {
-    require('./App.scss');
+    // require('./App.scss');
     return (
       <div className="app-container">
         <Header />
