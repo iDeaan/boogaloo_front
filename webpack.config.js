@@ -30,6 +30,9 @@ module.exports = {
         test: /\.scss$/,
         use: [
           {
+            loader: 'isomorphic-style-loader',
+          },
+          {
             loader: "style-loader" // creates style nodes from JS strings
           },
           {
