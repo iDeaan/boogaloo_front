@@ -1,38 +1,8 @@
-require('babel-register')({
-  presets: ['react', 'es2015']
-});
-
-var express = require('express');
-const path = require('path');
-var app = express();
-var React = require('react');
-var ReactDOMServer = require('react-dom/server');
-
-
-import { renderToString } from "react-dom/server"
-import Foo from './src/components/Foo';
-import Html from './src/helpers/Html';
-
-
-import routes from './src/routes';
-console.log('routes', routes())
-// @TODO: move to src
-
-// app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static('dist'));
-app.use(express.static('public'));
-// app.use(express.static(__dirname + '/public'));
-app.get('*', function(req, res) {
-  res.send(renderToString(
-    <Html>
-      {routes(true, req)}
-    </Html>
-  ));
-});
-
-
-
-var PORT = 3000;
-app.listen(PORT, function() {
-  console.log('http://localhost:' + PORT);
-});
+var path = require('path');
+var rootDir = path.resolve(__dirname);
+var WebpackIsomorphicTools = require('webpack-isomorphic-tools');
+global.webpackIsomorphicTools = new WebpackIsomorphicTools(require('./webpack-isomorphic-tools'))
+//  .development(__DEVELOPMENT__)
+  .server(rootDir, function() {
+    require('./_server');
+  });

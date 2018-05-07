@@ -1,6 +1,8 @@
 const webpack = require('webpack');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
+var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
+var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
 
 module.exports = {
   target: "web",
@@ -48,6 +50,7 @@ module.exports = {
   plugins: [
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    webpackIsomorphicToolsPlugin.development(),
     new StyleLintPlugin(),
     new LiveReloadPlugin()
   ]
