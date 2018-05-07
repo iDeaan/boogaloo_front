@@ -9,6 +9,7 @@ export default class Html extends PureComponent {
       </head>
       <body>
         <div id="root">{this.props.children}</div>
+        <script src="dlls/vendor.dll.js" charSet="UTF-8" />
         <script src="build.js" charSet="UTF-8" />
       </body>
       </html>

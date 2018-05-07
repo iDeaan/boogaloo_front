@@ -52,6 +52,10 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     webpackIsomorphicToolsPlugin.development(),
     new StyleLintPlugin(),
-    new LiveReloadPlugin()
+    new LiveReloadPlugin(),
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: require('./dist/dlls/vendor.json')
+    })
   ]
 };

@@ -9,7 +9,8 @@
     "start-server": "node_modules/.bin/babel-node server.js",
     "dev": "NODE_ENV=development concurrently  \"npm run build\" \"npm run start-server\"",
     "stylelint": "stylelint '**/*.scss'",
-    "stylelint-fix": "stylelint --fix '**/*.scss'"
+    "stylelint-fix": "stylelint --fix '**/*.scss'",
+    "build-dlls": "node_modules/.bin/webpack --colors --display-error-details --config library.webpack.config.js"
   },
   "author": "iDeaan",
   "license": "ISC",
