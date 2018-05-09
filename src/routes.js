@@ -9,11 +9,13 @@ import {
     Route,
     browserHistory
 } from 'react-router-dom';
+import { ConnectedRouter } from 'react-router-redux';
 
-export default (isServer = false, req) => {
+
+export default (isServer = false, req, history) => {
   if (isServer) {
     return (
-      <StaticRouter history={browserHistory} location={req.url}>
+      <StaticRouter history={history} location={req.url}>
         <App>
           <Route path='/foo' component={Foo} />
           <Route path='/bar' component={Bar} />
@@ -22,7 +24,7 @@ export default (isServer = false, req) => {
     );
   }
   return (
-    <Router history={browserHistory}>
+    <Router history={history}>
       <App>
         <Route path='/foo' component={Foo} />
         <Route path='/bar' component={Bar} />
