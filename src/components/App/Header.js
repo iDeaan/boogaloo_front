@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { increment } from '../../redux/modules/counter';
+import { signIn } from '../../redux/modules/auth';
 
 @connect(
   state => ({
@@ -20,6 +21,12 @@ export default class Header extends PureComponent {
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
+
+  componentDidMount() {
+    const { dispatch } = this.context.store;
+    console.log('componentDidMount');
+    dispatch(signIn());
+  }
 
   render() {
     const { counter } = this.props;

@@ -31,6 +31,8 @@ import { routerMiddleware } from 'react-router-redux'
 
 import reducer from './src/redux/modules/reducer';
 
+import clientMiddleware from './src/redux/middleware/clientMiddleware';
+import ApiClient from './src/helpers/ApiClient';
 
 
 
@@ -50,10 +52,13 @@ app.use(express.static('dist'));
 app.use(express.static('public'));
 // app.use(express.static(__dirname + '/public'));
 app.get('*', function(req, res) {
-
+  const client = new ApiClient(req);
   const history = createMemoryHistory();
-  const middleware = routerMiddleware(history);
-  const store = createStore(reducer, applyMiddleware(middleware));
+  const middleware = [
+    clientMiddleware(client),
+    routerMiddleware(history)
+  ];
+  const store = createStore(reducer, applyMiddleware(...middleware));
 
   console.log('store', store);
 

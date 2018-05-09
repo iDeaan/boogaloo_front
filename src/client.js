@@ -8,12 +8,19 @@ import { routerMiddleware } from 'react-router-redux'
 import routes from './routes';
 import reducer from './redux/modules/reducer';
 
+import clientMiddleware from '../src/redux/middleware/clientMiddleware';
+import ApiClient from '../src/helpers/ApiClient';
 
-// const history = createBrowserHistory();
-const middleware = routerMiddleware({});
+
+const client = new ApiClient();
+const middleware = [
+  clientMiddleware(client),
+  routerMiddleware({}) // DELETE EMPTY OBJECT
+];
+
 const store = createStore(reducer,
   compose(
-    applyMiddleware(middleware),
+    applyMiddleware(...middleware),
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )
 );
