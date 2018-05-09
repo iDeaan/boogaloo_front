@@ -46,11 +46,20 @@ module.exports = {
       'babel-runtime/helpers/toConsumableArray',
       'babel-runtime/helpers/typeof',
       'react',
+      'prop-types',
       'react-dom',
       'react-redux',
       'react-router',
       'react-router-redux',
+      'react-router-config',
+      'react-router-dom',
+      'redux-connect',
+      'redux-thunk',
       'redux',
+      'serialize-javascript',
+      'superagent',
+      'url',
+
     ]
   },
 
