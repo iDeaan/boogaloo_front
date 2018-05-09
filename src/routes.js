@@ -1,16 +1,23 @@
 import {
   App,
-  Register
+  Sign,
+  Home
 } from './containers';
 
+import authenticated from './helpers/authenticated';
+
 const routes = [{
-  path: '/',
   component: App,
   routes: [
     {
-      path: '/registration',
+      path: '/',
       exact: true,
-      component: Register,
+      component: authenticated(Home),
+    },
+    {
+      path: '/sign',
+      exact: true,
+      component: Sign,
     }
   ]
 }];

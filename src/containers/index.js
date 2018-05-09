@@ -1,2 +1,3 @@
 export App from './App/App';
-export Register from './Register/Register';
+export Sign from './Sign/Sign';
+export Home from './Home/Home';

@@ -13,12 +13,11 @@ import { asyncConnect } from "redux-connect";
     return Promise.all(promises).then(() => {});
   }
 }])
-export default class Register extends Component {
+export default class Home extends Component {
   render() {
-    require('./Register.scss');
     return (
-      <div className="register-container route-container">
-        REGISTRATION
+      <div className="home-container route-container">
+        HOME
       </div>
     );
   }

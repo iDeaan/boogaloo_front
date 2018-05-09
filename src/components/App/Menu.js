@@ -6,7 +6,7 @@ export default class Menu extends PureComponent {
     return (
       <div className="app-menu">
         <Link to="/">Головна сторінка</Link>
-        <Link to="/registration">Реєстрація</Link>
+        <Link to="/sign">Реєстрація</Link>
       </div>
     );
   }
