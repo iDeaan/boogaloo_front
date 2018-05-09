@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node_modules/.bin/webpack --config webpack.config.js --watch",
+    "build": "node_modules/.bin/webpack --config webpack/webpack.config.js --watch",
     "start-server": "node_modules/.bin/babel-node serverWithTools.js",
     "dev": "NODE_ENV=development concurrently  \"npm run build\" \"npm run start-server\"",
     "stylelint": "stylelint '**/*.scss'",
     "stylelint-fix": "stylelint --fix '**/*.scss'",
-    "build-dlls": "node_modules/.bin/webpack --colors --display-error-details --config library.webpack.config.js"
+    "build-dlls": "node_modules/.bin/webpack --colors --display-error-details --config webpack/library.webpack.config.js"
   },
   "author": "iDeaan",
   "license": "ISC",

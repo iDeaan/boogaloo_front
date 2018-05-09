@@ -30,7 +30,7 @@ export default class Header extends PureComponent {
     return (
       <header className="app-header">
         <div className="logo">
-          Boogalo1o
+          Boogaloo
         </div>
         <div className="user-actions">
           <div className="user-name">

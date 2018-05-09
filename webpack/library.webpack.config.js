@@ -1,13 +1,10 @@
-var path = require('path');
-var webpack = require('webpack');
-var projectRootPath = path.resolve(__dirname, '/');
-console.log('__dirname', path.resolve(__dirname + '/dist/dlls/'));
-module.exports = {
-  // devtool: 'inline-source-map',
+const path = require('path');
+const webpack = require('webpack');
 
+module.exports = {
   output: {
     filename: 'vendor.dll.js',
-    path: path.resolve(__dirname + '/dist/dlls/'),
+    path: path.resolve(__dirname, '../dist/dlls/'),
     library: 'vendor'
   },
 
@@ -60,7 +57,7 @@ module.exports = {
   plugins: [
     new webpack.DllPlugin({
       name: 'vendor',
-      path: path.resolve(__dirname + '/dist/dlls/vendor.json')
+      path: path.resolve(__dirname + '/dlls/vendor.json')
     })
   ]
 };

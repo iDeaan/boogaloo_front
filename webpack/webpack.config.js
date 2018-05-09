@@ -54,8 +54,7 @@ module.exports = {
     new StyleLintPlugin(),
     new LiveReloadPlugin(),
     new webpack.DllReferencePlugin({
-      context: __dirname,
-      manifest: require('./dist/dlls/vendor.json')
+      manifest: require('./dlls/vendor.json')
     })
   ]
 };
