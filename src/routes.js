@@ -6,21 +6,17 @@ import Bar from './components/Bar';
 import { StaticRouter } from 'react-router'
 import {
     BrowserRouter as Router,
-    Route,
-    browserHistory
+    Route
 } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
 
 
 export default (isServer = false, req, history) => {
   if (isServer) {
     return (
-      <StaticRouter history={history} location={req.url}>
-        <App>
-          <Route path='/foo' component={Foo} />
-          <Route path='/bar' component={Bar} />
-        </App>
-      </StaticRouter>
+      <App>
+        <Route path='/foo' component={Foo} />
+        <Route path='/bar' component={Bar} />
+      </App>
     );
   }
   return (

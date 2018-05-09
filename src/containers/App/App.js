@@ -1,8 +1,23 @@
 import React, { Component } from 'react';
 import Header from '../../components/App/Header';
 import Menu from '../../components/App/Menu';
+import renderRoutes from 'react-router-config/renderRoutes'
 import './App.scss';
+import {signIn} from "../../redux/modules/auth";
+import {asyncConnect} from "redux-connect";
 
+@asyncConnect([{
+  promise: ({ store: { dispatch, getState } }) => {
+
+    console.log('in async connect');
+
+    const promises = [];
+
+    promises.push(dispatch(signIn()));
+
+    return Promise.all(promises).then(() => {});
+  }
+}])
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +45,7 @@ export default class App extends Component {
 
   render() {
     // require('./App.scss');
+    const { route } = this.props;
     return (
       <div className="app-container">
         <button onClick={() => this.handleClick()}>SUBMIT</button>
@@ -50,6 +66,7 @@ export default class App extends Component {
           <Menu title={`Тестовий312 props ${this.state.clicked}`} />
           <div className="content">
             {this.props.children}
+            {renderRoutes(route.routes)}
           </div>
         </div>
       </div>

@@ -32,13 +32,16 @@
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
+    "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^4.0.8",
     "redux": "^4.0.0",
     "redux-async-connect": "^1.0.0-rc4",
+    "redux-connect": "^7.0.0",
     "redux-thunk": "^2.2.0",
     "serialize-javascript": "^1.5.0",
-    "superagent": "^3.8.3"
+    "superagent": "^3.8.3",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "autoprefixer": "^8.4.1",
