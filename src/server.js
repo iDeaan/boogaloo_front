@@ -1,32 +1,24 @@
 const express = require('express');
 const app = express();
 const React = require('react');
-import { renderToString } from "react-dom/server"
 
-import Html from './src/helpers/Html';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import { renderToString } from "react-dom/server";
+import { routerMiddleware } from 'react-router-redux';
+import { parse as parseUrl } from 'url';
+import { StaticRouter } from 'react-router';
+import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
+import createMemoryHistory from 'history/createMemoryHistory';
 
 
-// import routes from './src/routes';
-// @TODO: move to src
+import Html from './helpers/Html';
+import ApiClient from './helpers/ApiClient';
 
+import reducer from './redux/modules/reducer';
+import clientMiddleware from './redux/middleware/clientMiddleware';
 
-import { createStore, applyMiddleware } from 'redux'
-import { Provider } from 'react-redux'
-import createMemoryHistory from 'history/createMemoryHistory'
-import { routerMiddleware } from 'react-router-redux'
-import { parse as parseUrl } from 'url'
-
-import { StaticRouter } from 'react-router'
-
-import { match } from 'react-router'
-import { ReduxAsyncConnect, loadOnServer, reducer as reduxAsyncConnect } from 'redux-connect'
-
-import reducer from './src/redux/modules/reducer';
-
-import clientMiddleware from './src/redux/middleware/clientMiddleware';
-import ApiClient from './src/helpers/ApiClient';
-
-import routes from './src/routes';
+import routes from './routes';
 
 app.use(express.static('dist'));
 app.use(express.static('public'));
@@ -35,8 +27,8 @@ app.get('*', function(req, res) {
   const client = new ApiClient(req);
   const history = createMemoryHistory();
 
-  const url = req.originalUrl || req.url
-  const location = parseUrl(url)
+  const url = req.originalUrl || req.url;
+  const location = parseUrl(url);
 
   const middleware = [
     clientMiddleware(client),
@@ -50,7 +42,7 @@ app.get('*', function(req, res) {
 
   loadOnServer({ store, location, routes, helpers })
     .then(() => {
-      const context = {}
+      const context = {};
 
       const appHTML = renderToString(
         <Html store={store}>
@@ -67,6 +59,6 @@ app.get('*', function(req, res) {
 });
 
 const PORT = 3000;
-app.listen(PORT, function() {
+app.listen(PORT, () => {
   console.log('http://localhost:' + PORT);
 });
