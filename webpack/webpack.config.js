@@ -8,8 +8,9 @@ module.exports = {
   target: "web",
   entry: [
     './src/client.js',
-    'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr'
+    // 'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr'
   ],
+  devtool: "inline-source-map",
   output: {
     filename: 'build.js'
   },
@@ -21,7 +22,8 @@ module.exports = {
         exclude: '/node_modules/',
         use: [
           {
-            loader: "babel-loader"
+            loader: "babel-loader",
+            query: { compact: false }
           },
           {
             loader: "eslint-loader"

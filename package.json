@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node_modules/.bin/webpack --config webpack/webpack.config.js --watch",
+    "build": "node_modules/.bin/webpack --config webpack/webpack.config.js --mode development --watch",
     "start-server": "node_modules/.bin/babel-node serverWithTools.js",
     "dev": "NODE_ENV=development concurrently  \"npm run build\" \"npm run start-server\"",
     "stylelint": "stylelint '**/*.scss'",
@@ -38,6 +38,7 @@
     "redux": "^4.0.0",
     "redux-async-connect": "^1.0.0-rc4",
     "redux-connect": "^7.0.0",
+    "redux-form": "^7.3.0",
     "redux-thunk": "^2.2.0",
     "serialize-javascript": "^1.5.0",
     "superagent": "^3.8.3",

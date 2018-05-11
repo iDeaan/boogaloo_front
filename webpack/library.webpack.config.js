@@ -59,6 +59,7 @@ module.exports = {
       'serialize-javascript',
       'superagent',
       'url',
+      'redux-form'
 
     ]
   },

@@ -20,6 +20,9 @@ export default class Sign extends Component {
     return (
       <div className="sign-container route-container">
         <div className="sign-blurred">
+          <div className="sign-header">
+            Boogaloo
+          </div>
           <div className="sign-content">
             <LoginForm />
           </div>

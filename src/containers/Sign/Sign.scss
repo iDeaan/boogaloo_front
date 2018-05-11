@@ -1,5 +1,8 @@
 :global {
   .sign-container {
+    $blurWindowWidth: 300px;
+    $blurWindowHeight: 350px;
+
     background-image: url("/img/LoginBG.jpg");
     position: fixed;
     height: 100vh;
@@ -13,31 +16,45 @@
 
     .sign-blurred {
       position: relative;
-      width: 250px;
-      height: 350px;
-      top: calc(50% - 175px);
-      left: calc(50% - 125px);
+      width: $blurWindowWidth;
+      height: $blurWindowHeight;
+      top: calc(40% - 175px);
+      left: calc(50% - 150px);
       background: inherit;
       border-radius: 2px;
       overflow: hidden;
 
       &:after {
         content: "";
-        width: 300px;
-        height: 300px;
+        width: $blurWindowWidth;
+        height: $blurWindowHeight;
         background: inherit;
         position: absolute;
-        left: -25px;
-        top: -25px;
+        top: 0;
         box-shadow: inset 0 0 0 200px rgba(255, 255, 255, 0.05);
         filter: blur(10px);
       }
 
+      .sign-header {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+        padding: 10px;
+        box-sizing: border-box;
+        font-size: 40px;
+        font-weight: 500;
+        font-style: oblique;
+        color: #50586d;
+      }
+
       .sign-content {
         position: relative;
-        margin-top: 50px;
+        margin-top: 10px;
         text-align: center;
         z-index: 1;
+        padding: 10px;
       }
     }
   }
