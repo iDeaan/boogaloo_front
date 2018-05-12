@@ -1,0 +1,87 @@
+:global {
+  .form-input.text-input-item {
+    $inputheight: 35px;
+
+    position: relative;
+    outline: solid 1px #aaacb8;
+
+    input {
+      width: 100%;
+      height: $inputheight;
+      font-style: italic;
+      font-size: 16px;
+      color: #50586d;
+      border: none;
+    }
+
+    @keyframes :global(rotate) {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .input-loader, .input-validation-result {
+      position: absolute;
+      right: 10px;
+    }
+
+    .input-validation-result {
+      &.success {
+        color: green;
+      }
+      &.fail {
+        color: #d40a5c;
+      }
+      .input-error {
+        position: absolute;
+        background: #d40a5c;
+        z-index: 100000;
+        color: white;
+        width: 150px;
+        left: 45px;
+        top: -10px;
+        font-size: 14px;
+        padding: 10px;
+      }
+      .input-error:before {
+        content: ' ';
+        width: 0;
+        height: 0;
+        border-top: 15px solid #d40a5c;
+        border-left: 20px solid transparent;
+        position: absolute;
+        left: -20px;
+        top: 15px;
+
+      }
+    }
+
+    .input-loader {
+      color: red;
+      animation: rotate 1s linear infinite;
+    }
+
+    &.with-icon {
+      display: flex;
+      align-items: center;
+
+      .icon-placeholder {
+        left: 0;
+        height: $inputheight;
+        width: $inputheight;
+        display: flex;
+        align-items: center;
+        background: white;
+        justify-content: center;
+        color: grey;
+      }
+
+      input {
+        padding: 0 10px;
+      }
+    }
+  }
+}

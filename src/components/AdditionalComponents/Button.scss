@@ -1,0 +1,21 @@
+:global {
+  button.button-container {
+    &.default-button {
+      background-color: #416dea;
+      width: 100%;
+      height: 35px;
+      border: none;
+      color: white;
+      font-size: 16px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .button-icon {
+        font-size: 20px;
+        margin-left: 10px;
+      }
+    }
+  }
+}
