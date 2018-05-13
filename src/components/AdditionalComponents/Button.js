@@ -46,7 +46,7 @@ export default class Button extends Component {
         </div>
         {iconRight
           ? (
-            <div className="button-icon">
+            <div className="button-icon right-icon">
               <i className={`fa ${iconRight}`} />
             </div>
           ) : ''

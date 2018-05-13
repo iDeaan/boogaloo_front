@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import InputText from '../FormFields/InputText';
 import Button from '../AdditionalComponents/Button';
 import validateFields from '../../helpers/validateFields';
+import { signIn } from "../../redux/modules/auth";
 
 const validate = values => {
   const validateObject = {
@@ -22,6 +23,19 @@ export default class LoginForm extends Component {
     handleSubmit: PropTypes.func
   };
 
+  static contextTypes = {
+    store: PropTypes.object.isRequired
+  };
+
+  handleSubmit(values) {
+    const { dispatch } = this.context.store;
+    dispatch(signIn(values.login, values.password)).then((response) => {
+      console.log('response', response);
+    }).catch((err) => {
+      console.log('catch', err);
+    })
+  }
+
   render() {
     const { handleSubmit } = this.props;
 
@@ -29,7 +43,7 @@ export default class LoginForm extends Component {
     return (
       <div className="login-form-container">
         <form
-          onSubmit={handleSubmit((a, b, c) => console.log('value', a, b, c))}
+          onSubmit={handleSubmit((values) => this.handleSubmit(values))}
           className="login-form"
         >
           <Field

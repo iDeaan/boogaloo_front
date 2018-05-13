@@ -18,12 +18,14 @@
       from {
         transform: rotate(0deg);
       }
+
       to {
         transform: rotate(360deg);
       }
     }
 
-    .input-loader, .input-validation-result {
+    .input-loader,
+    .input-validation-result {
       position: absolute;
       right: 10px;
     }
@@ -32,9 +34,11 @@
       &.success {
         color: green;
       }
+
       &.fail {
         color: #d40a5c;
       }
+
       .input-error {
         position: absolute;
         background: #d40a5c;
@@ -46,8 +50,9 @@
         font-size: 14px;
         padding: 10px;
       }
+
       .input-error:before {
-        content: ' ';
+        content: " ";
         width: 0;
         height: 0;
         border-top: 15px solid #d40a5c;
@@ -55,7 +60,6 @@
         position: absolute;
         left: -20px;
         top: 15px;
-
       }
     }
 
