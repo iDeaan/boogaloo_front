@@ -6,7 +6,7 @@ const methods = ['get', 'post', 'put', 'patch', 'del'];
 export default class ApiClient {
   constructor(req) {
     methods.forEach((method) =>
-      this[method] = (path, { params, data } = {}) => new Promise((resolve, reject) => {
+      this[method] = (path, { params, data, headers } = {}) => new Promise((resolve, reject) => {
         const request = superagent[method](path);
 
         if (params) {
@@ -15,6 +15,12 @@ export default class ApiClient {
 
         if (data) {
           request.send(data);
+        }
+
+        if (headers) {
+          headers.forEach((header) => {
+            request.set(header.name, header.value);
+          });
         }
 
         request.end((err, { body } = {}) => err ? reject(body || err) : resolve(body));

@@ -8,7 +8,8 @@ export default class Button extends Component {
     iconLeft: PropTypes.string,
     buttonStyleType: PropTypes.string,
     className: PropTypes.string,
-    submitButton: PropTypes.bool
+    submitButton: PropTypes.bool,
+    onClick: PropTypes.func
   };
 
   static defaultProps = {
@@ -17,11 +18,14 @@ export default class Button extends Component {
     iconLeft: '',
     className: '',
     buttonStyleType: 'default-button',
-    submitButton: false
+    submitButton: false,
+    onClick: () => {}
   };
 
   render() {
-    const { text, iconRight, iconLeft, buttonStyleType, submitButton, className } = this.props;
+    const {
+      text, iconRight, iconLeft, buttonStyleType, submitButton, className, onClick
+    } = this.props;
 
     const customProps = {};
     if (submitButton) {
@@ -33,6 +37,7 @@ export default class Button extends Component {
       <button
         className={`button-container ${buttonStyleType} ${className}`}
         {...customProps}
+        onClick={() => onClick()}
       >
         {iconLeft
           ? (

@@ -1,7 +1,7 @@
 :global {
   .sign-container {
     $blurWindowWidth: 300px;
-    $blurWindowHeight: 350px;
+    $blurWindowHeight: 300px;
 
     background-image: url("/img/LoginBG.jpg");
     position: fixed;
@@ -54,6 +54,16 @@
         text-align: center;
         z-index: 1;
         padding: 10px;
+      }
+    }
+
+    &.register-container {
+      .sign-blurred {
+        height: 520px;
+
+        &:after {
+          height: 520px;
+        }
       }
     }
   }

@@ -13,7 +13,8 @@ export default class RenderFileInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayLoader: false
+      displayLoader: false,
+      hideError: true
     };
   };
 

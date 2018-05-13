@@ -20,7 +20,8 @@ const validate = values => {
 })
 export default class LoginForm extends Component {
   static propTypes = {
-    handleSubmit: PropTypes.func
+    handleSubmit: PropTypes.func,
+    onRegisterButtonClick: PropTypes.func
   };
 
   static contextTypes = {
@@ -37,7 +38,7 @@ export default class LoginForm extends Component {
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, onRegisterButtonClick } = this.props;
 
     require('./LoginForm.scss');
     return (
@@ -71,6 +72,7 @@ export default class LoginForm extends Component {
         <Button
           text="Створити акаунт"
           className="register-button"
+          onClick={() => onRegisterButtonClick()}
         />
       </div>
     );
