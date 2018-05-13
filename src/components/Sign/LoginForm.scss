@@ -1,0 +1,14 @@
+:global {
+  .login-form-container {
+    .text-input-item {
+      margin-bottom: 20px;
+    }
+
+    .register-button {
+      display: inline-flex;
+      width: auto;
+      padding: 0 20px;
+      opacity: 0.5;
+    }
+  }
+}

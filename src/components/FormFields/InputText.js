@@ -34,7 +34,7 @@ export default class RenderFileInput extends Component {
   renderInputResult() {
     const { input, meta } = this.props;
 
-    if (input.value) {
+    if (input.value || meta.submitFailed) {
       return (
         <div className={`input-validation-result ${meta.valid ? 'success' : 'fail'}`}>
           {meta.valid

@@ -4,20 +4,24 @@ import React, { Component } from 'react';
 export default class Button extends Component {
   static propTypes = {
     text: PropTypes.string,
-    icon: PropTypes.string,
+    iconRight: PropTypes.string,
+    iconLeft: PropTypes.string,
     buttonStyleType: PropTypes.string,
+    className: PropTypes.string,
     submitButton: PropTypes.bool
   };
 
   static defaultProps = {
     text: '',
-    icon: '',
+    iconRight: '',
+    iconLeft: '',
+    className: '',
     buttonStyleType: 'default-button',
     submitButton: false
   };
 
   render() {
-    const { text, icon, buttonStyleType, submitButton } = this.props;
+    const { text, iconRight, iconLeft, buttonStyleType, submitButton, className } = this.props;
 
     const customProps = {};
     if (submitButton) {
@@ -27,16 +31,23 @@ export default class Button extends Component {
     require('./Button.scss');
     return (
       <button
-        className={`button-container ${buttonStyleType}`}
+        className={`button-container ${buttonStyleType} ${className}`}
         {...customProps}
       >
+        {iconLeft
+          ? (
+            <div className="button-icon left-icon">
+              <i className={`fa ${iconLeft}`} />
+            </div>
+          ) : ''
+        }
         <div className="text">
           {text}
         </div>
-        {icon
+        {iconRight
           ? (
             <div className="button-icon">
-              <i className={`fa ${icon}`} />
+              <i className={`fa ${iconRight}`} />
             </div>
           ) : ''
         }
