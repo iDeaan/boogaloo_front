@@ -33,12 +33,12 @@ export default class Header extends PureComponent {
           Boogaloo
         </div>
         <div className="user-actions">
-          <div className="user-name">
-            {userInformation && userInformation.user
-              ? userInformation.user.name
-              : 'NoName'
-            }
-          </div>
+          {/*<div className="user-name">*/}
+            {/*{userInformation && userInformation.user*/}
+              {/*? userInformation.user.name*/}
+              {/*: 'NoName'*/}
+            {/*}*/}
+          {/*</div>*/}
         </div>
       </header>
     );
