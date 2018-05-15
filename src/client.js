@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import { routerMiddleware } from 'react-router-redux'
 import { ReduxAsyncConnect } from 'redux-connect'
 import { BrowserRouter } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie';
 
 import routes from './routes';
 import reducer from './redux/modules/reducer';
@@ -26,10 +27,12 @@ const store = createStore(reducer,
 );
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <ReduxAsyncConnect routes={routes} filter={item => !item.deferred} helpers={{client}} />
-    </BrowserRouter>
-  </Provider>,
+  <CookiesProvider>
+    <Provider store={store}>
+      <BrowserRouter>
+        <ReduxAsyncConnect routes={routes} filter={item => !item.deferred} helpers={{client}} />
+      </BrowserRouter>
+    </Provider>
+  </CookiesProvider>,
   document.getElementById('root')
 );

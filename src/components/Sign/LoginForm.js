@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
-import PropTypes from 'prop-types';
+import { PropTypes, instanceOf } from 'prop-types';
+import { Cookies } from 'react-cookie';
 import InputText from '../FormFields/InputText';
 import Button from '../AdditionalComponents/Button';
 import validateFields from '../../helpers/validateFields';
@@ -14,6 +15,8 @@ const validate = values => {
   return validateFields(validateObject, values);
 };
 
+const cookies = new Cookies();
+
 @reduxForm({
   form: 'LoginForm',
   validate
@@ -21,7 +24,8 @@ const validate = values => {
 export default class LoginForm extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func,
-    onRegisterButtonClick: PropTypes.func
+    onRegisterButtonClick: PropTypes.func,
+    cookies: instanceOf(Cookies).isRequired
   };
 
   static contextTypes = {
@@ -30,8 +34,13 @@ export default class LoginForm extends Component {
 
   handleSubmit(values) {
     const { dispatch } = this.context.store;
+
     dispatch(signIn(values.login, values.password)).then((response) => {
-      console.log('response', response);
+      const { data } = response;
+      const { token, user_id: userId } = data.token;
+
+      cookies.set('token', token, { path: '/' });
+      cookies.set('user', userId, { path: '/' });
     }).catch((err) => {
       console.log('catch', err);
     })

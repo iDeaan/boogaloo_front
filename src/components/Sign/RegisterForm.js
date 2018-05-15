@@ -34,8 +34,11 @@ export default class RegisterForm extends Component {
 
   handleSubmit(values) {
     const { dispatch } = this.context.store;
-    dispatch(registerNewUser(values)).then((response) => {
-      console.log('response', response);
+    const { onBackButtonClick } = this.props;
+
+    dispatch(registerNewUser(values)).then(() => {
+      onBackButtonClick();
+      // DISPLAY NOTIFICATION;
     }).catch((err) => {
       console.log('catch', err);
     })

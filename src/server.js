@@ -9,8 +9,10 @@ import { routerMiddleware } from 'react-router-redux';
 import { parse as parseUrl } from 'url';
 import { StaticRouter } from 'react-router';
 import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
+import { CookiesProvider } from 'react-cookie';
 import createMemoryHistory from 'history/createMemoryHistory';
 
+const cookiesMiddleware = require('universal-cookie-express');
 
 import Html from './helpers/Html';
 import ApiClient from './helpers/ApiClient';
@@ -22,6 +24,7 @@ import routes from './routes';
 
 app.use(express.static('dist'));
 app.use(express.static('public'));
+app.use(cookiesMiddleware());
 
 app.get('*', function(req, res) {
   const client = new ApiClient(req);
@@ -46,11 +49,13 @@ app.get('*', function(req, res) {
 
       const appHTML = renderToString(
         <Html store={store}>
-          <Provider store={store} key="provider">
-            <StaticRouter location={location} context={context}>
-              <ReduxAsyncConnect routes={routes} helpers={helpers} filter={item => !item.deferred} />
-            </StaticRouter>
-          </Provider>
+          <CookiesProvider cookies={req.universalCookies}>
+            <Provider store={store} key="provider">
+              <StaticRouter location={location} context={context}>
+                <ReduxAsyncConnect routes={routes} helpers={helpers} filter={item => !item.deferred} />
+              </StaticRouter>
+            </Provider>
+          </CookiesProvider>
         </Html>
       );
 

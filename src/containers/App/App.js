@@ -2,21 +2,33 @@ import React, { Component } from 'react';
 import Header from '../../components/App/Header';
 import Menu from '../../components/App/Menu';
 import renderRoutes from 'react-router-config/renderRoutes'
-import {signIn} from "../../redux/modules/auth";
+import { checkIfTokenValid } from "../../redux/modules/auth";
 import {asyncConnect} from "redux-connect";
+import { withCookies, Cookies } from 'react-cookie';
+
+const cookies = new Cookies();
 
 @asyncConnect([{
   promise: ({ store: { dispatch, getState } }) => {
     const promises = [];
 
-    if (!getState().auth.signed) {
-      promises.push(dispatch(signIn()));
+    const cookies = new Cookies();
+    const token = cookies.get('token');
+    const user = cookies.get('user');
+
+    if (token && user) {
+      promises.push(dispatch(checkIfTokenValid(token, user))
+        .then(() => {})
+        .catch(() => {
+          cookies.remove('token');
+          cookies.remove('user');
+        }));
     }
 
     return Promise.all(promises).then(() => {});
   }
 }])
-export default class App extends Component {
+class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,3 +70,5 @@ export default class App extends Component {
     );
   }
 }
+
+export default withCookies(App);

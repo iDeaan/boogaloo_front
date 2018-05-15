@@ -1,20 +1,7 @@
 import React, { Component } from 'react';
-import { signIn } from "../../redux/modules/auth";
-import { asyncConnect } from "redux-connect";
 import LoginForm from '../../../src/components/Sign/LoginForm';
 import RegisterForm from '../../../src/components/Sign/RegisterForm';
 
-@asyncConnect([{
-  promise: ({ store: { dispatch, getState } }) => {
-    const promises = [];
-
-    if (!getState().auth.signed) {
-      promises.push(dispatch(signIn()));
-    }
-
-    return Promise.all(promises).then(() => {});
-  }
-}])
 export default class Sign extends Component {
   constructor(props) {
     super(props);

@@ -2,6 +2,10 @@ const SIGN_START = 'boogaloo/auth/SIGN';
 const SIGN_SUCCESS = 'boogaloo/auth/SIGN_SUCCESS';
 const SIGN_FAIL = 'boogaloo/auth/SIGN_FAIL';
 
+const TOKEN_CHECK_START = 'boogaloo/auth/TOKEN_CHECK_START';
+const TOKEN_CHECK_SUCCESS = 'boogaloo/auth/TOKEN_CHECK_SUCCESS';
+const TOKEN_CHECK_FAIL = 'boogaloo/auth/TOKEN_CHECK_FAIL';
+
 const REGISTER_START = 'boogaloo/auth/REGISTER_START';
 const REGISTER_SUCCESS = 'boogaloo/auth/REGISTER_SUCCESS';
 const REGISTER_FAIL = 'boogaloo/auth/REGISTER_FAIL';
@@ -13,7 +17,10 @@ const initialState = {
   error: {},
   registering: false,
   registered: false,
-  registeredUser: {}
+  registeredUser: {},
+  isTokenValid: false,
+  tokenChecking: false,
+  tokenError: {}
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -58,6 +65,26 @@ export default function reducer(state = initialState, action = {}) {
         registered: false,
         error: action.error
       };
+    case TOKEN_CHECK_START:
+      return {
+        ...state,
+        tokenChecking: true,
+        isTokenValid: false
+      };
+    case TOKEN_CHECK_SUCCESS:
+      return {
+        ...state,
+        tokenChecking: false,
+        isTokenValid: true,
+        tokenError: {}
+      };
+    case TOKEN_CHECK_FAIL:
+      return {
+        ...state,
+        tokenChecking: false,
+        isTokenValid: false,
+        tokenError: action.error
+      };
     default:
       return state;
   }
@@ -79,5 +106,12 @@ export function registerNewUser(userData) {
         headers: [{ name: 'Content-Type', value: 'application/json' }]
       }
     )
+  };
+}
+
+export function checkIfTokenValid(token, userId) {
+  return {
+    types: [REGISTER_START, REGISTER_SUCCESS, REGISTER_FAIL],
+    promise: client => client.get(`http://localhost:3030/sign?token=${token}&userId=${userId}`)
   };
 }
