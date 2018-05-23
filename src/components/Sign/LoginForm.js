@@ -29,11 +29,13 @@ export default class LoginForm extends Component {
   };
 
   static contextTypes = {
-    store: PropTypes.object.isRequired
+    store: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired
   };
 
   handleSubmit(values) {
     const { dispatch } = this.context.store;
+    const { router } = this.context;
 
     dispatch(signIn(values.login, values.password)).then((response) => {
       const { data } = response;
@@ -41,6 +43,8 @@ export default class LoginForm extends Component {
 
       cookies.set('token', token, { path: '/' });
       cookies.set('user', userId, { path: '/' });
+
+      router.history.push('/');
     }).catch((err) => {
       console.log('catch', err);
     })

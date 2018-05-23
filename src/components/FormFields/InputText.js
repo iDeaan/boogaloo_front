@@ -1,15 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-export default class RenderFileInput extends Component {
-  static propTypes = {
-    fieldProps: PropTypes.object
-  };
-
-  static defaultProps = {
-    fieldProps: {}
-  };
-
+export default class InputText extends Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -19,16 +19,17 @@
       text-decoration: none;
       display: flex;
       align-items: center;
+      background: #cedadc;
+      padding: 0 20px;
+      margin-bottom: 5px;
+      transition: background 0.2s;
+      text-decoration: none;
+      color: black;
+      letter-spacing: 0.5px;
 
-
-
-      a {
-        &:hover {
-          text-decoration: none;
-          color: black;
-          background: #cbd9e6;
-          padding: 5px 10px;
-        }
+      &:hover {
+        background: #cbd9e6;
+        cursor: pointer;
       }
     }
   }

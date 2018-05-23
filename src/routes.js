@@ -1,10 +1,9 @@
 import {
   App,
   Sign,
-  Home
+  Home,
+  Friends
 } from './containers';
-
-import authenticated from './helpers/authenticated';
 
 const routes = [{
   component: App,
@@ -12,12 +11,17 @@ const routes = [{
     {
       path: '/',
       exact: true,
-      component: authenticated(Home),
+      component: Home,
     },
     {
       path: '/sign',
       exact: true,
       component: Sign,
+    },
+    {
+      path: '/friends',
+      exact: true,
+      component: Friends,
     }
   ]
 }];
