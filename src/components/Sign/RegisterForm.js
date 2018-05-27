@@ -13,7 +13,7 @@ const validate = values => {
     alphaNumberFields: ['login', 'password'],
     emailFields: ['email'],
     matchFields: [{ firstItem: 'password', secondItem: 'passwordRepeat' }],
-    minLengthFields: [{ title: 'password', length: '6' }]
+    minLengthFields: [{ title: 'password', length: '5' }]
   };
   return validateFields(validateObject, values);
 };

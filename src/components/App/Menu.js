@@ -28,6 +28,7 @@ export default class Menu extends PureComponent {
     require('./Menu.scss');
     return (
       <div className="app-menu menu-container">
+        <MenuItem linkTo="/profile" text="Моя сторінка" />
         <MenuItem linkTo="/" text="Новини" />
         <MenuItem linkTo="/friends" text="Друзі" />
         <MenuItem linkTo="/messages" text="Повідомлення" />

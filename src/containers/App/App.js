@@ -60,11 +60,12 @@ class App extends Component {
       <div className="app-container">
         <Header />
         <div className="app-content">
-          <Menu title={`Тестовий312 props ${this.state.clicked}`} />
+          <Menu />
           <div className="content">
             {this.props.children}
             {renderRoutes(route.routes)}
           </div>
+          <div className="right-content">FRIEND SUGGESTION</div>
         </div>
       </div>
     );

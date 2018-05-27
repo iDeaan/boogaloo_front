@@ -1,5 +1,12 @@
 :global {
   .friends-container.route-container {
+    padding: 10px;
 
+    .friends-list {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
   }
 }
