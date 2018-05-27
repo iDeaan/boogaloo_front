@@ -7,6 +7,8 @@ import authenticated from "../../helpers/authenticated";
 import FriendAvatar from "../../components/Friends/FriendAvatar";
 import FriendsSearch from "../../components/Friends/FriendsSearch";
 
+const SEARCH_DELAY_TIME = 500;
+
 @asyncConnect([{
   promise: ({ store: { dispatch, getState } }) => {
     if (getState().auth && getState().auth.registeredUser && getState().auth.registeredUser.userToken) {
@@ -15,11 +17,10 @@ import FriendsSearch from "../../components/Friends/FriendsSearch";
 
       promises.push(dispatch(loadUserFriendsIds(userId)).then((response) => {
         const friendsIds = response.data.map(friend => friend.friend_id);
-        return dispatch(loadUserFriendsData(friendsIds)).then((response) => console.log('response', response));
+        return dispatch(loadUserFriendsData(friendsIds)).then(() => {});
       }));
 
-      return Promise.all(promises).then(() => {
-      });
+      return Promise.all(promises).then(() => {});
     }
   }
 }])
@@ -35,7 +36,10 @@ export default class Friends extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoginSelected: true
+      isLoginSelected: true,
+      displayedIndexes: [],
+      searchValue: null,
+      times: 0
     }
   }
 
@@ -69,40 +73,79 @@ export default class Friends extends Component {
     return friends;
   }
 
+  componentDidMount() {
+    this.customFunc();
+  }
+
+  customFunc() {
+    this.times = 0;
+    this.interval = setInterval(() => {
+      if (this.times === 20) {
+        clearInterval(this.interval);
+      } else {
+        if (!this.state.displayedIndexes.includes(this.times)) {
+          const currentItems = this.state.displayedIndexes;
+          currentItems.push(this.times);
+          this.setState({displayedIndexes: currentItems});
+          this.times += 1;
+        }
+      }
+    }, 200);
+  }
+
   handleFriendsSearch(event) {
-    const { dispatch } = this.context.store;
-    const { auth } = this.props;
+    this.event = event;
+    this.setState({ searchValue: event.target.value });
 
-    const userToken = auth && auth.registeredUser && auth.registeredUser.userToken
-      && auth.registeredUser.userToken.token;
-    const userId = auth && auth.registeredUser && auth.registeredUser.userToken
-      && auth.registeredUser.userToken.user_id;
+    clearInterval(this.timeout);
+    this.timeout = setTimeout(() => {
+      const {dispatch} = this.context.store;
+      const {auth} = this.props;
 
-    if (!event.target.value) {
-      dispatch(loadUserFriendsIds(userId)).then((response) => {
-        const friendsIds = response.data.map(friend => friend.friend_id);
-        return dispatch(loadUserFriendsData(friendsIds)).then((response) => console.log('response', response));
-      });
-    }
+      const userToken = auth && auth.registeredUser && auth.registeredUser.userToken
+        && auth.registeredUser.userToken.token;
+      const userId = auth && auth.registeredUser && auth.registeredUser.userToken
+        && auth.registeredUser.userToken.user_id;
 
-    if (userToken) {
-      dispatch(searchFriends(event.target.value, userToken)).then((response) => {
-        const idsList = response.data.idsList.map(item => item.id);
-        dispatch(loadUserFriendsData(idsList));
-      });
-    }
+      if (!this.state.searchValue) {
+        dispatch(loadUserFriendsIds(userId)).then((response) => {
+          const friendsIds = response.data.map(friend => friend.friend_id);
+          return dispatch(loadUserFriendsData(friendsIds)).then((response) => {
+            this.setState({displayedIndexes: []}, this.customFunc())
+          });
+        });
+      }
+
+      if (userToken) {
+        dispatch(searchFriends(this.state.searchValue, userToken)).then((response) => {
+          const idsList = response.data.idsList.map(item => item.id);
+          dispatch(loadUserFriendsData(idsList)).then(() => {
+            this.setState({displayedIndexes: []}, this.customFunc())
+          });
+        });
+      }
+    }, SEARCH_DELAY_TIME, event);
+  }
+
+  renderFriendsList() {
+    const sortedFriendsList = this.returnSortedFriendsList();
+    return (
+      sortedFriendsList && sortedFriendsList.length ? sortedFriendsList.map((friend, index) =>
+        <FriendAvatar
+          friend={friend}
+          displayed={this.state.displayedIndexes.includes(index) || this.state.displayedIndexes[0] === 'all'}
+        />
+      ) : ''
+    );
   }
 
   render() {
-    const sortedFriendsList = this.returnSortedFriendsList();
     require('./Friends.scss');
     return (
       <div className={`friends-container route-container`}>
         <FriendsSearch onChange={(event) => this.handleFriendsSearch(event)} />
         <div className="friends-list">
-          {sortedFriendsList && sortedFriendsList.length ? sortedFriendsList.map(friend =>
-            <FriendAvatar friend={friend} />
-          ) : ''}
+          {this.renderFriendsList()}
         </div>
       </div>
     );

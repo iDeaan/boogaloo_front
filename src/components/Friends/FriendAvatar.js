@@ -4,21 +4,23 @@ import Button from '../AdditionalComponents/Button';
 
 export default class FriendAvatar extends Component {
   static propTypes = {
-    friend: PropTypes.object
+    friend: PropTypes.object,
+    displayed: PropTypes.bool,
   };
 
   static defaultProps = {
-    friend: {}
+    friend: {},
+    displayed: false,
   };
 
   render() {
-    const { friend } = this.props;
+    const { friend, displayed } = this.props;
 
     const avatarImage = friend.images && friend.images.find(image => image.image_type === 'avatar');
 
     require('./FriendAvatar.scss');
     return (
-      <div className="friend-avatar-container">
+      <div className={`friend-avatar-container ${displayed ? 'displayed' : 'hide'}`}>
         <div className="friend-avatar">
           {avatarImage
             ? (
