@@ -6,6 +6,7 @@ import { reducer as formReducer } from 'redux-form'
 import counter from './counter';
 import auth from './auth';
 import friends from './friends';
+import people from './people';
 
 export default combineReducers({
   routing: routerReducer,
@@ -13,5 +14,6 @@ export default combineReducers({
   counter,
   auth,
   friends,
+  people,
   form: formReducer
 });

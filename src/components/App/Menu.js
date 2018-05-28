@@ -33,6 +33,8 @@ export default class Menu extends PureComponent {
         <MenuItem linkTo="/friends" text="Друзі" />
         <MenuItem linkTo="/messages" text="Повідомлення" />
         <MenuItem linkTo="/sign" text="Реєстрація" />
+        <br /><br />
+        <MenuItem linkTo="/people" text="Люди" />
       </div>
     );
   }

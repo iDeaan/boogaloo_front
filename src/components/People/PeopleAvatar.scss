@@ -1,0 +1,21 @@
+:global {
+  .people-avatar-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 00px;
+    border-bottom: solid 2px #4e5967;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.8s;
+
+    &.displayed {
+      opacity: 1;
+    }
+
+    .friend-actions {
+      button {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}

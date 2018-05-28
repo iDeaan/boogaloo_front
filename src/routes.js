@@ -2,7 +2,8 @@ import {
   App,
   Sign,
   Home,
-  Friends
+  Friends,
+  People
 } from './containers';
 
 const routes = [{
@@ -22,6 +23,11 @@ const routes = [{
       path: '/friends',
       exact: true,
       component: Friends,
+    },
+    {
+      path: '/people',
+      exact: true,
+      component: People,
     }
   ]
 }];
