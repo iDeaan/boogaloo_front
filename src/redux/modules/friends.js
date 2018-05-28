@@ -10,6 +10,10 @@ const FRIENDS_SEARCH_START = 'boogaloo/friends/FRIENDS_SEARCH_START';
 const FRIENDS_SEARCH_SUCCESS = 'boogaloo/auth/FRIENDS_SEARCH_SUCCESS';
 const FRIENDS_SEARCH_FAIL = 'boogaloo/auth/FRIENDS_SEARCH_FAIL';
 
+const FULL_FRIENDS_IDS_LOAD_START = 'boogaloo/friends/FULL_FRIENDS_IDS_LOAD_START';
+const FULL_FRIENDS_IDS_LOAD_SUCCESS = 'boogaloo/auth/FULL_FRIENDS_IDS_LOAD_SUCCESS';
+const FULL_FRIENDS_IDS_LOAD_FAIL = 'boogaloo/auth/FULL_FRIENDS_IDS_LOAD_FAIL';
+
 const initialState = {
   currentPage: 0,
   friendsIds: [],
@@ -17,6 +21,8 @@ const initialState = {
   friends: [],
   loading: false,
   loaded: false,
+  fullFriendsIds: [],
+  fullFriendsCount: 0,
   error: null
 };
 
@@ -40,6 +46,12 @@ export default function reducer(state = initialState, action = {}) {
         laoding: true,
         loaded: false
       };
+    case FULL_FRIENDS_IDS_LOAD_START:
+      return {
+        ...state,
+        laoding: true,
+        loaded: false
+      };
     case FRIENDS_IDS_LOAD_SUCCESS:
       return {
         ...state,
@@ -56,6 +68,15 @@ export default function reducer(state = initialState, action = {}) {
         friends: action.result.data,
         error: null
       };
+    case FULL_FRIENDS_IDS_LOAD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        laoded: true,
+        fullFriendsIds: action.result.data.idsList,
+        fullFriendsCount: action.result.data.total,
+        error: null
+      };
     case FRIENDS_SEARCH_SUCCESS:
       return {
         ...state,
@@ -63,7 +84,7 @@ export default function reducer(state = initialState, action = {}) {
         laoded: true,
         searchIds: action.result.data,
         error: null
-      }
+      };
     case FRIENDS_IDS_LOAD_FAIL:
       return {
         ...state,
@@ -85,6 +106,15 @@ export default function reducer(state = initialState, action = {}) {
         laoded: false,
         error: action.error,
         searchIds: []
+      };
+    case FULL_FRIENDS_IDS_LOAD_FAIL:
+      return {
+        ...state,
+        loading: false,
+        laoded: false,
+        fullFriendsIds: [],
+        fullFriendsCount: 0,
+        error: action.error
       };
     default:
       return state;
@@ -112,3 +142,9 @@ export function searchFriends(input, token) {
   };
 }
 
+export function loadFullUserFriendsIds(token) {
+  return {
+    types: [FULL_FRIENDS_IDS_LOAD_START, FULL_FRIENDS_IDS_LOAD_SUCCESS, FULL_FRIENDS_IDS_LOAD_FAIL],
+    promise: client => client.get(`http://localhost:3030/users_friends?token=${token}&idsOnly=true`)
+  };
+}

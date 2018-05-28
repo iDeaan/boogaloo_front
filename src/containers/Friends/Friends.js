@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { loadUserFriendsIds, loadUserFriendsData, searchFriends } from "../../redux/modules/friends";
+import {
+  loadUserFriendsIds, loadUserFriendsData, searchFriends, loadFullUserFriendsIds
+} from "../../redux/modules/friends";
 import {asyncConnect} from "redux-connect";
 import authenticated from "../../helpers/authenticated";
 import FriendAvatar from "../../components/Friends/FriendAvatar";
@@ -13,12 +15,15 @@ const SEARCH_DELAY_TIME = 500;
   promise: ({ store: { dispatch, getState } }) => {
     if (getState().auth && getState().auth.registeredUser && getState().auth.registeredUser.userToken) {
       const userId = getState().auth.registeredUser.userToken.user_id;
+      const userToken = getState().auth.registeredUser.userToken.token;
       const promises = [];
 
       promises.push(dispatch(loadUserFriendsIds(userId)).then((response) => {
         const friendsIds = response.data.map(friend => friend.friend_id);
         return dispatch(loadUserFriendsData(friendsIds)).then(() => {});
       }));
+
+      promises.push(dispatch(loadFullUserFriendsIds(userToken)));
 
       return Promise.all(promises).then(() => {});
     }

@@ -31,6 +31,10 @@
         background: #cbd9e6;
         cursor: pointer;
       }
+
+      &.active {
+        background-color: #ffd9d9;
+      }
     }
   }
 }
