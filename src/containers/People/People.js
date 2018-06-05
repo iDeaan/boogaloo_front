@@ -88,13 +88,14 @@ export default class Friends extends Component {
   }
 
   renderUsersList() {
-    const { people, friendsIds } = this.props;
+    const { people, friendsIds, auth } = this.props;
     return (
       people && people.length ? people.map((people, index) =>
         <PeopleAvatar
           people={people}
           isFriend={friendsIds.includes(people.id)}
           displayed={this.state.displayedIndexes.includes(index) || this.state.displayedIndexes[0] === 'all'}
+          token={auth.token}
         />
       ) : ''
     );

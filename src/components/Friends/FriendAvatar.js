@@ -1,17 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../AdditionalComponents/Button';
+import { deleteFriend } from '../../helpers/functions';
 
 export default class FriendAvatar extends Component {
   static propTypes = {
     friend: PropTypes.object,
     displayed: PropTypes.bool,
+    token: PropTypes.string
   };
 
   static defaultProps = {
     friend: {},
     displayed: false,
+    token: ''
   };
+
+  handleFriendDelete(people) {
+    const { token } = this.props;
+    deleteFriend(token, people.id)
+  }
 
   render() {
     const { friend, displayed } = this.props;
@@ -47,7 +55,7 @@ export default class FriendAvatar extends Component {
           <Button
             text="Видалити друга"
             className="register-button"
-            onClick={() => console.log('delete clcik')}
+            onClick={() => this.handleFriendDelete(friend)}
           />
         </div>
       </div>

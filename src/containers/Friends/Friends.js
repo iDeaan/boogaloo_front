@@ -133,11 +133,13 @@ export default class Friends extends Component {
   }
 
   renderFriendsList() {
+    const { auth } = this.props;
     const sortedFriendsList = this.returnSortedFriendsList();
     return (
       sortedFriendsList && sortedFriendsList.length ? sortedFriendsList.map((friend, index) =>
         <FriendAvatar
           friend={friend}
+          token={auth.token}
           displayed={this.state.displayedIndexes.includes(index) || this.state.displayedIndexes[0] === 'all'}
         />
       ) : ''

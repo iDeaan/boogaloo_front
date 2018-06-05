@@ -20,7 +20,8 @@ const initialState = {
   registeredUser: {},
   isTokenValid: false,
   tokenChecking: false,
-  tokenError: {}
+  tokenError: {},
+  token: null
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -56,6 +57,7 @@ export default function reducer(state = initialState, action = {}) {
         registering: false,
         registered: true,
         registeredUser: action.result.data,
+        token: action.result.data && action.result.data.userToken ? action.result.data.userToken.token : null,
         error: null
       };
     case REGISTER_FAIL:

@@ -65,7 +65,15 @@ class App extends Component {
             {this.props.children}
             {renderRoutes(route.routes)}
           </div>
-          <div className="right-content">FRIEND SUGGESTION</div>
+          <div className="right-content">
+            SUGGESTION: friend_id === currentUser id AND accepted = 0
+            AFTER SUBMITING FRIEND ADD NEW ROW TO DB and update previous to status 1
+            IF DECLINED to status -1 <br/><br />
+
+            <b>case (1)</b> - friend<br/>
+            <b>case (-1)</b> - follower<br /><br />
+            FRIEND SUGGESTION
+          </div>
         </div>
       </div>
     );
