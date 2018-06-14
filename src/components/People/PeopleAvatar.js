@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../AdditionalComponents/Button';
 import { addNewFriend, deleteFriend } from '../../helpers/functions';
+import {
+  deleteFriend as deleteFriendFromStore,
+  addFriend as addFriendToStore
+} from "../../redux/modules/friends";
 
 export default class FriendAvatar extends Component {
   static propTypes = {
@@ -17,15 +21,26 @@ export default class FriendAvatar extends Component {
     token: ''
   };
 
+  static contextTypes = {
+    store: PropTypes.object.isRequired
+  };
+
   handleFriendAdd(people) {
+    const { dispatch } = this.context.store;
     const { token } = this.props;
-    addNewFriend(token, people.id)
+
+    addNewFriend(token, people.id).then(() => {
+      dispatch(addFriendToStore(people.id))
+    })
   }
 
   handleFriendDelete(people) {
+    const { dispatch } = this.context.store;
     const { token } = this.props;
-    console.log('here');
-    deleteFriend(token, people.id)
+
+    deleteFriend(token, people.id).then(() => {
+      dispatch(deleteFriendFromStore(people.id))
+    })
   }
 
   render() {

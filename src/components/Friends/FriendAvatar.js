@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../AdditionalComponents/Button';
 import { deleteFriend } from '../../helpers/functions';
+import {
+  deleteFriend as deleteFriendFromStore
+} from "../../redux/modules/friends";
 
 export default class FriendAvatar extends Component {
   static propTypes = {
@@ -16,9 +19,17 @@ export default class FriendAvatar extends Component {
     token: ''
   };
 
+  static contextTypes = {
+    store: PropTypes.object.isRequired
+  };
+
   handleFriendDelete(people) {
+    const { dispatch } = this.context.store;
     const { token } = this.props;
-    deleteFriend(token, people.id)
+
+    deleteFriend(token, people.id).then(() => {
+      dispatch(deleteFriendFromStore(people.id));
+    });
   }
 
   render() {
