@@ -103,13 +103,16 @@ export default class Friends extends Component {
 
   render() {
     require('./People.scss');
-    return (
-      <div className={`friends-container route-container`}>
-        <FriendsSearch onChange={(event) => this.handleUsersSearch(event)} />
-        <div className="friends-list">
-          {this.renderUsersList()}
+    return [
+      <div className="content">
+        <div className={`friends-container route-container`}>
+          <FriendsSearch onChange={(event) => this.handleUsersSearch(event)} />
+          <div className="friends-list">
+            {this.renderUsersList()}
+          </div>
         </div>
-      </div>
-    );
+      </div>,
+      <div className="right-content" />
+    ];
   }
 }

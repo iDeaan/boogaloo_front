@@ -3,8 +3,11 @@ import Header from '../../components/App/Header';
 import Menu from '../../components/App/Menu';
 import renderRoutes from 'react-router-config/renderRoutes'
 import { checkIfTokenValid } from "../../redux/modules/auth";
+import { loadNewFriends } from "../../redux/modules/friends";
 import {asyncConnect} from "redux-connect";
 import { withCookies, Cookies } from 'react-cookie';
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
 
 const cookies = new Cookies();
 
@@ -28,7 +31,16 @@ const cookies = new Cookies();
     return Promise.all(promises).then(() => {});
   }
 }])
+@connect(
+  state => ({
+    currentUserId: state.auth.currentUserId
+  })
+)
 class App extends Component {
+  static contextTypes = {
+    store: PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -37,8 +49,20 @@ class App extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentUserId !== this.props.currentUserId) {
+      this.loadFriendsSuggestions(nextProps.currentUserId);
+    }
+  }
+
+  loadFriendsSuggestions(userId) {
+    const { dispatch } = this.context.store;
+    dispatch(loadNewFriends(userId))
+      .then((response) => {})
+      .catch((err) => console.log('err', err));
+  }
+
   handleClick() {
-    console.log('handleClick');
     const { clicked } = this.state;
     this.setState({ clicked: clicked + 1 });
   }
@@ -61,19 +85,7 @@ class App extends Component {
         <Header />
         <div className="app-content">
           <Menu />
-          <div className="content">
-            {this.props.children}
-            {renderRoutes(route.routes)}
-          </div>
-          <div className="right-content">
-            SUGGESTION: friend_id === currentUser id AND accepted = 0
-            AFTER SUBMITING FRIEND ADD NEW ROW TO DB and update previous to status 1
-            IF DECLINED to status -1 <br/><br />
-
-            <b>case (1)</b> - friend<br/>
-            <b>case (-1)</b> - follower<br /><br />
-            FRIEND SUGGESTION
-          </div>
+          {renderRoutes(route.routes)}
         </div>
       </div>
     );

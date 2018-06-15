@@ -8,6 +8,7 @@ import {asyncConnect} from "redux-connect";
 import authenticated from "../../helpers/authenticated";
 import FriendAvatar from "../../components/Friends/FriendAvatar";
 import FriendsSearch from "../../components/Friends/FriendsSearch";
+import FriendsSuggestions from "../../components/Friends/FriendsSuggestions";
 
 const SEARCH_DELAY_TIME = 500;
 
@@ -148,13 +149,18 @@ export default class Friends extends Component {
 
   render() {
     require('./Friends.scss');
-    return (
-      <div className={`friends-container route-container`}>
-        <FriendsSearch onChange={(event) => this.handleFriendsSearch(event)} />
-        <div className="friends-list">
-          {this.renderFriendsList()}
+    return [
+      <div className="content">
+        <div className={`friends-container route-container`}>
+          <FriendsSearch onChange={(event) => this.handleFriendsSearch(event)} />
+          <div className="friends-list">
+            {this.renderFriendsList()}
+          </div>
         </div>
+      </div>,
+      <div className="right-content">
+        <FriendsSuggestions />
       </div>
-    );
+    ];
   }
 }

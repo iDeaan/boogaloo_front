@@ -12,6 +12,15 @@
       opacity: 1;
     }
 
+    .friend-avatar {
+      .friend-image {
+        img {
+          max-width: 128px;
+          max-height: 128px;
+        }
+      }
+    }
+
     .friend-actions {
       button {
         margin-bottom: 10px;

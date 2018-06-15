@@ -50,7 +50,11 @@ export default class FriendAvatar extends Component {
                 }
               </div>
             )
-            : <img />
+            : (
+              <div className="friend-image">
+                <img src="/img/no_image.png" />
+              </div>
+            )
           }
         </div>
         <div className="friend-initial">
