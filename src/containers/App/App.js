@@ -8,8 +8,13 @@ import {asyncConnect} from "redux-connect";
 import { withCookies, Cookies } from 'react-cookie';
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
+import io from "socket.io-client";
 
 const cookies = new Cookies();
+
+const socket = io('http://localhost:3030');
+
+
 
 @asyncConnect([{
   promise: ({ store: { dispatch, getState } }) => {
@@ -46,18 +51,42 @@ class App extends Component {
     this.state = {
       clicked: 0,
       hovered: false
-    }
+    };
+
+    socket.on('adding_new_friend', (userData) => {
+      console.log('adding_new_friend', userData);
+      this.loadFriendsSuggestions();
+    });
+    socket.on('submitting_new_friend', (userData) => {
+      console.log('submitting_new_friend', userData);
+    });
+    socket.on('rejecting_new_friend', (userData) => {
+      console.log('rejecting_new_friend', userData);
+    });
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.currentUserId !== this.props.currentUserId) {
+      socket.emit('connect_new_user', nextProps.currentUserId);
       this.loadFriendsSuggestions(nextProps.currentUserId);
     }
   }
 
+  componentDidMount() {
+    if (window) {
+      window.addEventListener('beforeunload', () => this.handleBeforeUnload());
+    }
+  }
+
+  handleBeforeUnload() {
+    const { currentUserId } = this.props;
+    socket.emit('disconnect_user', currentUserId);
+  }
+
   loadFriendsSuggestions(userId) {
+    const { currentUserId } = this.props;
     const { dispatch } = this.context.store;
-    dispatch(loadNewFriends(userId))
+    dispatch(loadNewFriends(userId || currentUserId))
       .then((response) => {})
       .catch((err) => console.log('err', err));
   }

@@ -24,6 +24,7 @@ export default class Html extends PureComponent {
         <script src="dlls/vendor.dll.js" charSet="UTF-8" />
         <script src="build.js" charSet="UTF-8" />
         <script src="http://localhost:35729/livereload.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
         <script dangerouslySetInnerHTML={{__html: `window.__data=${serialize(store.getState())};`}} charSet="UTF-8"/>
       </body>
       </html>

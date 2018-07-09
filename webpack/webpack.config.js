@@ -15,6 +15,9 @@ module.exports = {
   output: {
     filename: 'build.js'
   },
+  node: {
+    fs: "empty"
+  },
   // hot: true,
   module: {
     rules: [
