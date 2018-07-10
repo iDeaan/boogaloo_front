@@ -7,6 +7,7 @@ import counter from './counter';
 import auth from './auth';
 import friends from './friends';
 import people from './people';
+import notifications from './notifications';
 
 export default combineReducers({
   routing: routerReducer,
@@ -15,5 +16,6 @@ export default combineReducers({
   auth,
   friends,
   people,
+  notifications,
   form: formReducer
 });

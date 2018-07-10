@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import Header from '../../components/App/Header';
 import Menu from '../../components/App/Menu';
+import NotificationsContainer from '../../components/Notifications/NotificationsContainer';
 import renderRoutes from 'react-router-config/renderRoutes'
 import { checkIfTokenValid } from "../../redux/modules/auth";
 import { loadNewFriends } from "../../redux/modules/friends";
+import { showNotification } from "../../redux/modules/notifications";
 import {asyncConnect} from "redux-connect";
 import { withCookies, Cookies } from 'react-cookie';
 import {connect} from "react-redux";
@@ -42,10 +44,6 @@ const socket = io('http://localhost:3030');
   })
 )
 class App extends Component {
-  static contextTypes = {
-    store: PropTypes.object.isRequired
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -54,8 +52,8 @@ class App extends Component {
     };
 
     socket.on('adding_new_friend', (userData) => {
-      console.log('adding_new_friend', userData);
       this.loadFriendsSuggestions();
+      this.showAddingNewFriendNotification(userData);
     });
     socket.on('submitting_new_friend', (userData) => {
       console.log('submitting_new_friend', userData);
@@ -63,6 +61,34 @@ class App extends Component {
     socket.on('rejecting_new_friend', (userData) => {
       console.log('rejecting_new_friend', userData);
     });
+  }
+
+  static contextTypes = {
+    store: PropTypes.object.isRequired
+  };
+
+  showAddingNewFriendNotification(userData) {
+    const { dispatch } = this.context.store;
+
+    const notificationDOM = (
+      <div className="notification-new-friend-container">
+        <div className="title">Заявка в друзі</div>
+        {userData && userData.user
+          ? (
+            <div className="content">
+              <span>{userData.user.name} {userData.user.surname}</span> хоче добавити вас в список друзів.
+            </div>
+          ) : ''
+        }
+
+      </div>
+    );
+
+    const notification = {
+      notificationDOM
+    };
+
+    dispatch(showNotification(notification));
   }
 
   componentWillReceiveProps(nextProps) {
@@ -109,8 +135,23 @@ class App extends Component {
   render() {
     require('./App.scss');
     const { route } = this.props;
+    const { dispatch } = this.context.store;
+
     return (
       <div className="app-container">
+        <div
+          className="toggle-notification"
+          onClick={() => {
+            console.log('clicked');
+            const notification = {
+              message: 'lol'
+            };
+            dispatch(showNotification(notification));
+          }}
+        >
+          Notification1
+        </div>
+        <NotificationsContainer />
         <Header />
         <div className="app-content">
           <Menu />
