@@ -8,6 +8,7 @@ import auth from './auth';
 import friends from './friends';
 import people from './people';
 import notifications from './notifications';
+import chats from './chats';
 
 export default combineReducers({
   routing: routerReducer,
@@ -17,5 +18,6 @@ export default combineReducers({
   friends,
   people,
   notifications,
+  chats,
   form: formReducer
 });

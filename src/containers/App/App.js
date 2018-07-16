@@ -6,6 +6,7 @@ import renderRoutes from 'react-router-config/renderRoutes'
 import { checkIfTokenValid } from "../../redux/modules/auth";
 import { loadNewFriends } from "../../redux/modules/friends";
 import { showNotification } from "../../redux/modules/notifications";
+import { loadChatsList } from "../../redux/modules/chats";
 import {asyncConnect} from "redux-connect";
 import { withCookies, Cookies } from 'react-cookie';
 import {connect} from "react-redux";
@@ -40,7 +41,9 @@ const socket = io('http://localhost:3030');
 }])
 @connect(
   state => ({
-    currentUserId: state.auth.currentUserId
+    currentUserId: state.auth.currentUserId,
+    token: state.auth.token,
+    chatsList: state.chats.chatsList
   })
 )
 class App extends Component {
@@ -56,10 +59,10 @@ class App extends Component {
       this.showAddingNewFriendNotification(userData);
     });
     socket.on('submitting_new_friend', (userData) => {
-      console.log('submitting_new_friend', userData);
+      this.showSubmittingNewFriendNotification(userData);
     });
     socket.on('rejecting_new_friend', (userData) => {
-      console.log('rejecting_new_friend', userData);
+      this.showSubmittingNewFriendNotification(userData, false);
     });
   }
 
@@ -80,7 +83,29 @@ class App extends Component {
             </div>
           ) : ''
         }
+      </div>
+    );
 
+    const notification = {
+      notificationDOM
+    };
+
+    dispatch(showNotification(notification));
+  }
+
+  showSubmittingNewFriendNotification(userData, success = true) {
+    const { dispatch } = this.context.store;
+
+    const notificationDOM = (
+      <div className="notification-new-friend-container">
+        <div className="title">Заявка в друзі</div>
+        {userData && userData.user
+          ? (
+            <div className="content">
+              <span>{userData.user.name} {userData.user.surname}</span> {success ? 'прийняв' : 'відхилив'} Вашу заяку.
+            </div>
+          ) : ''
+        }
       </div>
     );
 
@@ -92,9 +117,20 @@ class App extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { dispatch } = this.context.store;
+
     if (nextProps.currentUserId !== this.props.currentUserId) {
-      socket.emit('connect_new_user', nextProps.currentUserId);
+      console.log('nextProps', nextProps);
+      // @TODO: SEND INFORMATION ABOUT CHATS LIST
+      dispatch(loadChatsList(nextProps.token, nextProps.currentUserId));
+
       this.loadFriendsSuggestions(nextProps.currentUserId);
+    }
+    if (nextProps.chatsList.length && nextProps.chatsList.length !== this.props.chatsList.length) {
+      socket.emit('connect_new_user', {
+        userId: nextProps.currentUserId,
+        chats: nextProps.chatsList
+      });
     }
   }
 
@@ -139,18 +175,6 @@ class App extends Component {
 
     return (
       <div className="app-container">
-        <div
-          className="toggle-notification"
-          onClick={() => {
-            console.log('clicked');
-            const notification = {
-              message: 'lol'
-            };
-            dispatch(showNotification(notification));
-          }}
-        >
-          Notification1
-        </div>
         <NotificationsContainer />
         <Header />
         <div className="app-content">
