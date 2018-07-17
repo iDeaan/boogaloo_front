@@ -13,7 +13,7 @@ const USERS_LOAD_FAIL = 'boogaloo/auth/USERS_LOAD_FAIL';
 const initialState = {
   chatsList: [],
   chatsData: [],
-  usersData: [],
+  chatsUsers: [],
   loading: false,
   loaded: false,
   error: {}
@@ -77,7 +77,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: true,
-        usersData: Array.isArray(action.result.data) ? action.result.data : [action.result.data],
+        chatsUsers: Array.isArray(action.result.data) ? action.result.data : [action.result.data],
         error: null
       };
     }
@@ -86,7 +86,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: false,
-        usersData: [],
+        chatsUsers: [],
         error: action.error
       };
     default:

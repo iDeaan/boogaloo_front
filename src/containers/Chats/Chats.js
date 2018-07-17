@@ -2,16 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  loadUserFriendsIds, loadUserFriendsData, searchFriends, loadFullUserFriendsIds
-} from "../../redux/modules/friends";
-import {
   loadChatsData, loadChatsUsers
 } from "../../redux/modules/chats";
 import {asyncConnect} from "redux-connect";
 import authenticated from "../../helpers/authenticated";
-import FriendAvatar from "../../components/Friends/FriendAvatar";
-import FriendsSearch from "../../components/Friends/FriendsSearch";
-import FriendsSuggestions from "../../components/Friends/FriendsSuggestions";
+import ChatsList from "../../components/Chats/ChatsList";
 
 const SEARCH_DELAY_TIME = 500;
 
@@ -64,6 +59,10 @@ export default class Chats extends Component {
     store: PropTypes.object.isRequired
   };
 
+  componentDidMount() {
+    this.loadChatsDataAndUsers(this.props);
+  }
+
   componentWillReceiveProps(nextProps) {
     const { chats } = this.props;
     const { chats: nextChats } = nextProps;
@@ -81,7 +80,6 @@ export default class Chats extends Component {
     const { chats, token, currentUserId } = props;
 
     const { chatsList } = chats;
-    console.log('chatsList', chatsList)
     dispatch(loadChatsData(token, chatsList.join(','))).then((response) => {
       const resultData = Array.isArray(response.data) ? response.data : [response.data];
       let usersIds = [];
@@ -99,13 +97,14 @@ export default class Chats extends Component {
   }
 
   render() {
+    const { chats } = this.props;
+    const { chatsData, chatsUsers } = chats;
+
     require('./Chats.scss');
     return [
       <div className="full-content">
         <div className={`chats-container route-container`}>
-          <div className="chats-list">
-            FIENERERE
-          </div>
+          <ChatsList chatsList={chatsData} chatsUsers={chatsUsers} />
           <div className="chats-data">
             chats data
           </div>
