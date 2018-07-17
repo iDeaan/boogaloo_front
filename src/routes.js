@@ -3,7 +3,8 @@ import {
   Sign,
   Home,
   Friends,
-  People
+  People,
+  Chats
 } from './containers';
 
 const routes = [{
@@ -28,6 +29,11 @@ const routes = [{
       path: '/people',
       exact: true,
       component: People,
+    },
+    {
+      path: '/chats',
+      exact: true,
+      component: Chats,
     }
   ]
 }];

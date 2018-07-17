@@ -52,7 +52,7 @@ export default class Menu extends Component {
         <MenuItem linkTo="/profile" text="Моя сторінка" />
         <MenuItem linkTo="/" text="Новини" />
         <MenuItem linkTo="/friends" text="Друзі" count={friendSuggestCount} />
-        <MenuItem linkTo="/messages" text="Повідомлення" />
+        <MenuItem linkTo="/chats" text="Повідомлення" />
         <MenuItem linkTo="/sign" text="Реєстрація" />
         <br /><br />
         <MenuItem linkTo="/people" text="Люди" />

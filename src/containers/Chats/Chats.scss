@@ -1,0 +1,14 @@
+:global {
+  .chats-container.route-container {
+    display: flex;
+    padding: 10px;
+
+    .chats-list {
+      width: 280px;
+      height: calc(100% - 20px);
+      border-right: solid 1px #4e5967;
+      box-sizing: border-box;
+    }
+  }
+}
+
