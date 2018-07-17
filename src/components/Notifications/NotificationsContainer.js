@@ -37,8 +37,6 @@ export default class NotificationsContainer extends PureComponent {
     const { notifications } = this.props;
     const { showNewNotification, notificationDOM } = notifications;
 
-    console.log('showNewNotification render', showNewNotification);
-
     require('./Notifications.scss');
     return (
       <div className={`notifications-container ${showNewNotification ? 'displayed' : ''}`}>

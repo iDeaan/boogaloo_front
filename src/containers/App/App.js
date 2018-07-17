@@ -120,7 +120,7 @@ class App extends Component {
     const { dispatch } = this.context.store;
 
     if (nextProps.currentUserId !== this.props.currentUserId) {
-      console.log('nextProps', nextProps);
+      // console.log('nextProps', nextProps);
       // @TODO: SEND INFORMATION ABOUT CHATS LIST
       dispatch(loadChatsList(nextProps.token, nextProps.currentUserId));
 
