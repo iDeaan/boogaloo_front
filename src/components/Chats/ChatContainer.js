@@ -4,6 +4,9 @@ import {
   loadMessages
 } from "../../redux/modules/chats";
 import { connect } from "react-redux";
+import Button from "../AdditionalComponents/Button";
+
+const CHAT_INPUT_HEIGHT = 180;
 
 @connect(
   state => ({
@@ -20,7 +23,8 @@ export default class ChatContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentChatUsers: []
+      currentChatUsers: [],
+      blockHeight: 0
     }
   }
 
@@ -47,6 +51,7 @@ export default class ChatContainer extends Component {
       this.loadMessagesList(this.props);
       this.setCurrentChatUsers(this.props);
     }
+    this.setBlockHeight();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -80,16 +85,29 @@ export default class ChatContainer extends Component {
     this.setState({ currentChatUsers: currentChatUsers });
   }
 
+  setBlockHeight() {
+    if (document) {
+      const element = document.getElementById('chat-content-container');
+      if (element) {
+        this.setState({ blockHeight: element.offsetHeight });
+      }
+    }
+  }
+
   render() {
     const { messages, currentUserId, userData } = this.props;
-    const { currentChatUsers } = this.state;
+    const { currentChatUsers, blockHeight } = this.state;
 
     return (
-      <div className="chats-data chats-messages">
-        <div className="messages-list">
+      <div className="chats-data chats-messages" id="chat-content-container">
+        <div className="messages-list" style={{ height: `${blockHeight - CHAT_INPUT_HEIGHT}px` }}>
           {messages && messages.length ? messages.map((message, index) => {
-            if (index !== messages.length) {
-
+            let isToShowUserInitials = true;
+            if (index !== 0) {
+              const prevMessage = messages[index - 1];
+              if (message.user_id === prevMessage.user_id) {
+                isToShowUserInitials = false;
+              }
             }
             return (
               <Message
@@ -97,12 +115,16 @@ export default class ChatContainer extends Component {
                 currentChatUsers={currentChatUsers}
                 message={message}
                 currentUserData={userData && userData[0] ? userData[0] : null}
+                isToShowUserInitials={isToShowUserInitials}
               />
             );
           }) : ''}
         </div>
-        <div className="text-input">
-          <input />
+        <div className="text-input-container" style={{ height: `${CHAT_INPUT_HEIGHT}px` }}>
+          <textarea className="data-input" />
+          <div className="submit-button">
+            <Button iconRight="fa-paper-plane" text="Відправити" />
+          </div>
         </div>
       </div>
     )
