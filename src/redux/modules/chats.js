@@ -12,10 +12,15 @@ const USERS_LOAD_FAIL = 'boogaloo/chats/USERS_LOAD_FAIL';
 
 const SELECT_CHAT = 'boogaloo/chats/SELECT_CHAT';
 
+const MESSAGES_LOAD_START = 'boogaloo/chats/MESSAGES_LOAD_START';
+const MESSAGES_LOAD_SUCCESS = 'boogaloo/chats/MESSAGES_LOAD_SUCCESS';
+const MESSAGES_LOAD_FAIL = 'boogaloo/chats/MESSAGES_LOAD_FAIL';
+
 const initialState = {
   chatsList: [],
   chatsData: [],
   chatsUsers: [],
+  messages: [],
   selectedChat: null,
   loading: false,
   loaded: false,
@@ -75,7 +80,6 @@ export default function reducer(state = initialState, action = {}) {
         loading: true
       };
     case USERS_LOAD_SUCCESS: {
-      console.log('action.result.data', action.result.data);
       return {
         ...state,
         loading: false,
@@ -96,6 +100,28 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         selectedChat: action.selectedChat
+      };
+    case MESSAGES_LOAD_START:
+      return {
+        ...state,
+        loading: true
+      };
+    case MESSAGES_LOAD_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        messages: Array.isArray(action.result.data) ? action.result.data : [action.result.data],
+        error: null
+      };
+    }
+    case MESSAGES_LOAD_FAIL:
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+        messages: [],
+        error: action.error
       };
     default:
       return state;
@@ -127,5 +153,12 @@ export function selectChat(chatId) {
   return {
     type: SELECT_CHAT,
     selectedChat: chatId
+  };
+}
+
+export function loadMessages(token, chatId, limit = 10, offset = 0) {
+  return {
+    types: [MESSAGES_LOAD_START, MESSAGES_LOAD_SUCCESS, MESSAGES_LOAD_FAIL],
+    promise: client => client.get(`http://localhost:3030/chats_messages?token=${token}&chat_id=${chatId}&limit=${limit}&offset=${offset}`)
   };
 }

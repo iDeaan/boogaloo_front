@@ -35,7 +35,6 @@ class ChatItem extends Component {
       const currentChatUser = chatUsers[0];
       const currentUserImageAvatar = currentChatUser && currentChatUser.images
         && currentChatUser.images.find(image => image.image_type === 'avatar');
-      console.log('currentChatUser', currentChatUser)
       return (
         <div
           className="chat-item-container"

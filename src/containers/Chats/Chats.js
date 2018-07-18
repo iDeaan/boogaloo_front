@@ -7,6 +7,7 @@ import {
 import {asyncConnect} from "redux-connect";
 import authenticated from "../../helpers/authenticated";
 import ChatsList from "../../components/Chats/ChatsList";
+import ChatContainer from "../../components/Chats/ChatContainer";
 
 const SEARCH_DELAY_TIME = 500;
 
@@ -105,9 +106,7 @@ export default class Chats extends Component {
       <div className="full-content">
         <div className={`chats-container route-container`}>
           <ChatsList chatsList={chatsData} chatsUsers={chatsUsers} />
-          <div className="chats-data">
-            chats data
-          </div>
+          <ChatContainer />
         </div>
       </div>
     ];
