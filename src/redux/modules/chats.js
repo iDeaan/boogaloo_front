@@ -1,19 +1,22 @@
-const CHAT_LOAD_START = 'boogaloo/auth/CHAT_LOAD_START';
-const CHAT_LOAD_SUCCESS = 'boogaloo/auth/CHAT_LOAD_SUCCESS';
-const CHAT_LOAD_FAIL = 'boogaloo/auth/CHAT_LOAD_FAIL';
+const CHAT_LOAD_START = 'boogaloo/chats/CHAT_LOAD_START';
+const CHAT_LOAD_SUCCESS = 'boogaloo/chats/CHAT_LOAD_SUCCESS';
+const CHAT_LOAD_FAIL = 'boogaloo/chats/CHAT_LOAD_FAIL';
 
-const CHAT_DATA_LOAD_START = 'boogaloo/auth/CHAT_DATA_LOAD_START';
-const CHAT_DATA_LOAD_SUCCESS = 'boogaloo/auth/CHAT_DATA_LOAD_SUCCESS';
-const CHAT_DATA_LOAD_FAIL = 'boogaloo/auth/CHAT_DATA_LOAD_FAIL';
+const CHAT_DATA_LOAD_START = 'boogaloo/chats/CHAT_DATA_LOAD_START';
+const CHAT_DATA_LOAD_SUCCESS = 'boogaloo/chats/CHAT_DATA_LOAD_SUCCESS';
+const CHAT_DATA_LOAD_FAIL = 'boogaloo/chats/CHAT_DATA_LOAD_FAIL';
 
-const USERS_LOAD_START = 'boogaloo/auth/USERS_LOAD_START';
-const USERS_LOAD_SUCCESS = 'boogaloo/auth/USERS_LOAD_SUCCESS';
-const USERS_LOAD_FAIL = 'boogaloo/auth/USERS_LOAD_FAIL';
+const USERS_LOAD_START = 'boogaloo/chats/USERS_LOAD_START';
+const USERS_LOAD_SUCCESS = 'boogaloo/chats/USERS_LOAD_SUCCESS';
+const USERS_LOAD_FAIL = 'boogaloo/chats/USERS_LOAD_FAIL';
+
+const SELECT_CHAT = 'boogaloo/chats/SELECT_CHAT';
 
 const initialState = {
   chatsList: [],
   chatsData: [],
   chatsUsers: [],
+  selectedChat: null,
   loading: false,
   loaded: false,
   error: {}
@@ -89,6 +92,11 @@ export default function reducer(state = initialState, action = {}) {
         chatsUsers: [],
         error: action.error
       };
+    case SELECT_CHAT:
+      return {
+        ...state,
+        selectedChat: action.selectedChat
+      };
     default:
       return state;
   }
@@ -112,5 +120,12 @@ export function loadChatsUsers(token, usersIds) {
   return {
     types: [USERS_LOAD_START, USERS_LOAD_SUCCESS, USERS_LOAD_FAIL],
     promise: client => client.get(`http://localhost:3030/users?token=${token}&where=(id*IN*${usersIds})&order=FIELD(id)&relations=images`)
+  };
+}
+
+export function selectChat(chatId) {
+  return {
+    type: SELECT_CHAT,
+    selectedChat: chatId
   };
 }

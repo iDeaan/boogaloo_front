@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Button from '../AdditionalComponents/Button';
 import { deleteFriend } from '../../helpers/functions';
 import {
-  deleteFriend as deleteFriendFromStore
-} from "../../redux/modules/friends";
+  selectChat
+} from "../../redux/modules/chats";
 
 class ChatItem extends Component {
   static  propTypes = {
@@ -17,6 +17,17 @@ class ChatItem extends Component {
     chatUsers: []
   };
 
+  static contextTypes = {
+    store: PropTypes.object
+  };
+
+  handleChatClick() {
+    const { dispatch } = this.context.store;
+    const { chat } = this.props;
+
+    dispatch(selectChat(chat.id));
+  }
+
   render() {
     const { chat, chatUsers } = this.props;
 
@@ -26,7 +37,10 @@ class ChatItem extends Component {
         && currentChatUser.images.find(image => image.image_type === 'avatar');
       console.log('currentChatUser', currentChatUser)
       return (
-        <div className="chat-item-container">
+        <div
+          className="chat-item-container"
+          onClick={() => this.handleChatClick()}
+        >
           {currentUserImageAvatar
             ? (
               <div className="avatar-image">
