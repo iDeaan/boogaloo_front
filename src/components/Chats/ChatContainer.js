@@ -12,6 +12,7 @@ import { connect } from "react-redux";
     chatsData: state.chats.chatsData,
     messages: state.chats.messages,
     token: state.auth.token,
+    userData: state.auth.data,
     currentUserId: state.auth.currentUserId
   })
 )
@@ -80,19 +81,25 @@ export default class ChatContainer extends Component {
   }
 
   render() {
-    const { messages, currentUserId } = this.props;
+    const { messages, currentUserId, userData } = this.props;
     const { currentChatUsers } = this.state;
 
     return (
       <div className="chats-data chats-messages">
         <div className="messages-list">
-          {messages && messages.length ? messages.map(message =>
-            <Message
-              currentUserId={currentUserId}
-              currentChatUsers={currentChatUsers}
-              message={message}
-            />
-          ) : ''}
+          {messages && messages.length ? messages.map((message, index) => {
+            if (index !== messages.length) {
+
+            }
+            return (
+              <Message
+                currentUserId={currentUserId}
+                currentChatUsers={currentChatUsers}
+                message={message}
+                currentUserData={userData && userData[0] ? userData[0] : null}
+              />
+            );
+          }) : ''}
         </div>
         <div className="text-input">
           <input />
@@ -106,53 +113,77 @@ class Message extends Component {
   static propTypes = {
     currentUserId: PropTypes.number,
     currentChatUsers: PropTypes.array,
+    currentUserData: PropTypes.object,
+    isToShowUserInitials: PropTypes.bool,
     message: PropTypes.object
   };
 
   static defaultProps = {
     currentUserId: 0,
     currentChatUsers: [],
+    isToShowUserInitials: true,
     message: {}
   };
 
   render() {
-    const { message, currentUserId, currentChatUsers } = this.props;
+    const { message, currentUserId, currentChatUsers, currentUserData, isToShowUserInitials } = this.props;
 
     let userAvatar = null;
     let currentUser = null;
 
     if (message.user_id !== currentUserId) {
       currentUser = currentChatUsers.find((user) => user.id === message.user_id);
-      userAvatar = currentUser && currentUser.images
-        && currentUser.images.find(image => image.image_type === 'avatar');
+    } else {
+      currentUser = currentUserData;
     }
 
+    userAvatar = currentUser && currentUser.images
+      && currentUser.images.find(image => image.image_type === 'avatar');
+
     require('./ChatContainer.scss');
+
+    if (!currentUser) {
+      return (
+        <div className={`message-item`}>
+          Немає ніяких повідомлень
+        </div>
+      )
+    }
+
     return (
-      <div className={`message-item ${message.user_id === currentUserId ? 'own-message' : ''}`}>
-        {currentUser
-          ? <div className="user-information">{currentUser.name} {currentUser.surname}</div>
-          : ''
-        }
-        <div className="user-avatar">
-          {userAvatar
+      <div className={`message-item`}>
+        <div className="left-part">
+          {isToShowUserInitials
             ? (
-              <div className="avatar-image">
-                {userAvatar.absolute_href
-                  ? <img src={userAvatar.absolute_href} />
-                  : <img src={userAvatar.href} />
+              <div className="user-avatar">
+                {userAvatar
+                  ? (
+                    <div className="avatar-image">
+                      {userAvatar.absolute_href
+                        ? <img src={userAvatar.absolute_href} />
+                        : <img src={userAvatar.href} />
+                      }
+                    </div>
+                  )
+                  : (
+                    <div className="avatar-image">
+                      <img src="/img/no_image.png" />
+                    </div>
+                  )
                 }
               </div>
             )
-            : (
-              <div className="avatar-image">
-                <img src="/img/no_image.png" />
-              </div>
-            )
+            : ''
           }
         </div>
-        <div className="message">
-          {message.message}
+        <div className="right-part">
+          {isToShowUserInitials
+            ? <div className="user-information">{currentUser.name} {currentUser.surname}</div>
+            : ''
+          }
+          <div className="message">
+            {message.message}
+          </div>
         </div>
       </div>
     );

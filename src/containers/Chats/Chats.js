@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  loadChatsData, loadChatsUsers
+  loadChatsData, loadChatsUsers, selectChat
 } from "../../redux/modules/chats";
 import {asyncConnect} from "redux-connect";
 import authenticated from "../../helpers/authenticated";
@@ -93,7 +93,9 @@ export default class Chats extends Component {
         });
       });
 
-      dispatch(loadChatsUsers(token, usersIds));
+      dispatch(loadChatsUsers(token, usersIds)).then(() => {
+        dispatch(selectChat(chatsList[0]));
+      });
     });
   }
 

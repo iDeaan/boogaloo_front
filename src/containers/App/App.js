@@ -3,7 +3,7 @@ import Header from '../../components/App/Header';
 import Menu from '../../components/App/Menu';
 import NotificationsContainer from '../../components/Notifications/NotificationsContainer';
 import renderRoutes from 'react-router-config/renderRoutes'
-import { checkIfTokenValid } from "../../redux/modules/auth";
+import { checkIfTokenValid, loadCurrentUser } from "../../redux/modules/auth";
 import { loadNewFriends } from "../../redux/modules/friends";
 import { showNotification } from "../../redux/modules/notifications";
 import { loadChatsList } from "../../redux/modules/chats";
@@ -29,7 +29,9 @@ const socket = io('http://localhost:3030');
 
     if (token && user) {
       promises.push(dispatch(checkIfTokenValid(token, user))
-        .then(() => {})
+        .then(() => {
+          dispatch(loadCurrentUser(token, user));
+        })
         .catch(() => {
           cookies.remove('token');
           cookies.remove('user');

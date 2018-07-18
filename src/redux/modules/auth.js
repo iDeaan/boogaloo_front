@@ -119,3 +119,10 @@ export function checkIfTokenValid(token, userId) {
     promise: client => client.get(`http://localhost:3030/sign?token=${token}&userId=${userId}`)
   };
 }
+
+export function loadCurrentUser(token, userId) {
+  return {
+    types: [SIGN_START, SIGN_SUCCESS, SIGN_FAIL],
+    promise: client => client.get(`http://localhost:3030/users?token=${token}&where=(id*=*${userId})&relations=images`)
+  };
+}
