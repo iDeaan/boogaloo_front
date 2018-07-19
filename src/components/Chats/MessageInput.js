@@ -6,10 +6,7 @@ import { deleteFriend } from '../../helpers/functions';
 import {
   sendNewMessage
 } from "../../redux/modules/chats";
-
-const renderTextArea = ({input, meta: { touched, error, warning }}) => (
-  <textarea {...input} placeholder="Введіть повідомлення" className="data-input" />
-);
+import InputTextArea from '../FormFields/InputTextArea';
 
 @reduxForm({
   form: 'MessageInputForm'
@@ -41,17 +38,28 @@ export default class MessageInput extends Component {
     dispatch(sendNewMessage(token, values)).then(() => reset());
   }
 
+  handleKeyDown = (e, cb) => {
+    if (e.key === 'Enter' && e.shiftKey === false) {
+      e.preventDefault();
+      cb();
+    }
+  };
+
   render() {
+    const { dispatch } = this.context.store;
     const { handleSubmit, blockHeight } = this.props;
+
     return (
       <div className="text-input-container" style={{ height: `${blockHeight}px` }}>
         <form
           onSubmit={handleSubmit((values) => this.handleSubmit(values))}
+          onKeyDown={(e) => { this.handleKeyDown(e, handleSubmit((values) => this.handleSubmit(values))); }}
           className="login-form"
         >
           <Field
             name="message"
-            component={renderTextArea}
+            component={InputTextArea}
+            handleSubmit={handleSubmit}
           />
           <div className="submit-button">
             <Button
