@@ -4,6 +4,10 @@ import {
   loadMessages
 } from "../../redux/modules/chats";
 import { connect } from "react-redux";
+import {
+  userPrintingMessageInChatStart,
+  userPrintingMessageInChatStop
+} from '../../helpers/sockets';
 import Button from "../AdditionalComponents/Button";
 import MessageInput from "./MessageInput";
 
@@ -25,8 +29,12 @@ export default class ChatContainer extends Component {
     super(props);
     this.state = {
       currentChatUsers: [],
-      blockHeight: 0
+      blockHeight: 0,
+      userPrintingInformation: false
     }
+
+    userPrintingMessageInChatStart((data) => this.userPrintingMessageStart(data));
+    userPrintingMessageInChatStop((data) => this.userPrintingMessageStop(data));
   }
 
   static  propTypes = {
@@ -65,6 +73,22 @@ export default class ChatContainer extends Component {
     }
   }
 
+  userPrintingMessageStart(data) {
+    const { selectedChat } = this.props;
+
+    if (selectedChat === data.chatId) {
+      this.setState({ userPrintingInformation: data.userInformation });
+    }
+  }
+
+  userPrintingMessageStop(data) {
+    const { selectedChat } = this.props;
+
+    if (selectedChat === data.chatId) {
+      this.setState({ userPrintingInformation: null });
+    }
+  }
+
   loadMessagesList(props) {
     const { dispatch } = this.context.store;
     const { selectedChat, token } = props;
@@ -97,7 +121,7 @@ export default class ChatContainer extends Component {
 
   render() {
     const { messages, currentUserId, userData, token, selectedChat } = this.props;
-    const { currentChatUsers, blockHeight } = this.state;
+    const { currentChatUsers, blockHeight, userPrintingInformation } = this.state;
 
     return (
       <div className="chats-data chats-messages" id="chat-content-container">
@@ -121,6 +145,10 @@ export default class ChatContainer extends Component {
             );
           }) : ''}
         </div>
+        {userPrintingInformation
+          ? <div>{userPrintingInformation} набирає повідомлення</div>
+          : ''
+        }
         <MessageInput blockHeight={CHAT_INPUT_HEIGHT} token={token} chatId={selectedChat} />
       </div>
     )

@@ -14,6 +14,14 @@ export function rejectingNewFriend(cb) {
   socket.on('rejecting_new_friend', (userData) => cb(userData));
 }
 
+export function userPrintingMessageInChatStart(cb) {
+  socket.on('user_printing_message_in_chat_start', (userInformation) => cb(userInformation));
+}
+
+export function userPrintingMessageInChatStop(cb) {
+  socket.on('user_printing_message_in_chat_stop', (userInformation) => cb(userInformation));
+}
+
 export function newMessage(cb) {
   socket.on('new_message', (message) => cb(message));
 }
@@ -27,4 +35,18 @@ export function connectNewUser(nextProps) {
 
 export function disconnectUser(currentUserId) {
   socket.emit('disconnect_user', currentUserId);
+}
+
+export function userPrintingMessageStart(chatId, userInformation) {
+  socket.emit('user_printing_message_start', {
+    chatId,
+    userInformation
+  })
+}
+
+export function userPrintingMessageStop(chatId, userInformation) {
+  socket.emit('user_printing_message_stop', {
+    chatId,
+    userInformation
+  })
 }
