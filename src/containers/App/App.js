@@ -12,7 +12,7 @@ import { withCookies, Cookies } from 'react-cookie';
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import io from "socket.io-client";
-
+import { addNewMessages } from "../../redux/modules/chats";
 const cookies = new Cookies();
 
 const socket = io('http://localhost:3030');
@@ -45,7 +45,8 @@ const socket = io('http://localhost:3030');
   state => ({
     currentUserId: state.auth.currentUserId,
     token: state.auth.token,
-    chatsList: state.chats.chatsList
+    chatsList: state.chats.chatsList,
+    selectedChat: state.chats.selectedChat
   })
 )
 class App extends Component {
@@ -66,14 +67,21 @@ class App extends Component {
     socket.on('rejecting_new_friend', (userData) => {
       this.showSubmittingNewFriendNotification(userData, false);
     });
-    socket.on('new_message', (message) => {
-      console.log('message', message);
-    })
+    socket.on('new_message', (message) => this.handleNewMessageAdded(message))
   }
 
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
+
+  handleNewMessageAdded(message) {
+    const { dispatch } = this.context.store;
+    const { selectedChat, currentUserId } = this.props;
+
+    if ((message.user_id !== currentUserId) && (selectedChat === message.chat_id)) {
+      dispatch(addNewMessages(message));
+    }
+  }
 
   showAddingNewFriendNotification(userData) {
     const { dispatch } = this.context.store;
