@@ -66,6 +66,9 @@ class App extends Component {
     socket.on('rejecting_new_friend', (userData) => {
       this.showSubmittingNewFriendNotification(userData, false);
     });
+    socket.on('new_message', (message) => {
+      console.log('message', message);
+    })
   }
 
   static contextTypes = {

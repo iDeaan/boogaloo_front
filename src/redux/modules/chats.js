@@ -16,6 +16,12 @@ const MESSAGES_LOAD_START = 'boogaloo/chats/MESSAGES_LOAD_START';
 const MESSAGES_LOAD_SUCCESS = 'boogaloo/chats/MESSAGES_LOAD_SUCCESS';
 const MESSAGES_LOAD_FAIL = 'boogaloo/chats/MESSAGES_LOAD_FAIL';
 
+const SEND_MESSAGE_START = 'boogaloo/chats/SEND_MESSAGE_START';
+const SEND_MESSAGE_SUCCESS = 'boogaloo/chats/SEND_MESSAGE_SUCCESS';
+const SEND_MESSAGE_FAIL = 'boogaloo/chats/SEND_MESSAGE_FAIL';
+
+const ADD_MESSAGES = 'boogaloo/chats/ADD_MESSAGES';
+
 const initialState = {
   chatsList: [],
   chatsData: [],
@@ -24,6 +30,8 @@ const initialState = {
   selectedChat: null,
   loading: false,
   loaded: false,
+  sendingMessage: false,
+  sentMessage: false,
   error: {}
 };
 
@@ -123,6 +131,33 @@ export default function reducer(state = initialState, action = {}) {
         messages: [],
         error: action.error
       };
+    case ADD_MESSAGES: {
+      const addedMessages = Array.isArray(action.newMessages) ? action.newMessages : [action.newMessages];
+      return {
+        ...state,
+        messages: [...state.messages, ...addedMessages]
+      };
+    }
+    case SEND_MESSAGE_START:
+      return {
+        ...state,
+        sendingMessage: true
+      };
+    case SEND_MESSAGE_SUCCESS: {
+      const addedMessages = Array.isArray(action.result.data) ? action.result.data : [action.result.data];
+      return {
+        ...state,
+        sendingMessage: false,
+        messages: [...state.messages, ...addedMessages]
+      };
+    }
+    case SEND_MESSAGE_FAIL:
+      return {
+        ...state,
+        sendingMessage: false,
+        sentMessage: false,
+        error: action.error
+      };
     default:
       return state;
   }
@@ -160,5 +195,24 @@ export function loadMessages(token, chatId, limit = 10, offset = 0) {
   return {
     types: [MESSAGES_LOAD_START, MESSAGES_LOAD_SUCCESS, MESSAGES_LOAD_FAIL],
     promise: client => client.get(`http://localhost:3030/chats_messages?token=${token}&chat_id=${chatId}&limit=${limit}&offset=${offset}`)
+  };
+}
+
+export function addNewMessages(messages) {
+  return {
+    type: ADD_MESSAGES,
+    newMessages: messages
+  };
+}
+
+export function sendNewMessage(token, messageData) {
+  return {
+    types: [SEND_MESSAGE_START, SEND_MESSAGE_SUCCESS, SEND_MESSAGE_FAIL],
+    promise: client => client.post(`http://localhost:3030/chats_messages?token=${token}`,
+      {
+        data: JSON.stringify(messageData),
+        headers: [{ name: 'Content-Type', value: 'application/json' }]
+      }
+    )
   };
 }

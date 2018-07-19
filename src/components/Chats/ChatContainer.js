@@ -5,6 +5,7 @@ import {
 } from "../../redux/modules/chats";
 import { connect } from "react-redux";
 import Button from "../AdditionalComponents/Button";
+import MessageInput from "./MessageInput";
 
 const CHAT_INPUT_HEIGHT = 180;
 
@@ -95,7 +96,7 @@ export default class ChatContainer extends Component {
   }
 
   render() {
-    const { messages, currentUserId, userData } = this.props;
+    const { messages, currentUserId, userData, token, selectedChat } = this.props;
     const { currentChatUsers, blockHeight } = this.state;
 
     return (
@@ -105,7 +106,7 @@ export default class ChatContainer extends Component {
             let isToShowUserInitials = true;
             if (index !== 0) {
               const prevMessage = messages[index - 1];
-              if (message.user_id === prevMessage.user_id) {
+              if (prevMessage && message && message.user_id === prevMessage.user_id) {
                 isToShowUserInitials = false;
               }
             }
@@ -120,12 +121,7 @@ export default class ChatContainer extends Component {
             );
           }) : ''}
         </div>
-        <div className="text-input-container" style={{ height: `${CHAT_INPUT_HEIGHT}px` }}>
-          <textarea className="data-input" />
-          <div className="submit-button">
-            <Button iconRight="fa-paper-plane" text="Відправити" />
-          </div>
-        </div>
+        <MessageInput blockHeight={CHAT_INPUT_HEIGHT} token={token} chatId={selectedChat} />
       </div>
     )
   }

@@ -85,9 +85,6 @@ export default class ChatsList extends Component {
   render() {
     const { chatsList, chatsUsers } = this.props;
 
-    // console.log('chatsList', chatsList);
-    console.log('chatsUsers', chatsUsers);
-
     require('./ChatsList.scss');
     return (
       <div className="chats-list-container chats-list">
