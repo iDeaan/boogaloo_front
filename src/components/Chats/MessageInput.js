@@ -33,12 +33,12 @@ export default class MessageInput extends Component {
   };
 
   handleSubmit(values) {
-    const { token, chatId } = this.props;
+    const { token, chatId, reset } = this.props;
     const { dispatch } = this.context.store;
 
     values.chat_id = chatId;
 
-    dispatch(sendNewMessage(token, values)).then((response) => console.log('response', response));
+    dispatch(sendNewMessage(token, values)).then(() => reset());
   }
 
   render() {

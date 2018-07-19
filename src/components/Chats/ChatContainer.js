@@ -102,7 +102,7 @@ export default class ChatContainer extends Component {
     return (
       <div className="chats-data chats-messages" id="chat-content-container">
         <div className="messages-list" style={{ height: `${blockHeight - CHAT_INPUT_HEIGHT}px` }}>
-          {messages && messages.length ? messages.map((message, index) => {
+          {messages && messages.length ? messages.sort((first, second) => first.id - second.id).map((message, index) => {
             let isToShowUserInitials = true;
             if (index !== 0) {
               const prevMessage = messages[index - 1];
