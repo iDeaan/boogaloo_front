@@ -11,13 +11,17 @@ import {asyncConnect} from "redux-connect";
 import { withCookies, Cookies } from 'react-cookie';
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import io from "socket.io-client";
 import { addNewMessages } from "../../redux/modules/chats";
+import {
+  addingNewFriend,
+  submittingNewFriend,
+  rejectingNewFriend,
+  connectNewUser,
+  newMessage,
+  disconnectUser
+} from '../../helpers/sockets';
+
 const cookies = new Cookies();
-
-const socket = io('http://localhost:3030');
-
-
 
 @asyncConnect([{
   promise: ({ store: { dispatch, getState } }) => {
@@ -57,17 +61,18 @@ class App extends Component {
       hovered: false
     };
 
-    socket.on('adding_new_friend', (userData) => {
+
+    addingNewFriend((userData) => {
       this.loadFriendsSuggestions();
       this.showAddingNewFriendNotification(userData);
     });
-    socket.on('submitting_new_friend', (userData) => {
+    submittingNewFriend((userData) => {
       this.showSubmittingNewFriendNotification(userData);
     });
-    socket.on('rejecting_new_friend', (userData) => {
+    rejectingNewFriend((userData) => {
       this.showSubmittingNewFriendNotification(userData, false);
     });
-    socket.on('new_message', (message) => this.handleNewMessageAdded(message))
+    newMessage((message) => this.handleNewMessageAdded(message))
   }
 
   static contextTypes = {
@@ -140,10 +145,7 @@ class App extends Component {
       this.loadFriendsSuggestions(nextProps.currentUserId);
     }
     if (nextProps.chatsList.length && nextProps.chatsList.length !== this.props.chatsList.length) {
-      socket.emit('connect_new_user', {
-        userId: nextProps.currentUserId,
-        chats: nextProps.chatsList
-      });
+      connectNewUser(nextProps);
     }
   }
 
@@ -155,7 +157,7 @@ class App extends Component {
 
   handleBeforeUnload() {
     const { currentUserId } = this.props;
-    socket.emit('disconnect_user', currentUserId);
+    disconnectUser(currentUserId);
   }
 
   loadFriendsSuggestions(userId) {
