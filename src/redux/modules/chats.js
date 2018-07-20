@@ -107,7 +107,8 @@ export default function reducer(state = initialState, action = {}) {
     case SELECT_CHAT:
       return {
         ...state,
-        selectedChat: action.selectedChat
+        selectedChat: action.selectedChat,
+        messages: []
       };
     case MESSAGES_LOAD_START:
       return {
@@ -191,7 +192,7 @@ export function selectChat(chatId) {
   };
 }
 
-export function loadMessages(token, chatId, limit = 10, offset = 0) {
+export function loadMessages(token, chatId, limit = 50, offset = 0) {
   return {
     types: [MESSAGES_LOAD_START, MESSAGES_LOAD_SUCCESS, MESSAGES_LOAD_FAIL],
     promise: client => client.get(`http://localhost:3030/chats_messages?token=${token}&chat_id=${chatId}&limit=${limit}&offset=${offset}`)

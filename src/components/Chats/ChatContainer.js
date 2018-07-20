@@ -31,7 +31,8 @@ export default class ChatContainer extends Component {
     this.state = {
       currentChatUsers: [],
       blockHeight: 0,
-      userPrintingInformation: false
+      userPrintingInformation: false,
+      isToUseInstantScroll: true
     }
 
     userPrintingMessageInChatStart((data) => this.userPrintingMessageStart(data));
@@ -66,12 +67,16 @@ export default class ChatContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selectedChat } = this.props;
-    const { selectedChat: nextSelectedChat } = nextProps;
+    const { selectedChat, messages } = this.props;
+    const { selectedChat: nextSelectedChat, messages: nextMessages } = nextProps;
 
     if (selectedChat !== nextSelectedChat) {
+      this.setState({ isToUseInstantScroll: true });
       this.loadMessagesList(nextProps);
       this.setCurrentChatUsers(nextProps);
+    }
+    if (messages && messages.length && nextMessages.length && (messages.length !== nextMessages.length)) {
+      this.setState({ isToUseInstantScroll: false });
     }
   }
 
@@ -80,7 +85,9 @@ export default class ChatContainer extends Component {
   }
 
   scrollToBottom() {
-    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    const { isToUseInstantScroll } = this.state;
+    const scrollBehavior = isToUseInstantScroll ? 'instant' : 'smooth';
+    this.messagesEnd.scrollIntoView({ behavior: scrollBehavior });
   }
 
   userPrintingMessageStart(data) {
