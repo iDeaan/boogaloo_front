@@ -100,14 +100,14 @@ export default class Chats extends Component {
   }
 
   render() {
-    const { chats } = this.props;
+    const { chats, currentUserId } = this.props;
     const { chatsData, chatsUsers } = chats;
 
     require('./Chats.scss');
     return [
       <div className="full-content">
         <div className={`chats-container route-container`}>
-          <ChatsList chatsList={chatsData} chatsUsers={chatsUsers} />
+          <ChatsList chatsList={chatsData} chatsUsers={chatsUsers} currentUserId={currentUserId} />
           <ChatContainer />
         </div>
       </div>

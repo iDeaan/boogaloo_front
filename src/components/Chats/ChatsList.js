@@ -5,16 +5,20 @@ import { deleteFriend } from '../../helpers/functions';
 import {
   selectChat
 } from "../../redux/modules/chats";
+import AnimatedDots from '../AdditionalComponents/AnimatedDots';
+import { userPrintingMessageInChatStart, userPrintingMessageInChatStop } from "../../helpers/sockets";
 
 class ChatItem extends Component {
   static  propTypes = {
     chat: PropTypes.object,
-    chatUsers: PropTypes.array
+    chatUsers: PropTypes.array,
+    userTypingMessage: PropTypes.string
   };
 
   static defaultProps = {
     chat: {},
-    chatUsers: []
+    chatUsers: [],
+    userTypingMessage: ''
   };
 
   static contextTypes = {
@@ -29,7 +33,7 @@ class ChatItem extends Component {
   }
 
   render() {
-    const { chat, chatUsers } = this.props;
+    const { chat, chatUsers, userTypingMessage } = this.props;
 
     if (chat.chat_type === 'private') {
       const currentChatUser = chatUsers[0];
@@ -60,6 +64,14 @@ class ChatItem extends Component {
               ? <span>{currentChatUser.name} {currentChatUser.surname}</span>
               : ''
             }
+            {userTypingMessage
+              ? (
+                <span className="user-typing-message">
+                  <i className="fa fa-pencil" />набирає повідомлення <AnimatedDots />
+                </span>
+              )
+              : ''
+            }
           </div>
         </div>
       );
@@ -68,13 +80,26 @@ class ChatItem extends Component {
 }
 
 export default class ChatsList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      userChatPrinting: []
+    };
+
+    userPrintingMessageInChatStart((data) => this.userPrintingMessageStart(data));
+    userPrintingMessageInChatStop((data) => this.userPrintingMessageStop(data));
+  }
+
   static propTypes = {
     chatsList: PropTypes.array,
+    currentUserId: PropTypes.number,
     chatsUsers: PropTypes.array
   };
 
   static defaultProps = {
     chatsList: [],
+    currentUserId: [],
     chatsUsers: []
   };
 
@@ -82,8 +107,27 @@ export default class ChatsList extends Component {
     store: PropTypes.object.isRequired
   };
 
+  userPrintingMessageStart(data) {
+    const { currentUserId } = this.props;
+    const { userChatPrinting } = this.state;
+
+    const isPrintingCheckedAlredy = userChatPrinting.find((item) => (item.chatId === data.chatId));
+    if (!isPrintingCheckedAlredy && (data.userId !== currentUserId)) {
+      const resultPrintingArray = [...userChatPrinting, data];
+      this.setState({ userChatPrinting: resultPrintingArray });
+    }
+  }
+
+  userPrintingMessageStop(data) {
+    const { userChatPrinting } = this.state;
+
+    const resultPrintingArray = userChatPrinting.filter((item) => item.chatId !== data.chatId);
+    this.setState({ userChatPrinting: resultPrintingArray });
+  }
+
   render() {
     const { chatsList, chatsUsers } = this.props;
+    const { userChatPrinting } = this.state;
 
     require('./ChatsList.scss');
     return (
@@ -91,8 +135,13 @@ export default class ChatsList extends Component {
         {chatsList && chatsList.length ? chatsList.map((chat) => {
           const chatUsersIds = chat.users.map((user) => user.user_id);
           const currentChatUsers = chatsUsers.filter((user) => chatUsersIds.includes(user.id));
+          const currentChatUserPrinting = userChatPrinting.find((item) => item.chatId === chat.id);
           return (
-            <ChatItem chat={chat} chatUsers={currentChatUsers} />
+            <ChatItem
+              chat={chat} chatUsers={currentChatUsers}
+              userTypingMessage={currentChatUserPrinting && currentChatUserPrinting.userInformation
+                ? currentChatUserPrinting.userInformation : ''}
+            />
           )
         }) : ''}
       </div>

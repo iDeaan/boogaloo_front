@@ -27,14 +27,14 @@ export default class InputTextArea extends Component {
 
     if (printingMessage === false) {
       this.setState({ printingMessage: true });
-      userPrintingMessageStart(selectedChat, userInformation);
+      userPrintingMessageStart(selectedChat, userInformation, userData[0].id);
     }
 
     clearTimeout(this.timeout);
 
     this.timeout = setTimeout(() => {
       this.setState({ printingMessage: false });
-      userPrintingMessageStop(selectedChat, userInformation);
+      userPrintingMessageStop(selectedChat, userInformation, userData[0].id);
     }, 1000);
   }
 

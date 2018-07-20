@@ -37,16 +37,18 @@ export function disconnectUser(currentUserId) {
   socket.emit('disconnect_user', currentUserId);
 }
 
-export function userPrintingMessageStart(chatId, userInformation) {
+export function userPrintingMessageStart(chatId, userInformation, userId) {
   socket.emit('user_printing_message_start', {
     chatId,
-    userInformation
+    userInformation,
+    userId
   })
 }
 
-export function userPrintingMessageStop(chatId, userInformation) {
+export function userPrintingMessageStop(chatId, userInformation, userId) {
   socket.emit('user_printing_message_stop', {
     chatId,
-    userInformation
+    userInformation,
+    userId
   })
 }
