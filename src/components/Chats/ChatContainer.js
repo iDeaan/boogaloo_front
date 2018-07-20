@@ -65,12 +65,22 @@ export default class ChatContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selectedChat } = this.props;
-    const { selectedChat: nextSelectedChat } = nextProps;
+    const { selectedChat, messages } = this.props;
+    const { selectedChat: nextSelectedChat, messages: nextMessages } = nextProps;
 
     if (selectedChat !== nextSelectedChat) {
       this.loadMessagesList(nextProps);
       this.setCurrentChatUsers(nextProps);
+    }
+    if (messages.length !== nextMessages.length) {
+      this.scrollToBottom();
+    }
+  }
+
+  scrollToBottom() {
+    if (document) {
+      const messagesContainer = document.getElementById('messages-list-container');
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
   }
 
@@ -123,10 +133,13 @@ export default class ChatContainer extends Component {
   render() {
     const { messages, currentUserId, userData, token, selectedChat } = this.props;
     const { currentChatUsers, blockHeight, userPrintingInformation } = this.state;
-
+    const messageListHeight = blockHeight - CHAT_INPUT_HEIGHT - 50;
     return (
       <div className="chats-data chats-messages" id="chat-content-container">
-        <div className="messages-list" style={{ height: `${blockHeight - CHAT_INPUT_HEIGHT}px` }}>
+        <div
+          className="messages-list" style={{ height: `${messageListHeight}px` }}
+          id="messages-list-container"
+        >
           {messages && messages.length ? messages.sort((first, second) => first.id - second.id).map((message, index) => {
             let isToShowUserInitials = true;
             if (index !== 0) {
@@ -145,11 +158,13 @@ export default class ChatContainer extends Component {
               />
             );
           }) : ''}
+        </div>
+        <div className="user-typing-message-container">
           {userPrintingInformation
             ? (
               <span className="user-typing-message">
-                  <i className="fa fa-pencil" /> {userPrintingInformation} набирає повідомлення <AnimatedDots />
-                </span>
+                <i className="fa fa-pencil" /> {userPrintingInformation} набирає повідомлення <AnimatedDots />
+              </span>
             )
             : ''
           }

@@ -8,23 +8,8 @@
 
     .messages-list {
       background-color: #e9f0f1;
-      padding-bottom: 30px;
       position: relative;
-
-      .user-typing-message {
-        display: block;
-        font-size: 14px;
-        font-weight: bold;
-        color: rebeccapurple;
-        position: absolute;
-        transform: translateX(-50%);
-        left: 50%;
-        bottom: 10px;
-
-        i {
-          margin-right: 5px;
-        }
-      }
+      overflow-y: scroll;
 
       .message-item {
         display: flex;
@@ -63,6 +48,25 @@
 
       .message-item.own-message {
         justify-content: flex-end;
+      }
+    }
+
+    .user-typing-message-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 50px;
+      background-color: #e9f0f1;
+
+      .user-typing-message {
+        font-size: 14px;
+        font-weight: bold;
+        color: rebeccapurple;
+        height: 100%;
+
+        i {
+          margin-right: 5px;
+        }
       }
     }
 
