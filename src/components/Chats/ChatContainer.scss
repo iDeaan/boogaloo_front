@@ -8,6 +8,23 @@
 
     .messages-list {
       background-color: #e9f0f1;
+      padding-bottom: 30px;
+      position: relative;
+
+      .user-typing-message {
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        color: rebeccapurple;
+        position: absolute;
+        transform: translateX(-50%);
+        left: 50%;
+        bottom: 10px;
+
+        i {
+          margin-right: 5px;
+        }
+      }
 
       .message-item {
         display: flex;

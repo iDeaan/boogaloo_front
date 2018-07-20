@@ -8,6 +8,7 @@ import {
   userPrintingMessageInChatStart,
   userPrintingMessageInChatStop
 } from '../../helpers/sockets';
+import AnimatedDots from '../AdditionalComponents/AnimatedDots';
 import Button from "../AdditionalComponents/Button";
 import MessageInput from "./MessageInput";
 
@@ -144,11 +145,15 @@ export default class ChatContainer extends Component {
               />
             );
           }) : ''}
+          {userPrintingInformation
+            ? (
+              <span className="user-typing-message">
+                  <i className="fa fa-pencil" /> {userPrintingInformation} набирає повідомлення <AnimatedDots />
+                </span>
+            )
+            : ''
+          }
         </div>
-        {userPrintingInformation
-          ? <div>{userPrintingInformation} набирає повідомлення</div>
-          : ''
-        }
         <MessageInput blockHeight={CHAT_INPUT_HEIGHT} token={token} chatId={selectedChat} />
       </div>
     )
