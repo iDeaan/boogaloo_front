@@ -62,26 +62,25 @@ export default class ChatContainer extends Component {
       this.setCurrentChatUsers(this.props);
     }
     this.setBlockHeight();
+    this.scrollToBottom();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selectedChat, messages } = this.props;
-    const { selectedChat: nextSelectedChat, messages: nextMessages } = nextProps;
+    const { selectedChat } = this.props;
+    const { selectedChat: nextSelectedChat } = nextProps;
 
     if (selectedChat !== nextSelectedChat) {
       this.loadMessagesList(nextProps);
       this.setCurrentChatUsers(nextProps);
     }
-    if (messages.length !== nextMessages.length) {
-      this.scrollToBottom();
-    }
+  }
+
+  componentDidUpdate(){
+    this.scrollToBottom();
   }
 
   scrollToBottom() {
-    if (document) {
-      const messagesContainer = document.getElementById('messages-list-container');
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   }
 
   userPrintingMessageStart(data) {
@@ -158,6 +157,7 @@ export default class ChatContainer extends Component {
               />
             );
           }) : ''}
+          <div id="messages-list" ref={(el) => { this.messagesEnd = el; }} />
         </div>
         <div className="user-typing-message-container">
           {userPrintingInformation
