@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import Header from '../../components/App/Header';
 import Menu from '../../components/App/Menu';
 import NotificationsContainer from '../../components/Notifications/NotificationsContainer';
-import renderRoutes from 'react-router-config/renderRoutes'
-import { checkIfTokenValid, loadCurrentUser } from "../../redux/modules/auth";
-import { loadNewFriends } from "../../redux/modules/friends";
-import { showNotification } from "../../redux/modules/notifications";
-import { loadChatsList } from "../../redux/modules/chats";
-import {asyncConnect} from "redux-connect";
+import renderRoutes from 'react-router-config/renderRoutes';
+import { checkIfTokenValid, loadCurrentUser } from '../../redux/modules/auth';
+import { loadNewFriends } from '../../redux/modules/friends';
+import { showNotification } from '../../redux/modules/notifications';
+import { loadChatsList } from '../../redux/modules/chats';
+import { asyncConnect } from 'redux-connect';
 import { withCookies, Cookies } from 'react-cookie';
-import {connect} from "react-redux";
-import PropTypes from "prop-types";
-import { addNewMessages, editChatOrder } from "../../redux/modules/chats";
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { addNewMessages, editChatOrder } from '../../redux/modules/chats';
 import {
   addingNewFriend,
   submittingNewFriend,
@@ -45,14 +45,12 @@ const cookies = new Cookies();
     return Promise.all(promises).then(() => {});
   }
 }])
-@connect(
-  state => ({
-    currentUserId: state.auth.currentUserId,
-    token: state.auth.token,
-    chatsList: state.chats.chatsList,
-    selectedChat: state.chats.selectedChat
-  })
-)
+@connect(state => ({
+  currentUserId: state.auth.currentUserId,
+  token: state.auth.token,
+  chatsList: state.chats.chatsList,
+  selectedChat: state.chats.selectedChat
+}))
 class App extends Component {
   constructor(props) {
     super(props);
@@ -67,12 +65,14 @@ class App extends Component {
       this.showAddingNewFriendNotification(userData);
     });
     submittingNewFriend((userData) => {
+      console.log('submittingNewFriend');
       this.showSubmittingNewFriendNotification(userData);
     });
     rejectingNewFriend((userData) => {
+      console.log('rejectingNewFriend');
       this.showSubmittingNewFriendNotification(userData, false);
     });
-    newMessage((message) => this.handleNewMessageAdded(message))
+    newMessage(message => this.handleNewMessageAdded(message));
   }
 
   static contextTypes = {
@@ -114,7 +114,7 @@ class App extends Component {
 
   showSubmittingNewFriendNotification(userData, success = true) {
     const { dispatch } = this.context.store;
-
+    console.log('showSubmittingNewFriendNotification');
     const notificationDOM = (
       <div className="notification-new-friend-container">
         <div className="title">Заявка в друзі</div>
@@ -145,7 +145,8 @@ class App extends Component {
 
       this.loadFriendsSuggestions(nextProps.currentUserId);
     }
-    if (nextProps.chatsList.length && nextProps.chatsList.length !== this.props.chatsList.length) {
+    if ((nextProps.currentUserId !== this.props.currentUserId)
+      || (nextProps.chatsList.length && nextProps.chatsList.length !== this.props.chatsList.length)) {
       connectNewUser(nextProps);
     }
   }
@@ -166,7 +167,7 @@ class App extends Component {
     const { dispatch } = this.context.store;
     dispatch(loadNewFriends(userId || currentUserId))
       .then((response) => {})
-      .catch((err) => console.log('err', err));
+      .catch(err => console.log('err', err));
   }
 
   handleClick() {

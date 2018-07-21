@@ -10,6 +10,8 @@
     "dev": "NODE_ENV=development concurrently  \"npm run build\" \"npm run start-server\"",
     "stylelint": "stylelint '**/*.scss'",
     "stylelint-fix": "stylelint --fix '**/*.scss'",
+    "lint": "node_modules/.bin/eslint --ignore-path ./.eslintignore *",
+    "lint-fix": "node_modules/.bin/eslint --ignore-path ./.eslintignore * --fix",
     "build-dlls": "node_modules/.bin/webpack --colors --display-error-details --config webpack/library.webpack.config.js"
   },
   "author": "iDeaan",

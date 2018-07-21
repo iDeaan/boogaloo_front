@@ -1,5 +1,6 @@
-/*
 /node_modules
 /dist
 package-lock.json
 package.json
+webpack-assets.json
+/webpack
