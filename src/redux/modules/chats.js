@@ -16,6 +16,10 @@ const MESSAGES_LOAD_START = 'boogaloo/chats/MESSAGES_LOAD_START';
 const MESSAGES_LOAD_SUCCESS = 'boogaloo/chats/MESSAGES_LOAD_SUCCESS';
 const MESSAGES_LOAD_FAIL = 'boogaloo/chats/MESSAGES_LOAD_FAIL';
 
+const PREVIOUS_MESSAGES_LOAD_START = 'boogaloo/chats/PREVIOUS_MESSAGES_LOAD_START';
+const PREVIOUS_MESSAGES_LOAD_SUCCESS = 'boogaloo/chats/PREVIOUS_MESSAGES_LOAD_SUCCESS';
+const PREVIOUS_MESSAGES_LOAD_FAIL = 'boogaloo/chats/PREVIOUS_MESSAGES_LOAD_FAIL';
+
 const SEND_MESSAGE_START = 'boogaloo/chats/SEND_MESSAGE_START';
 const SEND_MESSAGE_SUCCESS = 'boogaloo/chats/SEND_MESSAGE_SUCCESS';
 const SEND_MESSAGE_FAIL = 'boogaloo/chats/SEND_MESSAGE_FAIL';
@@ -132,6 +136,28 @@ export default function reducer(state = initialState, action = {}) {
         messages: [],
         error: action.error
       };
+    case PREVIOUS_MESSAGES_LOAD_START:
+      return {
+        ...state,
+        loading: true
+      };
+    case PREVIOUS_MESSAGES_LOAD_SUCCESS: {
+      const newMessages = Array.isArray(action.result.data) ? action.result.data : [action.result.data];
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        messages: [...newMessages, ...state.messages],
+        error: null
+      };
+    }
+    case PREVIOUS_MESSAGES_LOAD_FAIL:
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+        error: action.error
+      };
     case ADD_MESSAGES: {
       const addedMessages = Array.isArray(action.newMessages) ? action.newMessages : [action.newMessages];
       return {
@@ -195,6 +221,13 @@ export function selectChat(chatId) {
 export function loadMessages(token, chatId, limit = 50, offset = 0) {
   return {
     types: [MESSAGES_LOAD_START, MESSAGES_LOAD_SUCCESS, MESSAGES_LOAD_FAIL],
+    promise: client => client.get(`http://localhost:3030/chats_messages?token=${token}&chat_id=${chatId}&limit=${limit}&offset=${offset}`)
+  };
+}
+
+export function loadPreviousMessages(token, chatId, limit = 20, offset = 0) {
+  return {
+    types: [PREVIOUS_MESSAGES_LOAD_START, PREVIOUS_MESSAGES_LOAD_SUCCESS, PREVIOUS_MESSAGES_LOAD_FAIL],
     promise: client => client.get(`http://localhost:3030/chats_messages?token=${token}&chat_id=${chatId}&limit=${limit}&offset=${offset}`)
   };
 }

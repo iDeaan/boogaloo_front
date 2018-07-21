@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  loadMessages
+  loadMessages,
+  loadPreviousMessages
 } from "../../redux/modules/chats";
 import { connect } from "react-redux";
 import {
@@ -32,7 +33,8 @@ export default class ChatContainer extends Component {
       currentChatUsers: [],
       blockHeight: 0,
       userPrintingInformation: false,
-      isToUseInstantScroll: true
+      isToUseInstantScroll: true,
+      currentOffset: 50
     }
 
     userPrintingMessageInChatStart((data) => this.userPrintingMessageStart(data));
@@ -62,6 +64,10 @@ export default class ChatContainer extends Component {
       this.loadMessagesList(this.props);
       this.setCurrentChatUsers(this.props);
     }
+    if (document) {
+      const messagesListContainer = document.getElementById('messages-list-container');
+      messagesListContainer.addEventListener("scroll", (event) => this.handleMessagesContainerScroll(event))
+    }
     this.setBlockHeight();
     this.scrollToBottom();
   }
@@ -82,6 +88,22 @@ export default class ChatContainer extends Component {
 
   componentDidUpdate(){
     this.scrollToBottom();
+  }
+
+  handleMessagesContainerScroll(event) {
+    const { dispatch } = this.context.store;
+    const { selectedChat, token } = this.props;
+    const { currentOffset } = this.state;
+
+    const newMessagesToLoadNumber = 20;
+
+    const element = event.target;
+
+    if (element.scrollTop === 0) {
+      dispatch(loadPreviousMessages(token, selectedChat, newMessagesToLoadNumber, currentOffset)).then(() => {
+        this.setState({ currentOffset: currentOffset + newMessagesToLoadNumber });
+      });
+    }
   }
 
   scrollToBottom() {
@@ -217,10 +239,8 @@ class Message extends Component {
 
     if (!currentUser) {
       return (
-        <div className={`message-item`}>
-          Немає ніяких повідомлень
-        </div>
-      )
+        <div />
+      );
     }
 
     return (
