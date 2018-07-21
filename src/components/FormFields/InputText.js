@@ -1,12 +1,28 @@
-import PropTypes from 'prop-types';
+
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class InputText extends Component {
+  static propTypes = {
+    input: PropTypes.object,
+    meta: PropTypes.object,
+    label: PropTypes.string,
+    icon: PropTypes.string,
+    type: PropTypes.string
+  };
+
+  static defaultProps = {
+    input: {},
+    meta: {},
+    label: {},
+    icon: '',
+    type: ''
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      displayLoader: false,
-      hideError: true
+      displayLoader: false
     };
   }
 
@@ -49,7 +65,7 @@ export default class InputText extends Component {
 
   render() {
     const {
-      input, meta, label, icon, type
+      input, label, icon, type
     } = this.props;
     const { displayLoader } = this.state;
 

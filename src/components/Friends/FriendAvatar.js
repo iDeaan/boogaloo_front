@@ -43,14 +43,14 @@ export default class FriendAvatar extends Component {
             ? (
               <div className="friend-image">
                 {avatarImage.absolute_href
-                  ? <img src={avatarImage.absolute_href} />
-                  : <img src={avatarImage.href} />
+                  ? <img src={avatarImage.absolute_href} alt="avatar" />
+                  : <img src={avatarImage.href} alt="avatar" />
                 }
               </div>
             )
             : (
               <div className="friend-image">
-                <img src="/img/no_image.png" />
+                <img src="/img/no_image.png" alt="avatar" />
               </div>
             )
           }

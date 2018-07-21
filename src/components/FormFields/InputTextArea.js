@@ -1,15 +1,28 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import {
   userPrintingMessageStart,
   userPrintingMessageStop
 } from '../../helpers/sockets';
-import { connect } from 'react-redux';
 
 @connect(state => ({
   selectedChat: state.chats.selectedChat,
   userData: state.auth.data
 }))
 export default class InputTextArea extends Component {
+  static propTypes = {
+    selectedChat: PropTypes.object,
+    userData: PropTypes.object,
+    input: PropTypes.object
+  };
+
+  static defaultProps = {
+    selectedChat: {},
+    userData: {},
+    input: {}
+  };
+
   constructor(props) {
     super(props);
     this.state = {

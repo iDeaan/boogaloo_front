@@ -7,7 +7,7 @@ import {
   addFriend as addFriendToStore
 } from '../../redux/modules/friends';
 
-export default class FriendAvatar extends Component {
+export default class PeopleAvatar extends Component {
   static propTypes = {
     people: PropTypes.object,
     displayed: PropTypes.bool,

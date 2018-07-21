@@ -1,34 +1,7 @@
-import React, { PureComponent, Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
-
-class MenuItem extends PureComponent {
-  static propTypes = {
-    linkTo: PropTypes.string,
-    text: PropTypes.string,
-    count: PropTypes.number
-  };
-
-  static defaultProps = {
-    linkTo: '',
-    text: ''
-  };
-
-  render() {
-    const { linkTo, text, count } = this.props;
-    return (
-      <Link className="menu-item" to={linkTo}>
-        <span className="text">{text}</span>
-        {count && count > 0
-          ? <span className="number">{count}</span>
-          : ''
-        }
-      </Link>
-    );
-  }
-}
+import MenuItem from './MenuItem';
 
 @connect(state => ({
   friendSuggestCount: state.friends.friendSuggestCount

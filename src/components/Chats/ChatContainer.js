@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  loadMessages,
-  loadPreviousMessages
-} from '../../redux/modules/chats';
 import { connect } from 'react-redux';
+import {
+  loadMessages
+  // loadPreviousMessages
+} from '../../redux/modules/chats';
 import {
   userPrintingMessageInChatStart,
   userPrintingMessageInChatStop
 } from '../../helpers/sockets';
 import AnimatedDots from '../AdditionalComponents/AnimatedDots';
-import Button from '../AdditionalComponents/Button';
 import MessageInput from './MessageInput';
+import Message from './Message';
 
 const CHAT_INPUT_HEIGHT = 180;
 
@@ -25,36 +25,39 @@ const CHAT_INPUT_HEIGHT = 180;
   currentUserId: state.auth.currentUserId
 }))
 export default class ChatContainer extends Component {
+  static propTypes = {
+    selectedChat: PropTypes.number,
+    messages: PropTypes.array,
+    token: PropTypes.string,
+    userData: PropTypes.object,
+    currentUserId: PropTypes.number
+  };
+
+  static defaultProps = {
+    selectedChat: 0,
+    messages: [],
+    token: '',
+    userData: {},
+    currentUserId: 0
+  };
+
+  static contextTypes = {
+    store: PropTypes.object
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       currentChatUsers: [],
       blockHeight: 0,
       userPrintingInformation: false,
-      isToUseInstantScroll: true,
-      currentOffset: 50
+      isToUseInstantScroll: true
+      // currentOffset: 50
     };
 
     userPrintingMessageInChatStart(data => this.userPrintingMessageStart(data));
     userPrintingMessageInChatStop(data => this.userPrintingMessageStop(data));
   }
-
-  static propTypes = {
-    chat: PropTypes.object,
-    messages: PropTypes.array,
-    chatsUsers: PropTypes.array
-  };
-
-  static defaultProps = {
-    chat: {},
-    chatUsers: [],
-    messages: [],
-    chatsUsers: []
-  };
-
-  static contextTypes = {
-    store: PropTypes.object
-  };
 
   componentDidMount() {
     const { selectedChat, token } = this.props;
@@ -88,6 +91,7 @@ export default class ChatContainer extends Component {
     this.scrollToBottom();
   }
 
+  /*
   handleMessagesContainerScroll(event) {
     const { dispatch } = this.context.store;
     const { selectedChat, token } = this.props;
@@ -98,40 +102,12 @@ export default class ChatContainer extends Component {
     const element = event.target;
 
     if (element.scrollTop === 0) {
-      // dispatch(loadPreviousMessages(token, selectedChat, newMessagesToLoadNumber, currentOffset)).then(() => {
-      //   this.setState({ currentOffset: currentOffset + newMessagesToLoadNumber });
-      // });
+      dispatch(loadPreviousMessages(token, selectedChat, newMessagesToLoadNumber, currentOffset)).then(() => {
+        this.setState({ currentOffset: currentOffset + newMessagesToLoadNumber });
+      });
     }
   }
-
-  scrollToBottom() {
-    const { isToUseInstantScroll } = this.state;
-    const scrollBehavior = isToUseInstantScroll ? 'instant' : 'smooth';
-    this.messagesEnd.scrollIntoView({ behavior: scrollBehavior });
-  }
-
-  userPrintingMessageStart(data) {
-    const { selectedChat } = this.props;
-
-    if (selectedChat === data.chatId) {
-      this.setState({ userPrintingInformation: data.userInformation });
-    }
-  }
-
-  userPrintingMessageStop(data) {
-    const { selectedChat } = this.props;
-
-    if (selectedChat === data.chatId) {
-      this.setState({ userPrintingInformation: null });
-    }
-  }
-
-  loadMessagesList(props) {
-    const { dispatch } = this.context.store;
-    const { selectedChat, token } = props;
-
-    dispatch(loadMessages(token, selectedChat)).then((response) => {});
-  }
+  */
 
   setCurrentChatUsers(props) {
     const { chatsUsers, chatsData, selectedChat } = props;
@@ -156,12 +132,43 @@ export default class ChatContainer extends Component {
     }
   }
 
+  loadMessagesList(props) {
+    const { dispatch } = this.context.store;
+    const { selectedChat, token } = props;
+
+    dispatch(loadMessages(token, selectedChat));
+  }
+
+  scrollToBottom() {
+    const { isToUseInstantScroll } = this.state;
+    const scrollBehavior = isToUseInstantScroll ? 'instant' : 'smooth';
+    this.messagesEnd.scrollIntoView({ behavior: scrollBehavior });
+  }
+
+  userPrintingMessageStart(data) {
+    const { selectedChat } = this.props;
+
+    if (selectedChat === data.chatId) {
+      this.setState({ userPrintingInformation: data.userInformation });
+    }
+  }
+
+  userPrintingMessageStop(data) {
+    const { selectedChat } = this.props;
+
+    if (selectedChat === data.chatId) {
+      this.setState({ userPrintingInformation: null });
+    }
+  }
+
   render() {
     const {
       messages, currentUserId, userData, token, selectedChat
     } = this.props;
     const { currentChatUsers, blockHeight, userPrintingInformation } = this.state;
     const messageListHeight = blockHeight - CHAT_INPUT_HEIGHT - 50;
+
+    require('./ChatContainer.scss');
     return (
       <div className="chats-data chats-messages" id="chat-content-container">
         <div
@@ -169,24 +176,31 @@ export default class ChatContainer extends Component {
           style={{ height: `${messageListHeight}px` }}
           id="messages-list-container"
         >
-          {messages && messages.length ? messages.sort((first, second) => first.id - second.id).map((message, index) => {
-            let isToShowUserInitials = true;
-            if (index !== 0) {
-              const prevMessage = messages[index - 1];
-              if (prevMessage && message && message.user_id === prevMessage.user_id) {
-                isToShowUserInitials = false;
-              }
-            }
-            return (
-              <Message
-                currentUserId={currentUserId}
-                currentChatUsers={currentChatUsers}
-                message={message}
-                currentUserData={userData && userData[0] ? userData[0] : null}
-                isToShowUserInitials={isToShowUserInitials}
-              />
-            );
-          }) : ''}
+          {messages && messages.length
+            ? (
+              messages
+                .sort((first, second) => first.id - second.id)
+                .map((message, index) => {
+                  let isToShowUserInitials = true;
+                  if (index !== 0) {
+                    const prevMessage = messages[index - 1];
+                    if (prevMessage && message && message.user_id === prevMessage.user_id) {
+                      isToShowUserInitials = false;
+                    }
+                  }
+                  return (
+                    <Message
+                      currentUserId={currentUserId}
+                      currentChatUsers={currentChatUsers}
+                      message={message}
+                      currentUserData={userData && userData[0] ? userData[0] : null}
+                      isToShowUserInitials={isToShowUserInitials}
+                    />
+                  );
+                })
+            )
+            : ''
+          }
           <div id="messages-list" ref={(el) => { this.messagesEnd = el; }} />
         </div>
         <div className="user-typing-message-container">
@@ -200,87 +214,6 @@ export default class ChatContainer extends Component {
           }
         </div>
         <MessageInput blockHeight={CHAT_INPUT_HEIGHT} token={token} chatId={selectedChat} />
-      </div>
-    );
-  }
-}
-
-class Message extends Component {
-  static propTypes = {
-    currentUserId: PropTypes.number,
-    currentChatUsers: PropTypes.array,
-    currentUserData: PropTypes.object,
-    isToShowUserInitials: PropTypes.bool,
-    message: PropTypes.object
-  };
-
-  static defaultProps = {
-    currentUserId: 0,
-    currentChatUsers: [],
-    isToShowUserInitials: true,
-    message: {}
-  };
-
-  render() {
-    const {
-      message, currentUserId, currentChatUsers, currentUserData, isToShowUserInitials
-    } = this.props;
-
-    let userAvatar = null;
-    let currentUser = null;
-
-    if (message.user_id !== currentUserId) {
-      currentUser = currentChatUsers.find(user => user.id === message.user_id);
-    } else {
-      currentUser = currentUserData;
-    }
-
-    userAvatar = currentUser && currentUser.images
-      && currentUser.images.find(image => image.image_type === 'avatar');
-
-    require('./ChatContainer.scss');
-
-    if (!currentUser) {
-      return (
-        <div />
-      );
-    }
-
-    return (
-      <div className="message-item">
-        <div className="left-part">
-          {isToShowUserInitials
-            ? (
-              <div className="user-avatar">
-                {userAvatar
-                  ? (
-                    <div className="avatar-image">
-                      {userAvatar.absolute_href
-                        ? <img src={userAvatar.absolute_href} />
-                        : <img src={userAvatar.href} />
-                      }
-                    </div>
-                  )
-                  : (
-                    <div className="avatar-image">
-                      <img src="/img/no_image.png" />
-                    </div>
-                  )
-                }
-              </div>
-            )
-            : ''
-          }
-        </div>
-        <div className="right-part">
-          {isToShowUserInitials
-            ? <div className="user-information">{currentUser.name} {currentUser.surname}</div>
-            : ''
-          }
-          <div className="message">
-            {message.message}
-          </div>
-        </div>
       </div>
     );
   }

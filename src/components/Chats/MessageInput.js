@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import PropTypes from 'prop-types';
 import Button from '../AdditionalComponents/Button';
-import { deleteFriend } from '../../helpers/functions';
 import { sendNewMessage, editChatOrder } from '../../redux/modules/chats';
 import InputTextArea from '../FormFields/InputTextArea';
 
@@ -12,12 +11,15 @@ import InputTextArea from '../FormFields/InputTextArea';
 export default class MessageInput extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func,
+    reset: PropTypes.func,
     blockHeight: PropTypes.number,
     chatId: PropTypes.number,
     token: PropTypes.string
   };
 
   static defaultProps = {
+    handleSubmit: () => {},
+    reset: () => {},
     blockHeight: 0,
     chatId: 0,
     token: ''
@@ -31,9 +33,10 @@ export default class MessageInput extends Component {
     const { token, chatId, reset } = this.props;
     const { dispatch } = this.context.store;
 
-    values.chat_id = chatId;
+    const newMessage = values;
+    newMessage.chat_id = chatId;
 
-    dispatch(sendNewMessage(token, values)).then((response) => {
+    dispatch(sendNewMessage(token, newMessage)).then((response) => {
       const messageData = Array.isArray(response) ? response.data[0] : response.data;
       dispatch(editChatOrder(messageData.chat_id, messageData.createdAt));
       reset();
@@ -48,7 +51,6 @@ export default class MessageInput extends Component {
   };
 
   render() {
-    const { dispatch } = this.context.store;
     const { handleSubmit, blockHeight } = this.props;
 
     return (
