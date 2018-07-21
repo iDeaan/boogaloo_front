@@ -37,6 +37,12 @@
         cursor: pointer;
         background-color: #cedadc;
       }
+
+      &.chat-selected {
+        background: #a4a9b0;
+        margin: 0 0 0 -10px;
+        padding-left: 10px;
+      }
     }
   }
 }

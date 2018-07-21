@@ -28,6 +28,7 @@
     "font-awesome": "^4.7.0",
     "font-awesome-loader": "^1.0.2",
     "history": "^4.7.2",
+    "moment": "^2.22.2",
     "node-sass": "^4.9.0",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",

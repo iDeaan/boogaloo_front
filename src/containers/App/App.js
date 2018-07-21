@@ -11,7 +11,7 @@ import {asyncConnect} from "redux-connect";
 import { withCookies, Cookies } from 'react-cookie';
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import { addNewMessages } from "../../redux/modules/chats";
+import { addNewMessages, editChatOrder } from "../../redux/modules/chats";
 import {
   addingNewFriend,
   submittingNewFriend,
@@ -86,6 +86,7 @@ class App extends Component {
     if ((message.user_id !== currentUserId) && (selectedChat === message.chat_id)) {
       dispatch(addNewMessages(message));
     }
+    dispatch(editChatOrder(message.chat_id, message.createdAt));
   }
 
   showAddingNewFriendNotification(userData) {

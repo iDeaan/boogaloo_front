@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Button from '../AdditionalComponents/Button';
 import { deleteFriend } from '../../helpers/functions';
 import {
-  sendNewMessage
+  sendNewMessage, editChatOrder
 } from "../../redux/modules/chats";
 import InputTextArea from '../FormFields/InputTextArea';
 
@@ -35,7 +35,11 @@ export default class MessageInput extends Component {
 
     values.chat_id = chatId;
 
-    dispatch(sendNewMessage(token, values)).then(() => reset());
+    dispatch(sendNewMessage(token, values)).then((response) => {
+      const messageData = Array.isArray(response) ? response.data[0] : response.data;
+      dispatch(editChatOrder(messageData.chat_id, messageData.createdAt));
+      reset();
+    });
   }
 
   handleKeyDown = (e, cb) => {

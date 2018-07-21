@@ -100,9 +100,9 @@ export default class ChatContainer extends Component {
     const element = event.target;
 
     if (element.scrollTop === 0) {
-      dispatch(loadPreviousMessages(token, selectedChat, newMessagesToLoadNumber, currentOffset)).then(() => {
-        this.setState({ currentOffset: currentOffset + newMessagesToLoadNumber });
-      });
+      // dispatch(loadPreviousMessages(token, selectedChat, newMessagesToLoadNumber, currentOffset)).then(() => {
+      //   this.setState({ currentOffset: currentOffset + newMessagesToLoadNumber });
+      // });
     }
   }
 

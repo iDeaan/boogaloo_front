@@ -26,6 +26,8 @@ const SEND_MESSAGE_FAIL = 'boogaloo/chats/SEND_MESSAGE_FAIL';
 
 const ADD_MESSAGES = 'boogaloo/chats/ADD_MESSAGES';
 
+const EDIT_CHAT = 'boogaloo/chats/EDIT_CHAT';
+
 const initialState = {
   chatsList: [],
   chatsData: [],
@@ -133,7 +135,6 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: false,
-        messages: [],
         error: action.error
       };
     case PREVIOUS_MESSAGES_LOAD_START:
@@ -185,6 +186,22 @@ export default function reducer(state = initialState, action = {}) {
         sentMessage: false,
         error: action.error
       };
+    case EDIT_CHAT: {
+      const chatWithAddedMessage = state.chatsData.find((chat) => chat.id === action.chatId);
+      const otherChats = state.chatsData.filter((chat) => chat.id !== action.chatId);
+
+      chatWithAddedMessage.last_message_time = action.lastMessageTime;
+
+      console.log('chatWithAddedMessage', chatWithAddedMessage);
+
+      return {
+        ...state,
+        sendingMessage: false,
+        sentMessage: false,
+        chatsData: [...otherChats, chatWithAddedMessage],
+        error: action.error
+      };
+    }
     default:
       return state;
   }
@@ -236,6 +253,15 @@ export function addNewMessages(messages) {
   return {
     type: ADD_MESSAGES,
     newMessages: messages
+  };
+}
+
+export function editChatOrder(chatId, messageTime) {
+  console.log('EDIT_CHAT');
+  return {
+    type: EDIT_CHAT,
+    chatId,
+    lastMessageTime: messageTime
   };
 }
 

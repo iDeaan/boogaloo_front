@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import Button from '../AdditionalComponents/Button';
 import { deleteFriend } from '../../helpers/functions';
 import {
@@ -12,13 +13,15 @@ class ChatItem extends Component {
   static  propTypes = {
     chat: PropTypes.object,
     chatUsers: PropTypes.array,
-    userTypingMessage: PropTypes.string
+    userTypingMessage: PropTypes.string,
+    selectedChat: PropTypes.Number
   };
 
   static defaultProps = {
     chat: {},
     chatUsers: [],
-    userTypingMessage: ''
+    userTypingMessage: '',
+    selectedChat: 0
   };
 
   static contextTypes = {
@@ -33,7 +36,7 @@ class ChatItem extends Component {
   }
 
   render() {
-    const { chat, chatUsers, userTypingMessage } = this.props;
+    const { chat, chatUsers, userTypingMessage, selectedChat } = this.props;
 
     if (chat.chat_type === 'private') {
       const currentChatUser = chatUsers[0];
@@ -41,7 +44,7 @@ class ChatItem extends Component {
         && currentChatUser.images.find(image => image.image_type === 'avatar');
       return (
         <div
-          className="chat-item-container"
+          className={`chat-item-container ${selectedChat === chat.id ? 'chat-selected' : ''}`}
           onClick={() => this.handleChatClick()}
         >
           {currentUserImageAvatar
@@ -94,12 +97,14 @@ export default class ChatsList extends Component {
   static propTypes = {
     chatsList: PropTypes.array,
     currentUserId: PropTypes.number,
+    selectedChat: PropTypes.number,
     chatsUsers: PropTypes.array
   };
 
   static defaultProps = {
     chatsList: [],
     currentUserId: [],
+    selectedChat: 0,
     chatsUsers: []
   };
 
@@ -126,24 +131,27 @@ export default class ChatsList extends Component {
   }
 
   render() {
-    const { chatsList, chatsUsers } = this.props;
+    const { chatsList, chatsUsers, selectedChat } = this.props;
     const { userChatPrinting } = this.state;
 
     require('./ChatsList.scss');
     return (
       <div className="chats-list-container chats-list">
-        {chatsList && chatsList.length ? chatsList.map((chat) => {
-          const chatUsersIds = chat.users.map((user) => user.user_id);
-          const currentChatUsers = chatsUsers.filter((user) => chatUsersIds.includes(user.id));
-          const currentChatUserPrinting = userChatPrinting.find((item) => item.chatId === chat.id);
-          return (
-            <ChatItem
-              chat={chat} chatUsers={currentChatUsers}
-              userTypingMessage={currentChatUserPrinting && currentChatUserPrinting.userInformation
-                ? currentChatUserPrinting.userInformation : ''}
-            />
-          )
-        }) : ''}
+        {chatsList && chatsList.length
+          ? chatsList.sort((first, second) => moment.utc(second.last_message_time).diff(moment.utc(first.last_message_time))).map((chat) => {
+              const chatUsersIds = chat.users.map((user) => user.user_id);
+              const currentChatUsers = chatsUsers.filter((user) => chatUsersIds.includes(user.id));
+              const currentChatUserPrinting = userChatPrinting.find((item) => item.chatId === chat.id);
+              return (
+                <ChatItem
+                  selectedChat={selectedChat}
+                  chat={chat} chatUsers={currentChatUsers}
+                  userTypingMessage={currentChatUserPrinting && currentChatUserPrinting.userInformation
+                    ? currentChatUserPrinting.userInformation : ''}
+                />
+              )
+            })
+          : ''}
       </div>
     );
   }
