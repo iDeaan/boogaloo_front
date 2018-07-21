@@ -1,4 +1,4 @@
-import io from 'socket.io-client';
+import io from 'socket.io-client'; /* eslint-disable-line */
 
 const socket = io('http://localhost:3030');
 

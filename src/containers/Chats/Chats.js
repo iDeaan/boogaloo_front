@@ -2,27 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loadChatsData, loadChatsUsers, selectChat } from '../../redux/modules/chats';
-import { asyncConnect } from 'redux-connect';
 import authenticated from '../../helpers/authenticated';
 import ChatsList from '../../components/Chats/ChatsList';
 import ChatContainer from '../../components/Chats/ChatContainer';
 
-const SEARCH_DELAY_TIME = 500;
-
-@asyncConnect([{
-  promise: ({ store: { dispatch, getState } }) => {
-    // if (getState().chats && getState().chats.chatsList) {
-    //   const userToken = getState().auth.registeredUser.userToken.token;
-    //   const chatsListIds = getState().chats.chatsList;
-    //   console.log('fsdfsd', chatsListIds)
-    //   const promises = [];
-    //
-    //   promises.push(dispatch(loadChatsData(userToken, chatsListIds.join(','))).then((response) => {}));
-    //
-    //   return Promise.all(promises).then(() => {});
-    // }
-  }
-}])
 @authenticated
 @connect(state => ({
   chats: state.chats,
@@ -30,26 +13,14 @@ const SEARCH_DELAY_TIME = 500;
   currentUserId: state.auth.currentUserId
 }))
 export default class Chats extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      // isLoginSelected: true,
-      // displayedIndexes: [],
-      // searchValue: null,
-      // times: 0
-    };
-  }
-
   static propTypes = {
-    // friends: PropTypes.array,
-    // friendsSearchIds: PropTypes.array,
-    // auth: PropTypes.object,
+    chats: PropTypes.object,
+    currentUserId: PropTypes.number
   };
 
   static defaultProps = {
-    // friends: [],
-    // friendsSearchIds: [],
-    // auth: {},
+    chats: [],
+    currentUserId: 0
   };
 
   static contextTypes = {

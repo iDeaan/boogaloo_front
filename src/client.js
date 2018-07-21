@@ -19,6 +19,7 @@ const middleware = [
   routerMiddleware()
 ];
 
+/* eslint-disable */
 const store = createStore(
   reducer,
   compose(
@@ -37,3 +38,4 @@ ReactDOM.render(
   </CookiesProvider>,
   document.getElementById('root')
 );
+/* eslint-enable */

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { loadUserFriendsIds, loadUserFriendsData, searchFriends, loadFullUserFriendsIds } from '../../redux/modules/friends';
 import { asyncConnect } from 'redux-connect';
+import { loadUserFriendsIds, loadUserFriendsData, searchFriends, loadFullUserFriendsIds } from '../../redux/modules/friends';
 import authenticated from '../../helpers/authenticated';
 import FriendAvatar from '../../components/Friends/FriendAvatar';
 import FriendsSearch from '../../components/Friends/FriendsSearch';
@@ -26,6 +26,7 @@ const SEARCH_DELAY_TIME = 500;
 
       return Promise.all(promises).then(() => {});
     }
+    return true;
   }
 }])
 @authenticated
@@ -35,16 +36,6 @@ const SEARCH_DELAY_TIME = 500;
   auth: state.auth
 }))
 export default class Friends extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoginSelected: true,
-      displayedIndexes: [],
-      searchValue: null,
-      times: 0
-    };
-  }
-
   static propTypes = {
     friends: PropTypes.array,
     friendsSearchIds: PropTypes.array,
@@ -61,6 +52,18 @@ export default class Friends extends Component {
     store: PropTypes.object.isRequired
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      displayedIndexes: [],
+      searchValue: null
+    };
+  }
+
+  componentDidMount() {
+    this.customFunc();
+  }
+
   returnSortedFriendsList() {
     const { friends, friendsSearchIds } = this.props;
 
@@ -73,10 +76,6 @@ export default class Friends extends Component {
     }
 
     return friends;
-  }
-
-  componentDidMount() {
-    this.customFunc();
   }
 
   customFunc() {
@@ -110,7 +109,7 @@ export default class Friends extends Component {
       if (!this.state.searchValue) {
         dispatch(loadUserFriendsIds(userId)).then((response) => {
           const friendsIds = response.data.map(friend => friend.friend_id);
-          return dispatch(loadUserFriendsData(friendsIds)).then((response) => {
+          return dispatch(loadUserFriendsData(friendsIds)).then(() => {
             this.setState({ displayedIndexes: [] }, this.customFunc());
           });
         });

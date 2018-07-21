@@ -11,6 +11,10 @@ export default class NotificationsContainer extends PureComponent {
     notifications: PropTypes.object
   };
 
+  static defaultProps = {
+    notifications: {}
+  };
+
   static contextTypes = {
     store: PropTypes.object.isRequired
   };

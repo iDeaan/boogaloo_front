@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { asyncConnect } from 'redux-connect';
 import { loadFullUserFriendsIds } from '../../redux/modules/friends';
 import { loadUsersList, searchUsersByString } from '../../redux/modules/people';
-import { asyncConnect } from 'redux-connect';
 import authenticated from '../../helpers/authenticated';
 import PeopleAvatar from '../../components/People/PeopleAvatar';
 import FriendsSearch from '../../components/Friends/FriendsSearch';
@@ -22,6 +22,7 @@ const SEARCH_DELAY_TIME = 500;
 
       return Promise.all(promises).then(() => {});
     }
+    return true;
   }
 }])
 @authenticated
@@ -30,34 +31,30 @@ const SEARCH_DELAY_TIME = 500;
   friendsIds: state.friends.fullFriendsIds,
   auth: state.auth
 }))
-export default class Friends extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoginSelected: true,
-      displayedIndexes: [],
-      searchValue: null,
-      times: 0
-    };
-  }
-
+export default class People extends Component {
   static propTypes = {
     people: PropTypes.array,
     friendsIds: PropTypes.array,
-    friendsSearchIds: PropTypes.array,
     auth: PropTypes.object
   };
 
   static defaultProps = {
     people: [],
     friendsIds: [],
-    friendsSearchIds: [],
     auth: {}
   };
 
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      displayedIndexes: [],
+      searchValue: null
+    };
+  }
 
   handleUsersSearch(event) {
     this.event = event;
@@ -82,9 +79,9 @@ export default class Friends extends Component {
   }
 
   renderUsersList() {
-    const { people, friendsIds, auth } = this.props;
+    const { people: peoplesList, friendsIds, auth } = this.props;
     return (
-      people && people.length ? people.map((people, index) =>
+      peoplesList && peoplesList.length ? peoplesList.map((people, index) =>
         (<PeopleAvatar
           people={people}
           isFriend={friendsIds.includes(people.id)}

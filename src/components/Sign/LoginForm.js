@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
-import { PropTypes, instanceOf } from 'prop-types';
 import { Cookies } from 'react-cookie';
 import InputText from '../FormFields/InputText';
 import Button from '../AdditionalComponents/Button';
@@ -24,8 +24,12 @@ const cookies = new Cookies();
 export default class LoginForm extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func,
-    onRegisterButtonClick: PropTypes.func,
-    cookies: instanceOf(Cookies).isRequired
+    onRegisterButtonClick: PropTypes.func
+  };
+
+  static defaultProps = {
+    handleSubmit: () => {},
+    onRegisterButtonClick: () => {}
   };
 
   static contextTypes = {

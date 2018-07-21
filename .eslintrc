@@ -7,6 +7,15 @@
     "no-underscore-dangle": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "global-require": "off",
-    "forbid-prop-types": "off"
+    "react/forbid-prop-types": 0,
+    "max-len": [2, 120, 2, {
+      "ignoreUrls": true,
+      "ignoreComments": false,
+      "ignoreRegExpLiterals": true,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true
+    }],
+    "jsx-a11y/no-static-element-interactions": 0,
+    "jsx-a11y/click-events-have-key-events": 0
   }
 }

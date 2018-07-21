@@ -8,19 +8,19 @@ const validateFields = (fieldKeys, values) => {
   const alphaFields = fieldKeys.alphaFields || [];
   const minLengthFields = fieldKeys.minLengthFields || [];
 
-  requiredFields.map((field) => {
+  requiredFields.forEach((field) => {
     if (!values[field]) {
       errors[field] = 'Це поле обов\'язкове для заповнення.';
     }
   });
 
-  alphaNumberFields.map((field) => {
+  alphaNumberFields.forEach((field) => {
     if (values[field] && !values[field].match(/^(?:[a-zA-Z]|\d|\.)+$/)) {
       errors[field] = 'Це поле може містити лише числа та букви.';
     }
   });
 
-  emailFields.map((field) => {
+  emailFields.forEach((field) => {
     if (values[field] && !values[field].match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)) {
       errors[field] = 'Введіть правильне email посилання';
     }

@@ -4,8 +4,8 @@ import superagent from 'superagent';
 const methods = ['get', 'post', 'put', 'patch', 'del'];
 
 export default class ApiClient {
-  constructor(req) {
-    methods.forEach(method =>
+  constructor() {
+    methods.forEach((method) => {
       this[method] = (path, { params, data, headers } = {}) => new Promise((resolve, reject) => {
         const request = superagent[method](path);
 
@@ -24,7 +24,8 @@ export default class ApiClient {
         }
 
         request.end((err, { body } = {}) => (err ? reject(body || err) : resolve(body)));
-      }));
+      });
+    });
   }
   /*
    * There's a V8 bug where, when using Babel, exporting classes with only

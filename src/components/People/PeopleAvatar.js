@@ -18,6 +18,7 @@ export default class FriendAvatar extends Component {
   static defaultProps = {
     people: {},
     displayed: false,
+    isFriend: false,
     token: ''
   };
 
@@ -56,12 +57,12 @@ export default class FriendAvatar extends Component {
             ? (
               <div className="friend-image">
                 {avatarImage.absolute_href
-                  ? <img src={avatarImage.absolute_href} />
-                  : <img src={avatarImage.href} />
+                  ? <img src={avatarImage.absolute_href} alt="avatar" />
+                  : <img src={avatarImage.href} alt="avatar" />
                 }
               </div>
             )
-            : <img />
+            : <img alt="no-avatar" />
           }
         </div>
         <div className="friend-initial">

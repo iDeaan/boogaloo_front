@@ -37,8 +37,8 @@ class SuggestionItem extends Component {
       <div className="friend-suggestion-item">
         <div className="left-part">
           {avatar
-            ? <img src={avatar.absolute_href} />
-            : <img src="/img/no_image.png" />
+            ? <img src={avatar.absolute_href} alt="avatar" />
+            : <img src="/img/no_image.png" alt="avatar" />
           }
         </div>
         <div className="right-part">
@@ -70,28 +70,19 @@ class SuggestionItem extends Component {
   auth: state.auth
 }))
 export default class FriendsSuggestions extends Component {
+  static propTypes = {
+    auth: PropTypes.object
+  };
+
+  static defaultProps = {
+    auth: {}
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       suggestionsList: []
     };
-  }
-
-  static propTypes = {
-    friendSuggestionIds: PropTypes.array,
-    auth: PropTypes.object
-  };
-
-  static defaultProps = {
-    friendSuggestionIds: [],
-    auth: {}
-  };
-
-  loadUsersSuggestions(props) {
-    const usersIds = props.friendSuggestionIds.map(suggestion => suggestion.friend_id);
-    loadUsers(usersIds).then((response) => {
-      this.setState({ suggestionsList: response.data });
-    });
   }
 
   componentDidMount() {
@@ -100,6 +91,13 @@ export default class FriendsSuggestions extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.loadUsersSuggestions(nextProps);
+  }
+
+  loadUsersSuggestions(props) {
+    const usersIds = props.friendSuggestionIds.map(suggestion => suggestion.friend_id);
+    loadUsers(usersIds).then((response) => {
+      this.setState({ suggestionsList: response.data });
+    });
   }
 
   render() {

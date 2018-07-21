@@ -1,5 +1,6 @@
+/* eslint-disable */
 import React, { Component } from 'react';
-import { withCookies, Cookies } from 'react-cookie';
+import { Cookies } from 'react-cookie';
 
 const cookies = new Cookies();
 
@@ -13,5 +14,6 @@ const authenticated = WrappedComponent => class extends Component {
     return <WrappedComponent />;
   }
 };
+/* eslint-enable */
 
 export default authenticated;

@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import Header from '../../components/App/Header';
-import Menu from '../../components/App/Menu';
-import NotificationsContainer from '../../components/Notifications/NotificationsContainer';
 import renderRoutes from 'react-router-config/renderRoutes';
-import { checkIfTokenValid, loadCurrentUser } from '../../redux/modules/auth';
-import { loadNewFriends } from '../../redux/modules/friends';
-import { showNotification } from '../../redux/modules/notifications';
-import { loadChatsList } from '../../redux/modules/chats';
 import { asyncConnect } from 'redux-connect';
 import { withCookies, Cookies } from 'react-cookie';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addNewMessages, editChatOrder } from '../../redux/modules/chats';
+
+import Header from '../../components/App/Header';
+import Menu from '../../components/App/Menu';
+import NotificationsContainer from '../../components/Notifications/NotificationsContainer';
+import { checkIfTokenValid, loadCurrentUser } from '../../redux/modules/auth';
+import { loadNewFriends } from '../../redux/modules/friends';
+import { showNotification } from '../../redux/modules/notifications';
+import { loadChatsList, addNewMessages, editChatOrder } from '../../redux/modules/chats';
 import {
   addingNewFriend,
   submittingNewFriend,
@@ -21,10 +21,8 @@ import {
   disconnectUser
 } from '../../helpers/sockets';
 
-const cookies = new Cookies();
-
 @asyncConnect([{
-  promise: ({ store: { dispatch, getState } }) => {
+  promise: ({ store: { dispatch } }) => {
     const promises = [];
 
     const cookies = new Cookies();
@@ -52,41 +50,60 @@ const cookies = new Cookies();
   selectedChat: state.chats.selectedChat
 }))
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      clicked: 0,
-      hovered: false
-    };
+  static propTypes = {
+    currentUserId: PropTypes.number,
+    token: PropTypes.string,
+    chatsList: PropTypes.array,
+    selectedChat: PropTypes.number,
+    route: PropTypes.object
+  };
 
-
-    addingNewFriend((userData) => {
-      this.loadFriendsSuggestions();
-      this.showAddingNewFriendNotification(userData);
-    });
-    submittingNewFriend((userData) => {
-      console.log('submittingNewFriend');
-      this.showSubmittingNewFriendNotification(userData);
-    });
-    rejectingNewFriend((userData) => {
-      console.log('rejectingNewFriend');
-      this.showSubmittingNewFriendNotification(userData, false);
-    });
-    newMessage(message => this.handleNewMessageAdded(message));
-  }
+  static defaultProps = {
+    currentUserId: 0,
+    token: '',
+    chatsList: [],
+    selectedChat: 0,
+    route: {}
+  };
 
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
 
-  handleNewMessageAdded(message) {
-    const { dispatch } = this.context.store;
-    const { selectedChat, currentUserId } = this.props;
+  constructor(props) {
+    super(props);
 
-    if ((message.user_id !== currentUserId) && (selectedChat === message.chat_id)) {
-      dispatch(addNewMessages(message));
+    addingNewFriend((userData) => {
+      this.loadFriendsSuggestions();
+      this.showAddingNewFriendNotification(userData);
+    });
+    submittingNewFriend(userData => this.showSubmittingNewFriendNotification(userData));
+    rejectingNewFriend(userData => this.showSubmittingNewFriendNotification(userData, false));
+    newMessage(message => this.handleNewMessageAdded(message));
+  }
+
+  componentDidMount() {
+    /* eslint-disable */
+    if (window) {
+      window.addEventListener('beforeunload', () => this.handleBeforeUnload());
     }
-    dispatch(editChatOrder(message.chat_id, message.createdAt));
+    /* eslint-enable */
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { dispatch } = this.context.store;
+
+    if (nextProps.currentUserId !== this.props.currentUserId) {
+      // console.log('nextProps', nextProps);
+      // @TODO: SEND INFORMATION ABOUT CHATS LIST
+      dispatch(loadChatsList(nextProps.token, nextProps.currentUserId));
+
+      this.loadFriendsSuggestions(nextProps.currentUserId);
+    }
+    if ((nextProps.currentUserId !== this.props.currentUserId)
+      || (nextProps.chatsList.length && nextProps.chatsList.length !== this.props.chatsList.length)) {
+      connectNewUser(nextProps);
+    }
   }
 
   showAddingNewFriendNotification(userData) {
@@ -135,26 +152,14 @@ class App extends Component {
     dispatch(showNotification(notification));
   }
 
-  componentWillReceiveProps(nextProps) {
+  handleNewMessageAdded(message) {
     const { dispatch } = this.context.store;
+    const { selectedChat, currentUserId } = this.props;
 
-    if (nextProps.currentUserId !== this.props.currentUserId) {
-      // console.log('nextProps', nextProps);
-      // @TODO: SEND INFORMATION ABOUT CHATS LIST
-      dispatch(loadChatsList(nextProps.token, nextProps.currentUserId));
-
-      this.loadFriendsSuggestions(nextProps.currentUserId);
+    if ((message.user_id !== currentUserId) && (selectedChat === message.chat_id)) {
+      dispatch(addNewMessages(message));
     }
-    if ((nextProps.currentUserId !== this.props.currentUserId)
-      || (nextProps.chatsList.length && nextProps.chatsList.length !== this.props.chatsList.length)) {
-      connectNewUser(nextProps);
-    }
-  }
-
-  componentDidMount() {
-    if (window) {
-      window.addEventListener('beforeunload', () => this.handleBeforeUnload());
-    }
+    dispatch(editChatOrder(message.chat_id, message.createdAt));
   }
 
   handleBeforeUnload() {
@@ -166,30 +171,14 @@ class App extends Component {
     const { currentUserId } = this.props;
     const { dispatch } = this.context.store;
     dispatch(loadNewFriends(userId || currentUserId))
-      .then((response) => {})
+      .then(() => {})
       .catch(err => console.log('err', err));
   }
 
-  handleClick() {
-    const { clicked } = this.state;
-    this.setState({ clicked: clicked + 1 });
-  }
-
-  handleMouseEnter() {
-    const { hovered } = this.state;
-    this.setState({ hovered: true });
-  }
-
-  handleMouseLeave() {
-    const { hovered } = this.state;
-    this.setState({ hovered: false });
-  }
-
   render() {
-    require('./App.scss');
     const { route } = this.props;
-    const { dispatch } = this.context.store;
 
+    require('./App.scss');
     return (
       <div className="app-container">
         <NotificationsContainer />

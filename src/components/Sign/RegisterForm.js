@@ -28,6 +28,11 @@ export default class RegisterForm extends Component {
     onBackButtonClick: PropTypes.func
   };
 
+  static defaultProps = {
+    handleSubmit: () => {},
+    onBackButtonClick: () => {}
+  };
+
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
