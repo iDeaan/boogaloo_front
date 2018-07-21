@@ -214,12 +214,12 @@ export function deleteFriend(friendId) {
   return {
     type: FRIEND_DELETE,
     friendId
-  }
+  };
 }
 
 export function addFriend(friendId) {
   return {
     type: FRIEND_ADD,
     friendId
-  }
+  };
 }

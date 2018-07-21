@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, compose, applyMiddleware } from 'redux'
-import { Provider } from 'react-redux'
-import { routerMiddleware } from 'react-router-redux'
-import { ReduxAsyncConnect } from 'redux-connect'
+import { createStore, compose, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import { routerMiddleware } from 'react-router-redux';
+import { ReduxAsyncConnect } from 'redux-connect';
 import { BrowserRouter } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 
@@ -19,7 +19,8 @@ const middleware = [
   routerMiddleware()
 ];
 
-const store = createStore(reducer,
+const store = createStore(
+  reducer,
   compose(
     applyMiddleware(...middleware),
     window.devToolsExtension ? window.devToolsExtension() : f => f
@@ -30,7 +31,7 @@ ReactDOM.render(
   <CookiesProvider>
     <Provider store={store}>
       <BrowserRouter>
-        <ReduxAsyncConnect routes={routes} filter={item => !item.deferred} helpers={{client}} />
+        <ReduxAsyncConnect routes={routes} filter={item => !item.deferred} helpers={{ client }} />
       </BrowserRouter>
     </Provider>
   </CookiesProvider>,

@@ -3,14 +3,12 @@ import {
   userPrintingMessageStart,
   userPrintingMessageStop
 } from '../../helpers/sockets';
-import {connect} from "react-redux";
+import { connect } from 'react-redux';
 
-@connect(
-  state => ({
-    selectedChat: state.chats.selectedChat,
-    userData: state.auth.data
-  })
-)
+@connect(state => ({
+  selectedChat: state.chats.selectedChat,
+  userData: state.auth.data
+}))
 export default class InputTextArea extends Component {
   constructor(props) {
     super(props);

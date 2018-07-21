@@ -8,7 +8,7 @@ export default class InputText extends Component {
       displayLoader: false,
       hideError: true
     };
-  };
+  }
 
   handleKeyPress() {
     const { displayLoader } = this.state;
@@ -48,7 +48,9 @@ export default class InputText extends Component {
   }
 
   render() {
-    const { input, meta, label, icon, type } = this.props;
+    const {
+      input, meta, label, icon, type
+    } = this.props;
     const { displayLoader } = this.state;
 
     const { name } = input;
@@ -59,7 +61,7 @@ export default class InputText extends Component {
         {icon
           ? (
             <div className="icon-placeholder">
-                <i className={`fa ${icon}`} />
+              <i className={`fa ${icon}`} />
             </div>
           ) : ''
         }
@@ -71,7 +73,7 @@ export default class InputText extends Component {
           ) : this.renderInputResult()
         }
         <input
-          onChange={(event) => input.onChange(event.target.value)}
+          onChange={event => input.onChange(event.target.value)}
           type={type}
           name={name}
           placeholder={label}

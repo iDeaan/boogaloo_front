@@ -55,7 +55,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: true,
-        chatsList: chatsList.map((item) => item.chat_id),
+        chatsList: chatsList.map(item => item.chat_id),
         error: null
       };
     }
@@ -187,8 +187,8 @@ export default function reducer(state = initialState, action = {}) {
         error: action.error
       };
     case EDIT_CHAT: {
-      const chatWithAddedMessage = state.chatsData.find((chat) => chat.id === action.chatId);
-      const otherChats = state.chatsData.filter((chat) => chat.id !== action.chatId);
+      const chatWithAddedMessage = state.chatsData.find(chat => chat.id === action.chatId);
+      const otherChats = state.chatsData.filter(chat => chat.id !== action.chatId);
 
       chatWithAddedMessage.last_message_time = action.lastMessageTime;
 
@@ -268,7 +268,8 @@ export function editChatOrder(chatId, messageTime) {
 export function sendNewMessage(token, messageData) {
   return {
     types: [SEND_MESSAGE_START, SEND_MESSAGE_SUCCESS, SEND_MESSAGE_FAIL],
-    promise: client => client.post(`http://localhost:3030/chats_messages?token=${token}`,
+    promise: client => client.post(
+      `http://localhost:3030/chats_messages?token=${token}`,
       {
         data: JSON.stringify(messageData),
         headers: [{ name: 'Content-Type', value: 'application/json' }]

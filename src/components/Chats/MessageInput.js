@@ -3,16 +3,14 @@ import { reduxForm, Field } from 'redux-form';
 import PropTypes from 'prop-types';
 import Button from '../AdditionalComponents/Button';
 import { deleteFriend } from '../../helpers/functions';
-import {
-  sendNewMessage, editChatOrder
-} from "../../redux/modules/chats";
+import { sendNewMessage, editChatOrder } from '../../redux/modules/chats';
 import InputTextArea from '../FormFields/InputTextArea';
 
 @reduxForm({
   form: 'MessageInputForm'
 })
 export default class MessageInput extends Component {
-  static  propTypes = {
+  static propTypes = {
     handleSubmit: PropTypes.func,
     blockHeight: PropTypes.number,
     chatId: PropTypes.number,
@@ -56,8 +54,8 @@ export default class MessageInput extends Component {
     return (
       <div className="text-input-container" style={{ height: `${blockHeight}px` }}>
         <form
-          onSubmit={handleSubmit((values) => this.handleSubmit(values))}
-          onKeyDown={(e) => { this.handleKeyDown(e, handleSubmit((values) => this.handleSubmit(values))); }}
+          onSubmit={handleSubmit(values => this.handleSubmit(values))}
+          onKeyDown={(e) => { this.handleKeyDown(e, handleSubmit(values => this.handleSubmit(values))); }}
           className="login-form"
         >
           <Field
@@ -67,7 +65,8 @@ export default class MessageInput extends Component {
           />
           <div className="submit-button">
             <Button
-              iconRight="fa-paper-plane" text="Відправити"
+              iconRight="fa-paper-plane"
+              text="Відправити"
               submitButton
             />
           </div>

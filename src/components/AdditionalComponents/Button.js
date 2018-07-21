@@ -29,7 +29,7 @@ export default class Button extends Component {
 
     const customProps = {};
     if (submitButton) {
-      customProps.type = "submit"
+      customProps.type = 'submit';
     }
 
     require('./Button.scss');

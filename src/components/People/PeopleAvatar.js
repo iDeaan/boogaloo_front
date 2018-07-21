@@ -5,14 +5,14 @@ import { addNewFriend, deleteFriend } from '../../helpers/functions';
 import {
   deleteFriend as deleteFriendFromStore,
   addFriend as addFriendToStore
-} from "../../redux/modules/friends";
+} from '../../redux/modules/friends';
 
 export default class FriendAvatar extends Component {
   static propTypes = {
     people: PropTypes.object,
     displayed: PropTypes.bool,
     isFriend: PropTypes.bool,
-    token: PropTypes.string,
+    token: PropTypes.string
   };
 
   static defaultProps = {
@@ -30,8 +30,8 @@ export default class FriendAvatar extends Component {
     const { token } = this.props;
 
     addNewFriend(token, people.id).then(() => {
-      dispatch(addFriendToStore(people.id))
-    })
+      dispatch(addFriendToStore(people.id));
+    });
   }
 
   handleFriendDelete(people) {
@@ -39,8 +39,8 @@ export default class FriendAvatar extends Component {
     const { token } = this.props;
 
     deleteFriend(token, people.id).then(() => {
-      dispatch(deleteFriendFromStore(people.id))
-    })
+      dispatch(deleteFriendFromStore(people.id));
+    });
   }
 
   render() {
@@ -89,5 +89,4 @@ export default class FriendAvatar extends Component {
       </div>
     );
   }
-
 }

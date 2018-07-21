@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  loadChatsData, loadChatsUsers, selectChat
-} from "../../redux/modules/chats";
-import {asyncConnect} from "redux-connect";
-import authenticated from "../../helpers/authenticated";
-import ChatsList from "../../components/Chats/ChatsList";
-import ChatContainer from "../../components/Chats/ChatContainer";
+import { loadChatsData, loadChatsUsers, selectChat } from '../../redux/modules/chats';
+import { asyncConnect } from 'redux-connect';
+import authenticated from '../../helpers/authenticated';
+import ChatsList from '../../components/Chats/ChatsList';
+import ChatContainer from '../../components/Chats/ChatContainer';
 
 const SEARCH_DELAY_TIME = 500;
 
@@ -26,13 +24,11 @@ const SEARCH_DELAY_TIME = 500;
   }
 }])
 @authenticated
-@connect(
-  state => ({
-    chats: state.chats,
-    token: state.auth.token,
-    currentUserId: state.auth.currentUserId,
-  })
-)
+@connect(state => ({
+  chats: state.chats,
+  token: state.auth.token,
+  currentUserId: state.auth.currentUserId
+}))
 export default class Chats extends Component {
   constructor(props) {
     super(props);
@@ -41,7 +37,7 @@ export default class Chats extends Component {
       // displayedIndexes: [],
       // searchValue: null,
       // times: 0
-    }
+    };
   }
 
   static propTypes = {
@@ -83,7 +79,7 @@ export default class Chats extends Component {
     const { chatsList } = chats;
     dispatch(loadChatsData(token, chatsList.join(','))).then((response) => {
       const resultData = Array.isArray(response.data) ? response.data : [response.data];
-      let usersIds = [];
+      const usersIds = [];
 
       resultData.forEach((chat) => {
         chat.users.forEach((user) => {
@@ -106,9 +102,11 @@ export default class Chats extends Component {
     require('./Chats.scss');
     return [
       <div className="full-content">
-        <div className={`chats-container route-container`}>
+        <div className="chats-container route-container">
           <ChatsList
-            chatsList={chatsData} chatsUsers={chatsUsers} currentUserId={currentUserId}
+            chatsList={chatsData}
+            chatsUsers={chatsUsers}
+            currentUserId={currentUserId}
             selectedChat={selectedChat}
           />
           <ChatContainer />

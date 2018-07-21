@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  loadFullUserFriendsIds
-} from "../../redux/modules/friends";
-import {
-  loadUsersList, searchUsersByString
-} from "../../redux/modules/people";
-import {asyncConnect} from "redux-connect";
-import authenticated from "../../helpers/authenticated";
-import PeopleAvatar from "../../components/People/PeopleAvatar";
-import FriendsSearch from "../../components/Friends/FriendsSearch";
+import { loadFullUserFriendsIds } from '../../redux/modules/friends';
+import { loadUsersList, searchUsersByString } from '../../redux/modules/people';
+import { asyncConnect } from 'redux-connect';
+import authenticated from '../../helpers/authenticated';
+import PeopleAvatar from '../../components/People/PeopleAvatar';
+import FriendsSearch from '../../components/Friends/FriendsSearch';
 
 const SEARCH_DELAY_TIME = 500;
 
@@ -29,13 +25,11 @@ const SEARCH_DELAY_TIME = 500;
   }
 }])
 @authenticated
-@connect(
-  state => ({
-    people: state.people.peoples,
-    friendsIds: state.friends.fullFriendsIds,
-    auth: state.auth
-  })
-)
+@connect(state => ({
+  people: state.people.peoples,
+  friendsIds: state.friends.fullFriendsIds,
+  auth: state.auth
+}))
 export default class Friends extends Component {
   constructor(props) {
     super(props);
@@ -44,21 +38,21 @@ export default class Friends extends Component {
       displayedIndexes: [],
       searchValue: null,
       times: 0
-    }
+    };
   }
 
   static propTypes = {
     people: PropTypes.array,
     friendsIds: PropTypes.array,
     friendsSearchIds: PropTypes.array,
-    auth: PropTypes.object,
+    auth: PropTypes.object
   };
 
   static defaultProps = {
     people: [],
     friendsIds: [],
     friendsSearchIds: [],
-    auth: {},
+    auth: {}
   };
 
   static contextTypes = {
@@ -80,7 +74,7 @@ export default class Friends extends Component {
               ? response.data.hits.map((hit, index) => ({ id: Number(hit._id), order: index }))
               : [];
             return dispatch(loadUsersList(idsList.map(item => item.id), null, null, idsList));
-          })
+          });
       } else {
         dispatch(loadUsersList());
       }
@@ -91,13 +85,12 @@ export default class Friends extends Component {
     const { people, friendsIds, auth } = this.props;
     return (
       people && people.length ? people.map((people, index) =>
-        <PeopleAvatar
+        (<PeopleAvatar
           people={people}
           isFriend={friendsIds.includes(people.id)}
           displayed={this.state.displayedIndexes.includes(index) || this.state.displayedIndexes[0] === 'all'}
           token={auth.token}
-        />
-      ) : ''
+        />)) : ''
     );
   }
 
@@ -105,8 +98,8 @@ export default class Friends extends Component {
     require('./People.scss');
     return [
       <div className="content">
-        <div className={`friends-container route-container`}>
-          <FriendsSearch onChange={(event) => this.handleUsersSearch(event)} />
+        <div className="friends-container route-container">
+          <FriendsSearch onChange={event => this.handleUsersSearch(event)} />
           <div className="friends-list">
             {this.renderUsersList()}
           </div>

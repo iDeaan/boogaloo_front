@@ -27,7 +27,7 @@ export default function reducer(state = initialState, action = {}) {
       if (action.result && action.result.data && action.order && action.order.length) {
         const sortedIds = action.order;
         const peoplesWithOrders = action.result.data.map(people =>
-          ({...people, ...sortedIds.find(item => item.id === people.id)}));
+          ({ ...people, ...sortedIds.find(item => item.id === people.id) }));
         peoplesArray = peoplesWithOrders.sort((first, second) => first.order - second.order);
       }
 
@@ -63,7 +63,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: false,
-        loaded: false,
+        loaded: false
       };
     default:
       return state;
@@ -82,5 +82,5 @@ export function searchUsersByString(searchString) {
   return {
     types: [SEARCH_PEOPLES_LOAD_START, SEARCH_PEOPLES_LOAD_FAIL, SEARCH_PEOPLES_LOAD_SUCCESS],
     promise: client => client.get(`http://localhost:3030/search?query=${searchString}`)
-  }
+  };
 }

@@ -2,16 +2,14 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-@connect(
-  state => ({
-    counter: state.counter.count,
-    userInformation: state.auth.data
-  })
-)
+@connect(state => ({
+  counter: state.counter.count,
+  userInformation: state.auth.data
+}))
 export default class Header extends PureComponent {
   static propTypes = {
     counter: PropTypes.number,
-    userInformation: PropTypes.object,
+    userInformation: PropTypes.object
   };
 
   static defaultProps = {
@@ -33,12 +31,12 @@ export default class Header extends PureComponent {
           Boogaloo
         </div>
         <div className="user-actions">
-          {/*<div className="user-name">*/}
-            {/*{userInformation && userInformation.user*/}
-              {/*? userInformation.user.name*/}
-              {/*: 'NoName'*/}
-            {/*}*/}
-          {/*</div>*/}
+          {/* <div className="user-name"> */}
+          {/* {userInformation && userInformation.user */}
+          {/* ? userInformation.user.name */}
+          {/* : 'NoName' */}
+          {/* } */}
+          {/* </div> */}
         </div>
       </header>
     );

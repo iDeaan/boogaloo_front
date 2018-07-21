@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  loadUserFriendsIds, loadUserFriendsData, searchFriends, loadFullUserFriendsIds
-} from "../../redux/modules/friends";
-import {asyncConnect} from "redux-connect";
-import authenticated from "../../helpers/authenticated";
-import FriendAvatar from "../../components/Friends/FriendAvatar";
-import FriendsSearch from "../../components/Friends/FriendsSearch";
-import FriendsSuggestions from "../../components/Friends/FriendsSuggestions";
+import { loadUserFriendsIds, loadUserFriendsData, searchFriends, loadFullUserFriendsIds } from '../../redux/modules/friends';
+import { asyncConnect } from 'redux-connect';
+import authenticated from '../../helpers/authenticated';
+import FriendAvatar from '../../components/Friends/FriendAvatar';
+import FriendsSearch from '../../components/Friends/FriendsSearch';
+import FriendsSuggestions from '../../components/Friends/FriendsSuggestions';
 
 const SEARCH_DELAY_TIME = 500;
 
@@ -31,13 +29,11 @@ const SEARCH_DELAY_TIME = 500;
   }
 }])
 @authenticated
-@connect(
-  state => ({
-    friends: state.friends.friends,
-    friendsSearchIds: state.friends.searchIds,
-    auth: state.auth
-  })
-)
+@connect(state => ({
+  friends: state.friends.friends,
+  friendsSearchIds: state.friends.searchIds,
+  auth: state.auth
+}))
 export default class Friends extends Component {
   constructor(props) {
     super(props);
@@ -46,19 +42,19 @@ export default class Friends extends Component {
       displayedIndexes: [],
       searchValue: null,
       times: 0
-    }
+    };
   }
 
   static propTypes = {
     friends: PropTypes.array,
     friendsSearchIds: PropTypes.array,
-    auth: PropTypes.object,
+    auth: PropTypes.object
   };
 
   static defaultProps = {
     friends: [],
     friendsSearchIds: [],
-    auth: {},
+    auth: {}
   };
 
   static contextTypes = {
@@ -88,13 +84,11 @@ export default class Friends extends Component {
     this.interval = setInterval(() => {
       if (this.times === 20) {
         clearInterval(this.interval);
-      } else {
-        if (!this.state.displayedIndexes.includes(this.times)) {
-          const currentItems = this.state.displayedIndexes;
-          currentItems.push(this.times);
-          this.setState({displayedIndexes: currentItems});
-          this.times += 1;
-        }
+      } else if (!this.state.displayedIndexes.includes(this.times)) {
+        const currentItems = this.state.displayedIndexes;
+        currentItems.push(this.times);
+        this.setState({ displayedIndexes: currentItems });
+        this.times += 1;
       }
     }, 200);
   }
@@ -105,8 +99,8 @@ export default class Friends extends Component {
 
     clearInterval(this.timeout);
     this.timeout = setTimeout(() => {
-      const {dispatch} = this.context.store;
-      const {auth} = this.props;
+      const { dispatch } = this.context.store;
+      const { auth } = this.props;
 
       const userToken = auth && auth.registeredUser && auth.registeredUser.userToken
         && auth.registeredUser.userToken.token;
@@ -117,7 +111,7 @@ export default class Friends extends Component {
         dispatch(loadUserFriendsIds(userId)).then((response) => {
           const friendsIds = response.data.map(friend => friend.friend_id);
           return dispatch(loadUserFriendsData(friendsIds)).then((response) => {
-            this.setState({displayedIndexes: []}, this.customFunc())
+            this.setState({ displayedIndexes: [] }, this.customFunc());
           });
         });
       }
@@ -126,7 +120,7 @@ export default class Friends extends Component {
         dispatch(searchFriends(this.state.searchValue, userToken)).then((response) => {
           const idsList = response.data.idsList.map(item => item.id);
           dispatch(loadUserFriendsData(idsList)).then(() => {
-            this.setState({displayedIndexes: []}, this.customFunc())
+            this.setState({ displayedIndexes: [] }, this.customFunc());
           });
         });
       }
@@ -138,12 +132,11 @@ export default class Friends extends Component {
     const sortedFriendsList = this.returnSortedFriendsList();
     return (
       sortedFriendsList && sortedFriendsList.length ? sortedFriendsList.map((friend, index) =>
-        <FriendAvatar
+        (<FriendAvatar
           friend={friend}
           token={auth.token}
           displayed={this.state.displayedIndexes.includes(index) || this.state.displayedIndexes[0] === 'all'}
-        />
-      ) : ''
+        />)) : ''
     );
   }
 
@@ -151,8 +144,8 @@ export default class Friends extends Component {
     require('./Friends.scss');
     return [
       <div className="content">
-        <div className={`friends-container route-container`}>
-          <FriendsSearch onChange={(event) => this.handleFriendsSearch(event)} />
+        <div className="friends-container route-container">
+          <FriendsSearch onChange={event => this.handleFriendsSearch(event)} />
           <div className="friends-list">
             {this.renderFriendsList()}
           </div>

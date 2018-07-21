@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../AdditionalComponents/Button';
 import { deleteFriend } from '../../helpers/functions';
-import {
-  deleteFriend as deleteFriendFromStore
-} from "../../redux/modules/friends";
+import { deleteFriend as deleteFriendFromStore } from '../../redux/modules/friends';
 
 export default class FriendAvatar extends Component {
   static propTypes = {
@@ -76,5 +74,4 @@ export default class FriendAvatar extends Component {
       </div>
     );
   }
-
 }

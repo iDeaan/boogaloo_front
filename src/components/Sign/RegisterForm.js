@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import InputText from '../FormFields/InputText';
 import Button from '../AdditionalComponents/Button';
 import validateFields from '../../helpers/validateFields';
-import { registerNewUser } from "../../redux/modules/auth";
+import { registerNewUser } from '../../redux/modules/auth';
 
-const validate = values => {
+const validate = (values) => {
   const validateObject = {
     requiredFields: ['name', 'surname', 'email', 'login', 'password', 'passwordRepeat'],
     alphaFields: ['name', 'surname'],
@@ -41,7 +41,7 @@ export default class RegisterForm extends Component {
       // DISPLAY NOTIFICATION;
     }).catch((err) => {
       console.log('catch', err);
-    })
+    });
   }
 
   render() {
@@ -51,54 +51,54 @@ export default class RegisterForm extends Component {
     return (
       <div className="register-form-container">
         <form
-          onSubmit={handleSubmit((values) => this.handleSubmit(values))}
+          onSubmit={handleSubmit(values => this.handleSubmit(values))}
           className="register-form"
         >
           <Field
             name="name"
             type="text"
             label="Ім'я"
-            icon={'fa-user-circle'}
+            icon="fa-user-circle"
             component={InputText}
           />
           <Field
             name="surname"
             type="text"
             label="Прізвищен"
-            icon={'fa-user-circle'}
+            icon="fa-user-circle"
             component={InputText}
           />
           <Field
             name="email"
             type="text"
             label="Email"
-            icon={'fa-at'}
+            icon="fa-at"
             component={InputText}
           />
           <Field
             name="login"
             type="text"
             label="Логін"
-            icon={'fa-user'}
+            icon="fa-user"
             component={InputText}
           />
           <Field
             name="password"
             type="password"
             label="Пароль"
-            icon={'fa-key'}
+            icon="fa-key"
             component={InputText}
           />
           <Field
             name="passwordRepeat"
             type="password"
             label="Повторрення паролю"
-            icon={'fa-lock'}
+            icon="fa-lock"
             component={InputText}
           />
           <div className="register-form-actions">
             <Button
-              text={'Створити акаунт'}
+              text="Створити акаунт"
               submitButton
             />
           </div>

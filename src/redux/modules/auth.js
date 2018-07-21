@@ -104,7 +104,8 @@ export function signIn(login = 'admin', password = 'admin') {
 export function registerNewUser(userData) {
   return {
     types: [REGISTER_START, REGISTER_SUCCESS, REGISTER_FAIL],
-    promise: client => client.post('http://localhost:3030/sign',
+    promise: client => client.post(
+      'http://localhost:3030/sign',
       {
         data: JSON.stringify(userData),
         headers: [{ name: 'Content-Type', value: 'application/json' }]

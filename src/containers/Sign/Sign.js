@@ -7,7 +7,7 @@ export default class Sign extends Component {
     super(props);
     this.state = {
       isLoginSelected: true
-    }
+    };
   }
 
   render() {
@@ -23,7 +23,7 @@ export default class Sign extends Component {
           <div className="sign-content">
             {isLoginSelected
               ? <LoginForm onRegisterButtonClick={() => this.setState({ isLoginSelected: false })} />
-              : <RegisterForm onBackButtonClick={() => this.setState({ isLoginSelected: true })}/>
+              : <RegisterForm onBackButtonClick={() => this.setState({ isLoginSelected: true })} />
             }
           </div>
         </div>

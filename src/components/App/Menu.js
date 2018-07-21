@@ -1,7 +1,7 @@
 import React, { PureComponent, Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import {connect} from "react-redux";
+import { connect } from 'react-redux';
 
 
 class MenuItem extends PureComponent {
@@ -26,15 +26,13 @@ class MenuItem extends PureComponent {
           : ''
         }
       </Link>
-    )
+    );
   }
 }
 
-@connect(
-  state => ({
-    friendSuggestCount: state.friends.friendSuggestCount
-  })
-)
+@connect(state => ({
+  friendSuggestCount: state.friends.friendSuggestCount
+}))
 export default class Menu extends Component {
   static propTypes = {
     friendSuggestCount: PropTypes.number

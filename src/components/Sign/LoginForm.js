@@ -5,9 +5,9 @@ import { Cookies } from 'react-cookie';
 import InputText from '../FormFields/InputText';
 import Button from '../AdditionalComponents/Button';
 import validateFields from '../../helpers/validateFields';
-import { signIn } from "../../redux/modules/auth";
+import { signIn } from '../../redux/modules/auth';
 
-const validate = values => {
+const validate = (values) => {
   const validateObject = {
     requiredFields: ['login', 'password'],
     alphaNumberFields: ['login', 'password']
@@ -47,7 +47,7 @@ export default class LoginForm extends Component {
       router.history.push('/');
     }).catch((err) => {
       console.log('catch', err);
-    })
+    });
   }
 
   render() {
@@ -57,27 +57,27 @@ export default class LoginForm extends Component {
     return (
       <div className="login-form-container">
         <form
-          onSubmit={handleSubmit((values) => this.handleSubmit(values))}
+          onSubmit={handleSubmit(values => this.handleSubmit(values))}
           className="login-form"
         >
           <Field
             name="login"
             type="text"
             label="Логін"
-            icon={'fa-user'}
+            icon="fa-user"
             component={InputText}
           />
           <Field
             name="password"
             type="password"
             label="Пароль"
-            icon={'fa-lock'}
+            icon="fa-lock"
             component={InputText}
           />
           <div className="login-form-actions">
             <Button
-              text={'Увійти'}
-              iconRight={'fa-sign-in'}
+              text="Увійти"
+              iconRight="fa-sign-in"
               submitButton
             />
           </div>

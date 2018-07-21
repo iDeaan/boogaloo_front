@@ -26,5 +26,4 @@ export default class FriendsSearch extends Component {
       </div>
     );
   }
-
 }

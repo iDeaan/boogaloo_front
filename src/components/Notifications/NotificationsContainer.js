@@ -1,13 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { hideNotification } from "../../redux/modules/notifications";
+import { hideNotification } from '../../redux/modules/notifications';
 
-@connect(
-  state => ({
-    notifications: state.notifications
-  })
-)
+@connect(state => ({
+  notifications: state.notifications
+}))
 export default class NotificationsContainer extends PureComponent {
   static propTypes = {
     notifications: PropTypes.object

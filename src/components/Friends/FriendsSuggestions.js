@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from "react-redux";
+import { connect } from 'react-redux';
 import { loadUsers, submitNewFriend, rejectNewFriend } from '../../helpers/functions';
 
 class SuggestionItem extends Component {
@@ -18,20 +18,20 @@ class SuggestionItem extends Component {
     const { suggestionItem, auth } = this.props;
     submitNewFriend(auth.token, suggestionItem.id)
       .then(() => console.log('success'))
-      .catch((err) => console.log('err', err));
+      .catch(err => console.log('err', err));
   }
 
   handleRejectFriend() {
     const { suggestionItem, auth } = this.props;
     rejectNewFriend(auth.token, suggestionItem.id)
       .then(() => console.log('success'))
-      .catch((err) => console.log('err', err));
+      .catch(err => console.log('err', err));
   }
 
   render() {
     const { suggestionItem } = this.props;
     const avatar = suggestionItem && suggestionItem.images
-      ? suggestionItem.images.find((image) => image.image_type === 'avatar')
+      ? suggestionItem.images.find(image => image.image_type === 'avatar')
       : null;
     return (
       <div className="friend-suggestion-item">
@@ -65,12 +65,10 @@ class SuggestionItem extends Component {
   }
 }
 
-@connect(
-  state => ({
-    friendSuggestionIds: state.friends.friendSuggestionIds,
-    auth: state.auth
-  })
-)
+@connect(state => ({
+  friendSuggestionIds: state.friends.friendSuggestionIds,
+  auth: state.auth
+}))
 export default class FriendsSuggestions extends Component {
   constructor(props) {
     super(props);
@@ -90,10 +88,10 @@ export default class FriendsSuggestions extends Component {
   };
 
   loadUsersSuggestions(props) {
-    const usersIds = props.friendSuggestionIds.map((suggestion) => suggestion.friend_id);
+    const usersIds = props.friendSuggestionIds.map(suggestion => suggestion.friend_id);
     loadUsers(usersIds).then((response) => {
       this.setState({ suggestionsList: response.data });
-    })
+    });
   }
 
   componentDidMount() {
@@ -111,13 +109,11 @@ export default class FriendsSuggestions extends Component {
     return (
       <div className="friends-suggestion-container">
         {suggestionsList && suggestionsList.length
-          ? suggestionsList.map((suggestion) =>
-            <SuggestionItem suggestionItem={suggestion} auth={auth} />
-          )
+          ? suggestionsList.map(suggestion =>
+            <SuggestionItem suggestionItem={suggestion} auth={auth} />)
           : ''
         }
       </div>
     );
   }
-
 }

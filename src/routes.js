@@ -13,27 +13,27 @@ const routes = [{
     {
       path: '/',
       exact: true,
-      component: Home,
+      component: Home
     },
     {
       path: '/sign',
       exact: true,
-      component: Sign,
+      component: Sign
     },
     {
       path: '/friends',
       exact: true,
-      component: Friends,
+      component: Friends
     },
     {
       path: '/people',
       exact: true,
-      component: People,
+      component: People
     },
     {
       path: '/chats',
       exact: true,
-      component: Chats,
+      component: Chats
     }
   ]
 }];

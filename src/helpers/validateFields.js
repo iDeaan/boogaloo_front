@@ -34,13 +34,13 @@ const validateFields = (fieldKeys, values) => {
 
   alphaFields.forEach((field) => {
     if (values[field] && !values[field].match(/^[a-zA-Zа-яА-ЯЁёіїєІЇЄ"'-]+$/i)) {
-      errors[field] =  'Поле може містити лише букви';
+      errors[field] = 'Поле може містити лише букви';
     }
   });
 
   minLengthFields.forEach((field) => {
     if (values[field.title] && values[field.title].length < field.length) {
-      errors[field.title] =  `Поле має мітстити більше ніж ${field.length} символів.`;
+      errors[field.title] = `Поле має мітстити більше ніж ${field.length} символів.`;
     }
   });
 

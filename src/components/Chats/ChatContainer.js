@@ -3,29 +3,27 @@ import PropTypes from 'prop-types';
 import {
   loadMessages,
   loadPreviousMessages
-} from "../../redux/modules/chats";
-import { connect } from "react-redux";
+} from '../../redux/modules/chats';
+import { connect } from 'react-redux';
 import {
   userPrintingMessageInChatStart,
   userPrintingMessageInChatStop
 } from '../../helpers/sockets';
 import AnimatedDots from '../AdditionalComponents/AnimatedDots';
-import Button from "../AdditionalComponents/Button";
-import MessageInput from "./MessageInput";
+import Button from '../AdditionalComponents/Button';
+import MessageInput from './MessageInput';
 
 const CHAT_INPUT_HEIGHT = 180;
 
-@connect(
-  state => ({
-    selectedChat: state.chats.selectedChat,
-    chatsUsers: state.chats.chatsUsers,
-    chatsData: state.chats.chatsData,
-    messages: state.chats.messages,
-    token: state.auth.token,
-    userData: state.auth.data,
-    currentUserId: state.auth.currentUserId
-  })
-)
+@connect(state => ({
+  selectedChat: state.chats.selectedChat,
+  chatsUsers: state.chats.chatsUsers,
+  chatsData: state.chats.chatsData,
+  messages: state.chats.messages,
+  token: state.auth.token,
+  userData: state.auth.data,
+  currentUserId: state.auth.currentUserId
+}))
 export default class ChatContainer extends Component {
   constructor(props) {
     super(props);
@@ -35,13 +33,13 @@ export default class ChatContainer extends Component {
       userPrintingInformation: false,
       isToUseInstantScroll: true,
       currentOffset: 50
-    }
+    };
 
-    userPrintingMessageInChatStart((data) => this.userPrintingMessageStart(data));
-    userPrintingMessageInChatStop((data) => this.userPrintingMessageStop(data));
+    userPrintingMessageInChatStart(data => this.userPrintingMessageStart(data));
+    userPrintingMessageInChatStop(data => this.userPrintingMessageStop(data));
   }
 
-  static  propTypes = {
+  static propTypes = {
     chat: PropTypes.object,
     messages: PropTypes.array,
     chatsUsers: PropTypes.array
@@ -66,7 +64,7 @@ export default class ChatContainer extends Component {
     }
     if (document) {
       const messagesListContainer = document.getElementById('messages-list-container');
-      messagesListContainer.addEventListener("scroll", (event) => this.handleMessagesContainerScroll(event))
+      messagesListContainer.addEventListener('scroll', event => this.handleMessagesContainerScroll(event));
     }
     this.setBlockHeight();
     this.scrollToBottom();
@@ -86,7 +84,7 @@ export default class ChatContainer extends Component {
     }
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     this.scrollToBottom();
   }
 
@@ -132,21 +130,21 @@ export default class ChatContainer extends Component {
     const { dispatch } = this.context.store;
     const { selectedChat, token } = props;
 
-    dispatch(loadMessages(token, selectedChat)).then((response) => {})
+    dispatch(loadMessages(token, selectedChat)).then((response) => {});
   }
 
   setCurrentChatUsers(props) {
     const { chatsUsers, chatsData, selectedChat } = props;
-    const currentChatObject = chatsData.find((chat) => chat.id === selectedChat);
+    const currentChatObject = chatsData.find(chat => chat.id === selectedChat);
 
-    let usersIds = [];
+    const usersIds = [];
     if (currentChatObject && currentChatObject.users) {
-      currentChatObject.users.forEach((user) => usersIds.push(user.user_id));
+      currentChatObject.users.forEach(user => usersIds.push(user.user_id));
     }
 
-    const currentChatUsers = chatsUsers.filter((user) => usersIds.includes(user.id));
+    const currentChatUsers = chatsUsers.filter(user => usersIds.includes(user.id));
 
-    this.setState({ currentChatUsers: currentChatUsers });
+    this.setState({ currentChatUsers });
   }
 
   setBlockHeight() {
@@ -159,13 +157,16 @@ export default class ChatContainer extends Component {
   }
 
   render() {
-    const { messages, currentUserId, userData, token, selectedChat } = this.props;
+    const {
+      messages, currentUserId, userData, token, selectedChat
+    } = this.props;
     const { currentChatUsers, blockHeight, userPrintingInformation } = this.state;
     const messageListHeight = blockHeight - CHAT_INPUT_HEIGHT - 50;
     return (
       <div className="chats-data chats-messages" id="chat-content-container">
         <div
-          className="messages-list" style={{ height: `${messageListHeight}px` }}
+          className="messages-list"
+          style={{ height: `${messageListHeight}px` }}
           id="messages-list-container"
         >
           {messages && messages.length ? messages.sort((first, second) => first.id - second.id).map((message, index) => {
@@ -200,7 +201,7 @@ export default class ChatContainer extends Component {
         </div>
         <MessageInput blockHeight={CHAT_INPUT_HEIGHT} token={token} chatId={selectedChat} />
       </div>
-    )
+    );
   }
 }
 
@@ -221,13 +222,15 @@ class Message extends Component {
   };
 
   render() {
-    const { message, currentUserId, currentChatUsers, currentUserData, isToShowUserInitials } = this.props;
+    const {
+      message, currentUserId, currentChatUsers, currentUserData, isToShowUserInitials
+    } = this.props;
 
     let userAvatar = null;
     let currentUser = null;
 
     if (message.user_id !== currentUserId) {
-      currentUser = currentChatUsers.find((user) => user.id === message.user_id);
+      currentUser = currentChatUsers.find(user => user.id === message.user_id);
     } else {
       currentUser = currentUserData;
     }
@@ -244,7 +247,7 @@ class Message extends Component {
     }
 
     return (
-      <div className={`message-item`}>
+      <div className="message-item">
         <div className="left-part">
           {isToShowUserInitials
             ? (
