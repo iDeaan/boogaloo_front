@@ -18,6 +18,32 @@ export default class Message extends PureComponent {
     message: {}
   };
 
+  returnMessageData(message) {
+    let resultMessage = message + '';
+    const imagePattern = /https?:\/\/\S+\.(png|jpg)/gi;
+    const boldPattern = /\*\*(.+?)\*\*/gi;
+    const italicPattern = /\*(.+?)\*/gi;
+    const newLinePattern = /(?:\r\n|\r|\n)/gi;
+
+    const imageMatches = imagePattern.exec(message);
+    const boldMatches = boldPattern.exec(message);
+    const italicMatches = italicPattern.exec(message);
+    const newLineMatches = newLinePattern.exec(message);
+
+    if (imageMatches || boldMatches || italicMatches || newLineMatches) {
+      resultMessage = resultMessage.replace(imagePattern, `<img src="$&" />`);
+      resultMessage = resultMessage.replace(boldPattern, `<b>$1</b>`);
+      resultMessage = resultMessage.replace(italicPattern, `<i>$1</i>`);
+      resultMessage = resultMessage.replace(newLinePattern, `<br />`);
+
+      return (
+        <div dangerouslySetInnerHTML={{ __html: resultMessage }} />
+      );
+    }
+
+    return resultMessage;
+  }
+
   render() {
     const {
       message, currentUserId, currentChatUsers, currentUserData, isToShowUserInitials
@@ -73,7 +99,7 @@ export default class Message extends PureComponent {
             : ''
           }
           <div className="message">
-            {message.message}
+            {this.returnMessageData(message.message)}
           </div>
         </div>
       </div>
