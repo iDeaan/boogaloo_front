@@ -52,3 +52,7 @@ export function userPrintingMessageStop(chatId, userInformation, userId) {
     userId
   });
 }
+
+export function addNewChatToUser(cb) {
+  socket.on('add_new_chat_to_user', chatId => cb(chatId));
+}

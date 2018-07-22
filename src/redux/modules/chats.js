@@ -26,7 +26,12 @@ const SEND_MESSAGE_FAIL = 'boogaloo/chats/SEND_MESSAGE_FAIL';
 
 const ADD_MESSAGES = 'boogaloo/chats/ADD_MESSAGES';
 
+const ADD_CHAT_TO_USER = 'boogaloo/chats/ADD_CHAT_TO_USER';
 const EDIT_CHAT = 'boogaloo/chats/EDIT_CHAT';
+
+const CHAT_CREATE_START = 'boogaloo/chats/CHAT_CREATE_START';
+const CHAT_CREATE_SUCCESS = 'boogaloo/chats/CHAT_CREATE_SUCCESS';
+const CHAT_CREATE_FAIL = 'boogaloo/chats/CHAT_CREATE_FAIL';
 
 const initialState = {
   chatsList: [],
@@ -192,8 +197,6 @@ export default function reducer(state = initialState, action = {}) {
 
       chatWithAddedMessage.last_message_time = action.lastMessageTime;
 
-      console.log('chatWithAddedMessage', chatWithAddedMessage);
-
       return {
         ...state,
         sendingMessage: false,
@@ -202,6 +205,36 @@ export default function reducer(state = initialState, action = {}) {
         error: action.error
       };
     }
+    case CHAT_CREATE_START:
+      return {
+        ...state,
+        loading: true
+      };
+    case CHAT_CREATE_SUCCESS: {
+      const newChatId = action.result.data.id;
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        chatsList: [...state.chatsList, newChatId],
+        error: null
+      };
+    }
+    case CHAT_CREATE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+        error: action.error
+      };
+    case ADD_CHAT_TO_USER:
+      return {
+        ...state,
+        loading: false,
+        loaded: false,
+        chatsList: [...state.chatsList, action.newChatId],
+        error: action.error
+      };
     default:
       return state;
   }
@@ -257,7 +290,6 @@ export function addNewMessages(messages) {
 }
 
 export function editChatOrder(chatId, messageTime) {
-  console.log('EDIT_CHAT');
   return {
     type: EDIT_CHAT,
     chatId,
@@ -275,5 +307,25 @@ export function sendNewMessage(token, messageData) {
         headers: [{ name: 'Content-Type', value: 'application/json' }]
       }
     )
+  };
+}
+
+export function createNewChat(token, userId) {
+  return {
+    types: [CHAT_CREATE_START, CHAT_CREATE_SUCCESS, CHAT_CREATE_FAIL],
+    promise: client => client.post(
+      `http://localhost:3030/chats?token=${token}&userId=${userId}`,
+      {
+        headers: [{ name: 'Content-Type', value: 'application/json' }]
+      }
+    )
+  };
+}
+
+export function addNewChatToUser(newChatId) {
+  console.log('addNewChatToUser');
+  return {
+    type: ADD_CHAT_TO_USER,
+    newChatId
   };
 }

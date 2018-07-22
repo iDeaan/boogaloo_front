@@ -11,14 +11,20 @@ import NotificationsContainer from '../../components/Notifications/Notifications
 import { checkIfTokenValid, loadCurrentUser } from '../../redux/modules/auth';
 import { loadNewFriends } from '../../redux/modules/friends';
 import { showNotification } from '../../redux/modules/notifications';
-import { loadChatsList, addNewMessages, editChatOrder } from '../../redux/modules/chats';
+import {
+  loadChatsList,
+  addNewMessages,
+  editChatOrder,
+  addNewChatToUser as setNewChatToUser
+} from '../../redux/modules/chats';
 import {
   addingNewFriend,
   submittingNewFriend,
   rejectingNewFriend,
   connectNewUser,
   newMessage,
-  disconnectUser
+  disconnectUser,
+  addNewChatToUser
 } from '../../helpers/sockets';
 
 @asyncConnect([{
@@ -80,6 +86,7 @@ class App extends Component {
     submittingNewFriend(userData => this.showSubmittingNewFriendNotification(userData));
     rejectingNewFriend(userData => this.showSubmittingNewFriendNotification(userData, false));
     newMessage(message => this.handleNewMessageAdded(message));
+    addNewChatToUser(chatId => this.handleNewChatAdded(chatId));
   }
 
   componentDidMount() {
@@ -160,6 +167,12 @@ class App extends Component {
       dispatch(addNewMessages(message));
     }
     dispatch(editChatOrder(message.chat_id, message.createdAt));
+  }
+
+  handleNewChatAdded(chatId) {
+    const { dispatch } = this.context.store;
+    console.log('handleNewChatAdded', chatId);
+    dispatch(setNewChatToUser(chatId));
   }
 
   handleBeforeUnload() {
