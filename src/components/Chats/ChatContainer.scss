@@ -19,6 +19,10 @@
         margin-left: 10px;
         transition: background-color 0.5s;
 
+        img {
+          max-height: 300px;
+        }
+
         .left-part {
           width: 70px;
 
@@ -43,10 +47,6 @@
           }
 
           margin-left: 15px;
-        }
-
-        img {
-          max-height: 300px;
         }
       }
 

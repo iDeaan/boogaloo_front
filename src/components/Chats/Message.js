@@ -18,8 +18,8 @@ export default class Message extends PureComponent {
     message: {}
   };
 
-  returnMessageData(message) {
-    let resultMessage = message + '';
+  returnMessageData = (message) => {
+    let resultMessage = message;
     const imagePattern = /https?:\/\/\S+\.(png|jpg)/gi;
     const boldPattern = /\*\*(.+?)\*\*/gi;
     const italicPattern = /\*(.+?)\*/gi;
@@ -31,10 +31,12 @@ export default class Message extends PureComponent {
     const newLineMatches = newLinePattern.exec(message);
 
     if (imageMatches || boldMatches || italicMatches || newLineMatches) {
-      resultMessage = resultMessage.replace(imagePattern, `<img src="$&" />`);
-      resultMessage = resultMessage.replace(boldPattern, `<b>$1</b>`);
-      resultMessage = resultMessage.replace(italicPattern, `<i>$1</i>`);
-      resultMessage = resultMessage.replace(newLinePattern, `<br />`);
+      /* eslint-disable */
+      resultMessage = resultMessage.replace(imagePattern, '<img src="$&" />');
+      /* eslint-enable */
+      resultMessage = resultMessage.replace(boldPattern, '<b>$1</b>');
+      resultMessage = resultMessage.replace(italicPattern, '<i>$1</i>');
+      resultMessage = resultMessage.replace(newLinePattern, '<br />');
 
       return (
         <div dangerouslySetInnerHTML={{ __html: resultMessage }} />
