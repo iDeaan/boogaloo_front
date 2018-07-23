@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { connect } from "react-redux";
-import { userPrintingMessageInChatStart, userPrintingMessageInChatStop } from '../../helpers/sockets';
+import {
+  userPrintingMessageInChatStart,
+  userPrintingMessageInChatStop,
+  newUserOnline,
+  newUserOffline,
+} from '../../helpers/sockets';
+import { setUsersOnlineIds } from '../../redux/modules/usersOnline';
 import ChatItem from './ChatItem';
 
 @connect(state => ({
@@ -38,6 +44,24 @@ export default class ChatsList extends Component {
 
     userPrintingMessageInChatStart(data => this.userPrintingMessageStart(data));
     userPrintingMessageInChatStop(data => this.userPrintingMessageStop(data));
+    newUserOnline(userId => this.newUserConnecting(userId));
+    newUserOffline(userId => this.newUserDisconnecting(userId));
+  }
+
+  newUserConnecting(userId) {
+    const { dispatch } = this.context.store;
+    const { usersOnlineIds } = this.props;
+
+    dispatch(setUsersOnlineIds([...usersOnlineIds, userId]));
+  }
+
+  newUserDisconnecting(userId) {
+    const { dispatch } = this.context.store;
+    const { usersOnlineIds } = this.props;
+
+    const newUsersIdsList = usersOnlineIds.filter(item => item !== userId);
+
+    dispatch(setUsersOnlineIds(newUsersIdsList));
   }
 
   userPrintingMessageStart(data) {

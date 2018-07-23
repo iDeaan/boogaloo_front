@@ -53,6 +53,14 @@ export function userPrintingMessageStop(chatId, userInformation, userId) {
   });
 }
 
+export function newUserOnline(cb) {
+  socket.on('new_user_online', userId => cb(userId));
+}
+
+export function newUserOffline(cb) {
+  socket.on('new_user_offline', userId => cb(userId));
+}
+
 export function addNewChatToUser(cb) {
   socket.on('add_new_chat_to_user', chatId => cb(chatId));
 }
