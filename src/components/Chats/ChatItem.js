@@ -8,6 +8,7 @@ export default class ChatItem extends Component {
     chat: PropTypes.object,
     chatUsers: PropTypes.array,
     userTypingMessage: PropTypes.string,
+    isOnline: PropTypes.string,
     selectedChat: PropTypes.Number
   };
 
@@ -15,6 +16,7 @@ export default class ChatItem extends Component {
     chat: {},
     chatUsers: [],
     userTypingMessage: '',
+    isOnline: false,
     selectedChat: 0
   };
 
@@ -31,7 +33,7 @@ export default class ChatItem extends Component {
 
   render() {
     const {
-      chat, chatUsers, userTypingMessage, selectedChat
+      chat, chatUsers, userTypingMessage, selectedChat, isOnline
     } = this.props;
 
     if (chat.chat_type === 'private') {
@@ -60,7 +62,12 @@ export default class ChatItem extends Component {
           }
           <div className="user-information">
             {currentChatUser
-              ? <span>{currentChatUser.name} {currentChatUser.surname}</span>
+              ? (
+                <span>
+                  {currentChatUser.name} {currentChatUser.surname}
+                  {isOnline ? <span className="online">⏺</span> : ''}
+                </span>
+              )
               : ''
             }
             {userTypingMessage

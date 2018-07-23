@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { connect } from "react-redux";
 import { userPrintingMessageInChatStart, userPrintingMessageInChatStop } from '../../helpers/sockets';
 import ChatItem from './ChatItem';
 
+@connect(state => ({
+  usersOnlineIds: state.usersOnline.usersOnlineIds
+}))
 export default class ChatsList extends Component {
   static propTypes = {
     chatsList: PropTypes.array,
+    usersOnlineIds: PropTypes.array,
     currentUserId: PropTypes.number,
     selectedChat: PropTypes.number,
     chatsUsers: PropTypes.array
@@ -14,6 +19,7 @@ export default class ChatsList extends Component {
 
   static defaultProps = {
     chatsList: [],
+    usersOnlineIds: [],
     currentUserId: [],
     selectedChat: 0,
     chatsUsers: []
@@ -53,7 +59,7 @@ export default class ChatsList extends Component {
   }
 
   render() {
-    const { chatsList, chatsUsers, selectedChat } = this.props;
+    const { chatsList, chatsUsers, selectedChat, usersOnlineIds } = this.props;
     const { userChatPrinting } = this.state;
 
     require('./ChatsList.scss');
@@ -67,6 +73,11 @@ export default class ChatsList extends Component {
                 const chatUsersIds = chat.users.map(user => user.user_id);
                 const currentChatUsers = chatsUsers.filter(user => chatUsersIds.includes(user.id));
                 const currentChatUserPrinting = userChatPrinting.find(item => item.chatId === chat.id);
+
+                let isOnline = false;
+                if (chat.chat_type === 'private' && currentChatUsers && currentChatUsers[0]) {
+                  isOnline = usersOnlineIds.includes(currentChatUsers[0].id);
+                }
                 return (
                   <ChatItem
                     selectedChat={selectedChat}
@@ -74,6 +85,7 @@ export default class ChatsList extends Component {
                     chatUsers={currentChatUsers}
                     userTypingMessage={currentChatUserPrinting && currentChatUserPrinting.userInformation
                       ? currentChatUserPrinting.userInformation : ''}
+                    isOnline={isOnline}
                   />
                 );
               })
