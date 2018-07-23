@@ -171,7 +171,6 @@ class App extends Component {
 
   handleNewChatAdded(chatId) {
     const { dispatch } = this.context.store;
-    console.log('handleNewChatAdded', chatId);
     dispatch(setNewChatToUser(chatId));
   }
 

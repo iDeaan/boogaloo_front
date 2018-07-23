@@ -24,19 +24,26 @@ export default class Message extends PureComponent {
     const boldPattern = /\*\*(.+?)\*\*/gi;
     const italicPattern = /\*(.+?)\*/gi;
     const newLinePattern = /(?:\r\n|\r|\n)/gi;
+    const youtubePattern = /http(?:s)?:\/\/(?:www.)?youtu(?:.be\/(\S{11})|be)?(?:.com\/)?(?:\S+v=(\S{11}))?/gi;
 
     const imageMatches = imagePattern.exec(message);
     const boldMatches = boldPattern.exec(message);
     const italicMatches = italicPattern.exec(message);
     const newLineMatches = newLinePattern.exec(message);
+    const youtubeMatches = youtubePattern.exec(message);
 
-    if (imageMatches || boldMatches || italicMatches || newLineMatches) {
+    if (imageMatches || boldMatches || italicMatches || newLineMatches || youtubeMatches) {
       /* eslint-disable */
       resultMessage = resultMessage.replace(imagePattern, '<img src="$&" />');
       /* eslint-enable */
       resultMessage = resultMessage.replace(boldPattern, '<b>$1</b>');
       resultMessage = resultMessage.replace(italicPattern, '<i>$1</i>');
       resultMessage = resultMessage.replace(newLinePattern, '<br />');
+
+      if (youtubeMatches) {
+        resultMessage = resultMessage.replace(youtubePattern,
+          `<iframe width="580px" height="315px" src="https://www.youtube.com/embed/${youtubeMatches[1] || youtubeMatches[2]}?wmode=opaque" frameborder="0" allowfullscreen></iframe>`);
+      }
 
       return (
         <div dangerouslySetInnerHTML={{ __html: resultMessage }} />
