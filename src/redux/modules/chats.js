@@ -28,6 +28,7 @@ const ADD_MESSAGES = 'boogaloo/chats/ADD_MESSAGES';
 
 const ADD_CHAT_TO_USER = 'boogaloo/chats/ADD_CHAT_TO_USER';
 const EDIT_CHAT = 'boogaloo/chats/EDIT_CHAT';
+const EDIT_CHAT_LM = 'boogaloo/chats/EDIT_CHAT_LM';
 
 const CHAT_CREATE_START = 'boogaloo/chats/CHAT_CREATE_START';
 const CHAT_CREATE_SUCCESS = 'boogaloo/chats/CHAT_CREATE_SUCCESS';
@@ -205,6 +206,20 @@ export default function reducer(state = initialState, action = {}) {
         error: action.error
       };
     }
+    case EDIT_CHAT_LM: {
+      const chatWithAddedMessage = state.chatsData.find(chat => chat.id === action.chatId);
+      const otherChats = state.chatsData.filter(chat => chat.id !== action.chatId);
+
+      chatWithAddedMessage.last_message = action.lastMessage;
+
+      return {
+        ...state,
+        sendingMessage: false,
+        sentMessage: false,
+        chatsData: [...otherChats, chatWithAddedMessage],
+        error: action.error
+      };
+    }
     case CHAT_CREATE_START:
       return {
         ...state,
@@ -294,6 +309,14 @@ export function editChatOrder(chatId, messageTime) {
     type: EDIT_CHAT,
     chatId,
     lastMessageTime: messageTime
+  };
+}
+
+export function editChatLM(chatId, lm) {
+  return {
+    type: EDIT_CHAT_LM,
+    chatId,
+    lastMessage: lm
   };
 }
 

@@ -15,6 +15,7 @@ import {
   loadChatsList,
   addNewMessages,
   editChatOrder,
+  editChatLM,
   addNewChatToUser as setNewChatToUser
 } from '../../redux/modules/chats';
 import {
@@ -167,6 +168,7 @@ class App extends Component {
       dispatch(addNewMessages(message));
     }
     dispatch(editChatOrder(message.chat_id, message.createdAt));
+    dispatch(editChatLM(message.chat_id, message.message));
   }
 
   handleNewChatAdded(chatId) {

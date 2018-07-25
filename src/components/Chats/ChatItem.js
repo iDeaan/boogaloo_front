@@ -76,7 +76,7 @@ export default class ChatItem extends Component {
                   <i className="fa fa-pencil" />набирає повідомлення <AnimatedDots />
                 </span>
               )
-              : ''
+              : <div className="message">{chat.last_message}</div>
             }
           </div>
         </div>
