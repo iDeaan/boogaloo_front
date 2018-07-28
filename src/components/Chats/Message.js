@@ -41,8 +41,10 @@ export default class Message extends PureComponent {
       resultMessage = resultMessage.replace(newLinePattern, '<br />');
 
       if (youtubeMatches) {
-        resultMessage = resultMessage.replace(youtubePattern,
-          `<iframe width="580px" height="315px" src="https://www.youtube.com/embed/${youtubeMatches[1] || youtubeMatches[2]}?wmode=opaque" frameborder="0" allowfullscreen></iframe>`);
+        resultMessage = resultMessage.replace(
+          youtubePattern,
+          `<iframe width="580px" height="315px" src="https://www.youtube.com/embed/${youtubeMatches[1] || youtubeMatches[2]}?wmode=opaque" frameborder="0" allowfullscreen></iframe>`
+        );
       }
 
       return (

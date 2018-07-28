@@ -69,7 +69,7 @@ export default class RegisterForm extends Component {
           <Field
             name="surname"
             type="text"
-            label="Прізвищен"
+            label="Прізвище"
             icon="fa-user-circle"
             component={InputText}
           />

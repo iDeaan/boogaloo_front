@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import {
   userPrintingMessageInChatStart,
   userPrintingMessageInChatStop,
   newUserOnline,
-  newUserOffline,
+  newUserOffline
 } from '../../helpers/sockets';
 import { setUsersOnlineIds } from '../../redux/modules/usersOnline';
 import ChatItem from './ChatItem';
@@ -83,7 +83,9 @@ export default class ChatsList extends Component {
   }
 
   render() {
-    const { chatsList, chatsUsers, selectedChat, usersOnlineIds } = this.props;
+    const {
+      chatsList, chatsUsers, selectedChat, usersOnlineIds
+    } = this.props;
     const { userChatPrinting } = this.state;
 
     require('./ChatsList.scss');

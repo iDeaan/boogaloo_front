@@ -56,5 +56,5 @@ export function setUsersOnlineIds(idsList) {
   return {
     type: SET_USERS_ONLINE_IDS,
     usersOnlineIds: idsList
-  }
+  };
 }
