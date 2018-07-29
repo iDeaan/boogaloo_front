@@ -3,6 +3,7 @@ const USERS_NOT_READ_MESSAGES_LOAD_SUCCESS = 'boogaloo/usersNotReadMessages/USER
 const USERS_NOT_READ_MESSAGES_LOAD_FAIL = 'boogaloo/usersNotReadMessages/USERS_NOT_READ_MESSAGES_LOAD_FAIL';
 
 const ADD_NEW_NOT_READ_MESSAGE = 'boogaloo/usersNotReadMessages/ADD_NEW_NOT_READ_MESSAGE';
+const CLEAR_CHAT_NOT_READ_MESSAGE = 'boogaloo/usersNotReadMessages/CLEAR_CHAT_NOT_READ_MESSAGE';
 
 const initialState = {
   loading: false,
@@ -45,11 +46,27 @@ export default function reducer(state = initialState, action = {}) {
       const otherChats = state.usersNotReadMessages.filter(chat => chat.chatId !== action.chatId);
 
       chatWithAddedMessage.messagesCount += 1;
+      chatWithAddedMessage.idsList.push(action.messageId);
 
       return {
         ...state,
         usersNotReadMessages: [...otherChats, chatWithAddedMessage],
         usersNotReadMessagesTotal: state.usersNotReadMessagesTotal + 1,
+        usersOnlineIds: action.usersOnlineIds
+      };
+    }
+    case CLEAR_CHAT_NOT_READ_MESSAGE: {
+      const chatWithAddedMessage = state.usersNotReadMessages.find(chat => chat.chatId === action.chatId);
+      const otherChats = state.usersNotReadMessages.filter(chat => chat.chatId !== action.chatId);
+      const totalNotReadMessages = state.usersNotReadMessagesTotal - chatWithAddedMessage.messagesCount;
+
+      chatWithAddedMessage.messagesCount = 0;
+      chatWithAddedMessage.idsList = [];
+
+      return {
+        ...state,
+        usersNotReadMessages: [...otherChats, chatWithAddedMessage],
+        usersNotReadMessagesTotal: totalNotReadMessages,
         usersOnlineIds: action.usersOnlineIds
       };
     }
@@ -65,7 +82,15 @@ export function loadUserNotReadMessages(token) {
   };
 }
 
-export function addNewNotReadMessage(chatId) {
+export function addNewNotReadMessage(chatId, messageId) {
+  return {
+    type: ADD_NEW_NOT_READ_MESSAGE,
+    chatId,
+    messageId
+  };
+}
+
+export function clearChatNotReadMessage(chatId) {
   return {
     type: ADD_NEW_NOT_READ_MESSAGE,
     chatId

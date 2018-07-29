@@ -9,7 +9,8 @@ export default class ChatItem extends Component {
     chatUsers: PropTypes.array,
     userTypingMessage: PropTypes.string,
     isOnline: PropTypes.string,
-    selectedChat: PropTypes.Number
+    selectedChat: PropTypes.number,
+    notReadMessagesCount: PropTypes.number
   };
 
   static defaultProps = {
@@ -17,7 +18,8 @@ export default class ChatItem extends Component {
     chatUsers: [],
     userTypingMessage: '',
     isOnline: false,
-    selectedChat: 0
+    selectedChat: 0,
+    notReadMessagesCount: 0
   };
 
   static contextTypes = {
@@ -33,7 +35,7 @@ export default class ChatItem extends Component {
 
   render() {
     const {
-      chat, chatUsers, userTypingMessage, selectedChat, isOnline
+      chat, chatUsers, userTypingMessage, selectedChat, isOnline, notReadMessagesCount
     } = this.props;
 
     if (chat.chat_type === 'private') {
@@ -66,6 +68,7 @@ export default class ChatItem extends Component {
                 <span>
                   {currentChatUser.name} {currentChatUser.surname}
                   {isOnline ? <span className="online">⏺</span> : ''}
+                  {notReadMessagesCount ? <span className="not-read-messages-count">{notReadMessagesCount}</span> : ''}
                 </span>
               )
               : ''

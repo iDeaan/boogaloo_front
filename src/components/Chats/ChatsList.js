@@ -12,7 +12,8 @@ import { setUsersOnlineIds } from '../../redux/modules/usersOnline';
 import ChatItem from './ChatItem';
 
 @connect(state => ({
-  usersOnlineIds: state.usersOnline.usersOnlineIds
+  usersOnlineIds: state.usersOnline.usersOnlineIds,
+  usersNotReadMessages: state.usersNotReadMessages.usersNotReadMessages
 }))
 export default class ChatsList extends Component {
   static propTypes = {
@@ -20,7 +21,8 @@ export default class ChatsList extends Component {
     usersOnlineIds: PropTypes.array,
     currentUserId: PropTypes.number,
     selectedChat: PropTypes.number,
-    chatsUsers: PropTypes.array
+    chatsUsers: PropTypes.array,
+    usersNotReadMessages: PropTypes.array,
   };
 
   static defaultProps = {
@@ -28,7 +30,8 @@ export default class ChatsList extends Component {
     usersOnlineIds: [],
     currentUserId: [],
     selectedChat: 0,
-    chatsUsers: []
+    chatsUsers: [],
+    usersNotReadMessages: [],
   };
 
   static contextTypes = {
@@ -84,7 +87,7 @@ export default class ChatsList extends Component {
 
   render() {
     const {
-      chatsList, chatsUsers, selectedChat, usersOnlineIds
+      chatsList, chatsUsers, selectedChat, usersOnlineIds, usersNotReadMessages
     } = this.props;
     const { userChatPrinting } = this.state;
 
@@ -99,6 +102,7 @@ export default class ChatsList extends Component {
                 const chatUsersIds = chat.users.map(user => user.user_id);
                 const currentChatUsers = chatsUsers.filter(user => chatUsersIds.includes(user.id));
                 const currentChatUserPrinting = userChatPrinting.find(item => item.chatId === chat.id);
+                const currentChatNotReadMessages = usersNotReadMessages.find(item => item.chatId === chat.id);
 
                 let isOnline = false;
                 if (chat.chat_type === 'private' && currentChatUsers && currentChatUsers[0]) {
@@ -112,6 +116,7 @@ export default class ChatsList extends Component {
                     userTypingMessage={currentChatUserPrinting && currentChatUserPrinting.userInformation
                       ? currentChatUserPrinting.userInformation : ''}
                     isOnline={isOnline}
+                    notReadMessagesCount={currentChatNotReadMessages.messagesCount}
                   />
                 );
               })

@@ -48,6 +48,10 @@
 
           margin-left: 15px;
         }
+
+        &.not-read-message {
+          background-color: #c0cfd2;
+        }
       }
 
       .message-item.own-message {

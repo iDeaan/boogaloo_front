@@ -22,7 +22,9 @@ const CHAT_INPUT_HEIGHT = 180;
   messages: state.chats.messages,
   token: state.auth.token,
   userData: state.auth.data,
-  currentUserId: state.auth.currentUserId
+  currentUserId: state.auth.currentUserId,
+  usersNotReadMessages:
+    state.usersNotReadMessages.usersNotReadMessages.find((item) => item.chatId === state.chats.selectedChat)
 }))
 export default class ChatContainer extends Component {
   static propTypes = {
@@ -30,7 +32,8 @@ export default class ChatContainer extends Component {
     messages: PropTypes.array,
     token: PropTypes.string,
     userData: PropTypes.object,
-    currentUserId: PropTypes.number
+    currentUserId: PropTypes.number,
+    usersNotReadMessages: PropTypes.object
   };
 
   static defaultProps = {
@@ -38,7 +41,8 @@ export default class ChatContainer extends Component {
     messages: [],
     token: '',
     userData: {},
-    currentUserId: 0
+    currentUserId: 0,
+    usersNotReadMessages: {}
   };
 
   static contextTypes = {
@@ -163,11 +167,11 @@ export default class ChatContainer extends Component {
 
   render() {
     const {
-      messages, currentUserId, userData, token, selectedChat
+      messages, currentUserId, userData, token, selectedChat, usersNotReadMessages
     } = this.props;
     const { currentChatUsers, blockHeight, userPrintingInformation } = this.state;
     const messageListHeight = blockHeight - CHAT_INPUT_HEIGHT - 50;
-
+    console.log('usersNotReadMessages', usersNotReadMessages);
     require('./ChatContainer.scss');
     return (
       <div className="chats-data chats-messages" id="chat-content-container">
@@ -195,6 +199,7 @@ export default class ChatContainer extends Component {
                       message={message}
                       currentUserData={userData && userData[0] ? userData[0] : null}
                       isToShowUserInitials={isToShowUserInitials}
+                      isNotRead={usersNotReadMessages.idsList.includes(message.id)}
                     />
                   );
                 })

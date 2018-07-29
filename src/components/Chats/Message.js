@@ -7,6 +7,7 @@ export default class Message extends PureComponent {
     currentChatUsers: PropTypes.array,
     currentUserData: PropTypes.object,
     isToShowUserInitials: PropTypes.bool,
+    isNotRead: PropTypes.bool,
     message: PropTypes.object
   };
 
@@ -15,6 +16,7 @@ export default class Message extends PureComponent {
     currentChatUsers: [],
     currentUserData: {},
     isToShowUserInitials: true,
+    isNotRead: true,
     message: {}
   };
 
@@ -57,7 +59,7 @@ export default class Message extends PureComponent {
 
   render() {
     const {
-      message, currentUserId, currentChatUsers, currentUserData, isToShowUserInitials
+      message, currentUserId, currentChatUsers, currentUserData, isToShowUserInitials, isNotRead
     } = this.props;
 
     let userAvatar = null;
@@ -79,7 +81,7 @@ export default class Message extends PureComponent {
     }
 
     return (
-      <div className="message-item">
+      <div className={`message-item ${isNotRead ? 'not-read-message' : ''}`}>
         <div className="left-part">
           {isToShowUserInitials
             ? (
