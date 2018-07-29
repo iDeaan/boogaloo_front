@@ -3,7 +3,10 @@ const USERS_NOT_READ_MESSAGES_LOAD_SUCCESS = 'boogaloo/usersNotReadMessages/USER
 const USERS_NOT_READ_MESSAGES_LOAD_FAIL = 'boogaloo/usersNotReadMessages/USERS_NOT_READ_MESSAGES_LOAD_FAIL';
 
 const ADD_NEW_NOT_READ_MESSAGE = 'boogaloo/usersNotReadMessages/ADD_NEW_NOT_READ_MESSAGE';
+
+const CLEAR_CHAT_NOT_READ_MESSAGE_START = 'boogaloo/usersNotReadMessages/CLEAR_CHAT_NOT_READ_MESSAGE_START';
 const CLEAR_CHAT_NOT_READ_MESSAGE = 'boogaloo/usersNotReadMessages/CLEAR_CHAT_NOT_READ_MESSAGE';
+const CLEAR_CHAT_NOT_READ_MESSAGE_FAIL = 'boogaloo/usersNotReadMessages/CLEAR_CHAT_NOT_READ_MESSAGE_FAIL';
 
 const initialState = {
   loading: false,
@@ -55,7 +58,13 @@ export default function reducer(state = initialState, action = {}) {
         usersOnlineIds: action.usersOnlineIds
       };
     }
+    case CLEAR_CHAT_NOT_READ_MESSAGE_START:
+      return {
+        ...state,
+        loading: true
+      };
     case CLEAR_CHAT_NOT_READ_MESSAGE: {
+      console.log('here');
       const chatWithAddedMessage = state.usersNotReadMessages.find(chat => chat.chatId === action.chatId);
       const otherChats = state.usersNotReadMessages.filter(chat => chat.chatId !== action.chatId);
       const totalNotReadMessages = state.usersNotReadMessagesTotal - chatWithAddedMessage.messagesCount;
@@ -70,6 +79,11 @@ export default function reducer(state = initialState, action = {}) {
         usersOnlineIds: action.usersOnlineIds
       };
     }
+    case CLEAR_CHAT_NOT_READ_MESSAGE_FAIL:
+      return {
+        ...state,
+        loading: false
+      };
     default:
       return state;
   }
@@ -90,9 +104,19 @@ export function addNewNotReadMessage(chatId, messageId) {
   };
 }
 
-export function clearChatNotReadMessage(chatId) {
+export function clearChatNotReadMessage(token, chatId, messageId) {
   return {
-    type: ADD_NEW_NOT_READ_MESSAGE,
+    types: [CLEAR_CHAT_NOT_READ_MESSAGE_START, CLEAR_CHAT_NOT_READ_MESSAGE, CLEAR_CHAT_NOT_READ_MESSAGE_FAIL],
+    promise: client => client.put(
+      `http://localhost:3030/chats_users?token=${token}`,
+      {
+        data: JSON.stringify({
+          chatId,
+          messageId
+        }),
+        headers: [{ name: 'Content-Type', value: 'application/json' }]
+      }
+    ),
     chatId
   };
 }

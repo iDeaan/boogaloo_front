@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import Button from '../AdditionalComponents/Button';
 import { sendNewMessage, editChatOrder } from '../../redux/modules/chats';
 import InputTextArea from '../FormFields/InputTextArea';
+import {
+  clearChatNotReadMessage
+} from '../../redux/modules/usersNotReadMessages';
 
 @reduxForm({
   form: 'MessageInputForm'
@@ -13,6 +16,7 @@ export default class MessageInput extends Component {
     handleSubmit: PropTypes.func,
     reset: PropTypes.func,
     blockHeight: PropTypes.number,
+    usersNotReadMessages: PropTypes.array,
     chatId: PropTypes.number,
     token: PropTypes.string
   };
@@ -21,6 +25,7 @@ export default class MessageInput extends Component {
     handleSubmit: () => {},
     reset: () => {},
     blockHeight: 0,
+    usersNotReadMessages: [],
     chatId: 0,
     token: ''
   };
@@ -50,6 +55,16 @@ export default class MessageInput extends Component {
     }
   };
 
+  handleFocus() {
+    const { dispatch } = this.context.store;
+    const { token, chatId, usersNotReadMessages } = this.props;
+
+    if (usersNotReadMessages.messagesCount) {
+      const lastItemId = usersNotReadMessages.idsList[usersNotReadMessages.messagesCount - 1];
+      dispatch(clearChatNotReadMessage(token, chatId, lastItemId));
+    }
+  }
+
   render() {
     const { handleSubmit, blockHeight } = this.props;
 
@@ -58,6 +73,7 @@ export default class MessageInput extends Component {
         <form
           onSubmit={handleSubmit(values => this.handleSubmit(values))}
           onKeyDown={(e) => { this.handleKeyDown(e, handleSubmit(values => this.handleSubmit(values))); }}
+          onFocus={() => this.handleFocus()}
           className="login-form"
         >
           <Field

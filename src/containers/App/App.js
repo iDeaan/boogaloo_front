@@ -174,8 +174,9 @@ class App extends Component {
 
     if ((message.user_id !== currentUserId) && (selectedChat === message.chat_id)) {
       dispatch(addNewMessages(message));
-    } else {
-      dispatch(addNewNotReadMessage(message.chat_id));
+    }
+    if (selectedChat !== message.chat_id) {
+      dispatch(addNewNotReadMessage(message.chat_id, message.id));
     }
     dispatch(editChatOrder(message.chat_id, message.createdAt));
     dispatch(editChatLM(message.chat_id, message.message));

@@ -23,8 +23,7 @@ const CHAT_INPUT_HEIGHT = 180;
   token: state.auth.token,
   userData: state.auth.data,
   currentUserId: state.auth.currentUserId,
-  usersNotReadMessages:
-    state.usersNotReadMessages.usersNotReadMessages.find((item) => item.chatId === state.chats.selectedChat)
+  usersNotReadMessages: state.usersNotReadMessages.usersNotReadMessages
 }))
 export default class ChatContainer extends Component {
   static propTypes = {
@@ -33,7 +32,7 @@ export default class ChatContainer extends Component {
     token: PropTypes.string,
     userData: PropTypes.object,
     currentUserId: PropTypes.number,
-    usersNotReadMessages: PropTypes.object
+    usersNotReadMessages: PropTypes.array
   };
 
   static defaultProps = {
@@ -42,7 +41,7 @@ export default class ChatContainer extends Component {
     token: '',
     userData: {},
     currentUserId: 0,
-    usersNotReadMessages: {}
+    usersNotReadMessages: []
   };
 
   static contextTypes = {
@@ -171,7 +170,8 @@ export default class ChatContainer extends Component {
     } = this.props;
     const { currentChatUsers, blockHeight, userPrintingInformation } = this.state;
     const messageListHeight = blockHeight - CHAT_INPUT_HEIGHT - 50;
-    console.log('usersNotReadMessages', usersNotReadMessages);
+    const currentChatNotReadMessages = usersNotReadMessages.find((item) => item.chatId === selectedChat);
+    console.log('currentChatNotReadMessages', currentChatNotReadMessages);
     require('./ChatContainer.scss');
     return (
       <div className="chats-data chats-messages" id="chat-content-container">
@@ -199,7 +199,7 @@ export default class ChatContainer extends Component {
                       message={message}
                       currentUserData={userData && userData[0] ? userData[0] : null}
                       isToShowUserInitials={isToShowUserInitials}
-                      isNotRead={usersNotReadMessages.idsList.includes(message.id)}
+                      isNotRead={currentChatNotReadMessages && currentChatNotReadMessages.idsList.includes(message.id)}
                     />
                   );
                 })
@@ -218,7 +218,10 @@ export default class ChatContainer extends Component {
             : ''
           }
         </div>
-        <MessageInput blockHeight={CHAT_INPUT_HEIGHT} token={token} chatId={selectedChat} />
+        <MessageInput
+          blockHeight={CHAT_INPUT_HEIGHT} token={token} chatId={selectedChat}
+          usersNotReadMessages={currentChatNotReadMessages}
+        />
       </div>
     );
   }
