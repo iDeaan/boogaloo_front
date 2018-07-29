@@ -31,6 +31,7 @@ import {
   disconnectUser,
   addNewChatToUser
 } from '../../helpers/sockets';
+import { clearChatNotReadMessage } from "../../redux/modules/usersNotReadMessages";
 
 @asyncConnect([{
   promise: ({ store: { dispatch } }) => {
@@ -170,10 +171,11 @@ class App extends Component {
 
   handleNewMessageAdded(message) {
     const { dispatch } = this.context.store;
-    const { selectedChat, currentUserId } = this.props;
+    const { selectedChat, currentUserId, token } = this.props;
 
     if ((message.user_id !== currentUserId) && (selectedChat === message.chat_id)) {
       dispatch(addNewMessages(message));
+      dispatch(clearChatNotReadMessage(token, selectedChat, message.id));
     }
     if (selectedChat !== message.chat_id) {
       dispatch(addNewNotReadMessage(message.chat_id, message.id));

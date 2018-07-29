@@ -116,7 +116,7 @@ export default class ChatsList extends Component {
                     userTypingMessage={currentChatUserPrinting && currentChatUserPrinting.userInformation
                       ? currentChatUserPrinting.userInformation : ''}
                     isOnline={isOnline}
-                    notReadMessagesCount={currentChatNotReadMessages.messagesCount}
+                    notReadMessagesCount={currentChatNotReadMessages && currentChatNotReadMessages.messagesCount}
                   />
                 );
               })
