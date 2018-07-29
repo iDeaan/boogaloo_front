@@ -10,6 +10,7 @@ import people from './people';
 import notifications from './notifications';
 import chats from './chats';
 import usersOnline from './usersOnline';
+import usersNotReadMessages from './usersNotReadMessages';
 
 export default combineReducers({
   routing: routerReducer,
@@ -21,5 +22,6 @@ export default combineReducers({
   notifications,
   chats,
   usersOnline,
+  usersNotReadMessages,
   form: formReducer
 });

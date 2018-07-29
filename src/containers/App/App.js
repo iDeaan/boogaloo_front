@@ -19,6 +19,10 @@ import {
   addNewChatToUser as setNewChatToUser
 } from '../../redux/modules/chats';
 import {
+  loadUserNotReadMessages,
+  addNewNotReadMessage
+} from '../../redux/modules/usersNotReadMessages';
+import {
   addingNewFriend,
   submittingNewFriend,
   rejectingNewFriend,
@@ -91,6 +95,9 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const { token } = this.props;
+
+
     /* eslint-disable */
     if (window) {
       window.addEventListener('beforeunload', () => this.handleBeforeUnload());
@@ -107,6 +114,7 @@ class App extends Component {
       dispatch(loadChatsList(nextProps.token, nextProps.currentUserId));
 
       this.loadFriendsSuggestions(nextProps.currentUserId);
+      this.loadNotReadMessages(nextProps.token);
     }
     if ((nextProps.currentUserId !== this.props.currentUserId)
       || (nextProps.chatsList.length && nextProps.chatsList.length !== this.props.chatsList.length)) {
@@ -166,6 +174,8 @@ class App extends Component {
 
     if ((message.user_id !== currentUserId) && (selectedChat === message.chat_id)) {
       dispatch(addNewMessages(message));
+    } else {
+      dispatch(addNewNotReadMessage(message.chat_id));
     }
     dispatch(editChatOrder(message.chat_id, message.createdAt));
     dispatch(editChatLM(message.chat_id, message.message));
@@ -187,6 +197,11 @@ class App extends Component {
     dispatch(loadNewFriends(userId || currentUserId))
       .then(() => {})
       .catch(err => console.log('err', err));
+  }
+
+  loadNotReadMessages(token) {
+    const { dispatch } = this.context.store;
+    dispatch(loadUserNotReadMessages(token));
   }
 
   render() {
