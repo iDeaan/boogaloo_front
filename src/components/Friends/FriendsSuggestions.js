@@ -34,9 +34,13 @@ export default class FriendsSuggestions extends Component {
 
   loadUsersSuggestions(props) {
     const usersIds = props.friendSuggestionIds.map(suggestion => suggestion.friend_id);
-    loadUsers(usersIds).then((response) => {
-      this.setState({ suggestionsList: response.data });
-    });
+    if (usersIds.length) {
+      loadUsers(usersIds).then((response) => {
+        this.setState({ suggestionsList: response.data });
+      });
+    } else {
+      this.setState({ suggestionsList: [] });
+    }
   }
 
   render() {

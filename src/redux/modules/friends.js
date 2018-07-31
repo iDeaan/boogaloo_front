@@ -20,6 +20,7 @@ const NEW_FRIENDS_LOAD_FAIL = 'boogaloo/friends/NEW_FRIENDS_LOAD_FAIL';
 
 const FRIEND_DELETE = 'boogaloo/friends/FRIEND_DELETE';
 const FRIEND_ADD = 'boogaloo/friends/FRIEND_ADD';
+const SUBMIT_NEW_FRIEND_BY_ID = 'boogaloo/friends/SUBMIT_NEW_FRIEND_BY_ID';
 
 const initialState = {
   currentPage: 0,
@@ -170,6 +171,13 @@ export default function reducer(state = initialState, action = {}) {
         friendSuggestionIds: [],
         error: action.error
       };
+    case SUBMIT_NEW_FRIEND_BY_ID:
+      return {
+        ...state,
+        fullFriendsIds: [...state.fullFriendsIds , action.friendId],
+        friendSuggestionIds: state.friendSuggestionIds.filter(item => item.friend_id !== action.friendId),
+        friendSuggestCount: state.friendSuggestCount - 1
+      };
     default:
       return state;
   }
@@ -220,6 +228,13 @@ export function deleteFriend(friendId) {
 export function addFriend(friendId) {
   return {
     type: FRIEND_ADD,
+    friendId
+  };
+}
+
+export function submitNewFriendById(friendId) {
+  return {
+    type: SUBMIT_NEW_FRIEND_BY_ID,
     friendId
   };
 }

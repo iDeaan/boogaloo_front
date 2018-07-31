@@ -33,18 +33,21 @@ const SEARCH_DELAY_TIME = 500;
 @connect(state => ({
   friends: state.friends.friends,
   friendsSearchIds: state.friends.searchIds,
+  fullFriendsIds: state.friends.fullFriendsIds,
   auth: state.auth
 }))
 export default class Friends extends Component {
   static propTypes = {
     friends: PropTypes.array,
     friendsSearchIds: PropTypes.array,
+    fullFriendsIds: PropTypes.array,
     auth: PropTypes.object
   };
 
   static defaultProps = {
     friends: [],
     friendsSearchIds: [],
+    fullFriendsIds: [],
     auth: {}
   };
 
@@ -62,6 +65,28 @@ export default class Friends extends Component {
 
   componentDidMount() {
     this.customFunc();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { fullFriendsIds } = this.props;
+    const { fullFriendsIds: nextFullFriendsIds } = nextProps;
+
+    if (fullFriendsIds.length !== nextFullFriendsIds.length) {
+      this.loadFullFriendsData(nextProps);
+    }
+  }
+
+  loadFullFriendsData(props) {
+    const { dispatch } = this.context.store;
+    const { auth } = props;
+
+    const userId = auth && auth.registeredUser && auth.registeredUser.userToken
+      && auth.registeredUser.userToken.user_id;
+
+    dispatch(loadUserFriendsIds(userId)).then((response) => {
+      const friendsIds = response.data.map(friend => friend.friend_id);
+      return dispatch(loadUserFriendsData(friendsIds)).then(() => {});
+    })
   }
 
   returnSortedFriendsList() {

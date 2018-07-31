@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { submitNewFriend, rejectNewFriend } from '../../helpers/functions';
+import { submitNewFriendById } from '../../redux/modules/friends';
 
 export default class SuggestionItem extends Component {
   static propTypes = {
@@ -13,17 +14,21 @@ export default class SuggestionItem extends Component {
     auth: {}
   };
 
+  static contextTypes = {
+    store: PropTypes.object
+  };
+
   handleAcceptFriend() {
+    const { dispatch } = this.context.store;
     const { suggestionItem, auth } = this.props;
     submitNewFriend(auth.token, suggestionItem.id)
-      .then(() => console.log('success'))
+      .then(() => dispatch(submitNewFriendById(suggestionItem.id)))
       .catch(err => console.log('err', err));
   }
 
   handleRejectFriend() {
     const { suggestionItem, auth } = this.props;
     rejectNewFriend(auth.token, suggestionItem.id)
-      .then(() => console.log('success'))
       .catch(err => console.log('err', err));
   }
 
