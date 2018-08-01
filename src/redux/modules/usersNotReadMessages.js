@@ -91,7 +91,8 @@ export default function reducer(state = initialState, action = {}) {
 
 export function loadUserNotReadMessages(token) {
   return {
-    types: [USERS_NOT_READ_MESSAGES_LOAD_START, USERS_NOT_READ_MESSAGES_LOAD_SUCCESS, USERS_NOT_READ_MESSAGES_LOAD_FAIL],
+    types:
+      [USERS_NOT_READ_MESSAGES_LOAD_START, USERS_NOT_READ_MESSAGES_LOAD_SUCCESS, USERS_NOT_READ_MESSAGES_LOAD_FAIL],
     promise: client => client.get(`http://localhost:3030/users_not_read_messages?token=${token}`)
   };
 }

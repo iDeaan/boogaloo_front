@@ -86,7 +86,7 @@ export default class Friends extends Component {
     dispatch(loadUserFriendsIds(userId)).then((response) => {
       const friendsIds = response.data.map(friend => friend.friend_id);
       return dispatch(loadUserFriendsData(friendsIds)).then(() => {});
-    })
+    });
   }
 
   returnSortedFriendsList() {

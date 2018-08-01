@@ -170,7 +170,7 @@ export default class ChatContainer extends Component {
     } = this.props;
     const { currentChatUsers, blockHeight, userPrintingInformation } = this.state;
     const messageListHeight = blockHeight - CHAT_INPUT_HEIGHT - 50;
-    const currentChatNotReadMessages = usersNotReadMessages.find((item) => item.chatId === selectedChat);
+    const currentChatNotReadMessages = usersNotReadMessages.find(item => item.chatId === selectedChat);
     console.log('currentChatNotReadMessages', currentChatNotReadMessages);
     require('./ChatContainer.scss');
     return (
@@ -219,7 +219,9 @@ export default class ChatContainer extends Component {
           }
         </div>
         <MessageInput
-          blockHeight={CHAT_INPUT_HEIGHT} token={token} chatId={selectedChat}
+          blockHeight={CHAT_INPUT_HEIGHT}
+          token={token}
+          chatId={selectedChat}
           usersNotReadMessages={currentChatNotReadMessages}
         />
       </div>

@@ -22,7 +22,7 @@ export default class ChatsList extends Component {
     currentUserId: PropTypes.number,
     selectedChat: PropTypes.number,
     chatsUsers: PropTypes.array,
-    usersNotReadMessages: PropTypes.array,
+    usersNotReadMessages: PropTypes.array
   };
 
   static defaultProps = {
@@ -31,7 +31,7 @@ export default class ChatsList extends Component {
     currentUserId: [],
     selectedChat: 0,
     chatsUsers: [],
-    usersNotReadMessages: [],
+    usersNotReadMessages: []
   };
 
   static contextTypes = {

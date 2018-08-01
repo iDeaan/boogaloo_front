@@ -174,7 +174,7 @@ export default function reducer(state = initialState, action = {}) {
     case SUBMIT_NEW_FRIEND_BY_ID:
       return {
         ...state,
-        fullFriendsIds: [...state.fullFriendsIds , action.friendId],
+        fullFriendsIds: [...state.fullFriendsIds, action.friendId],
         friendSuggestionIds: state.friendSuggestionIds.filter(item => item.friend_id !== action.friendId),
         friendSuggestCount: state.friendSuggestCount - 1
       };

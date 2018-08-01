@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import Button from '../AdditionalComponents/Button';
 import { sendNewMessage, editChatOrder } from '../../redux/modules/chats';
 import InputTextArea from '../FormFields/InputTextArea';
-import {
-  clearChatNotReadMessage
-} from '../../redux/modules/usersNotReadMessages';
+import { clearChatNotReadMessage } from '../../redux/modules/usersNotReadMessages';
 
 @reduxForm({
   form: 'MessageInputForm'

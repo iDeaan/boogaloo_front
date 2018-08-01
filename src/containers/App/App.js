@@ -20,7 +20,8 @@ import {
 } from '../../redux/modules/chats';
 import {
   loadUserNotReadMessages,
-  addNewNotReadMessage
+  addNewNotReadMessage,
+  clearChatNotReadMessage
 } from '../../redux/modules/usersNotReadMessages';
 import {
   addingNewFriend,
@@ -31,7 +32,6 @@ import {
   disconnectUser,
   addNewChatToUser
 } from '../../helpers/sockets';
-import { clearChatNotReadMessage } from "../../redux/modules/usersNotReadMessages";
 
 @asyncConnect([{
   promise: ({ store: { dispatch } }) => {
@@ -96,9 +96,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { token } = this.props;
-
-
     /* eslint-disable */
     if (window) {
       window.addEventListener('beforeunload', () => this.handleBeforeUnload());
