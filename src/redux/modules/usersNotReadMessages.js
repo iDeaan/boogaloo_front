@@ -1,3 +1,5 @@
+const config = require('../../config');
+
 const USERS_NOT_READ_MESSAGES_LOAD_START = 'boogaloo/usersNotReadMessages/USERS_NOT_READ_MESSAGES_LOAD_START';
 const USERS_NOT_READ_MESSAGES_LOAD_SUCCESS = 'boogaloo/usersNotReadMessages/USERS_NOT_READ_MESSAGES_LOAD_SUCCESS';
 const USERS_NOT_READ_MESSAGES_LOAD_FAIL = 'boogaloo/usersNotReadMessages/USERS_NOT_READ_MESSAGES_LOAD_FAIL';
@@ -93,7 +95,7 @@ export function loadUserNotReadMessages(token) {
   return {
     types:
       [USERS_NOT_READ_MESSAGES_LOAD_START, USERS_NOT_READ_MESSAGES_LOAD_SUCCESS, USERS_NOT_READ_MESSAGES_LOAD_FAIL],
-    promise: client => client.get(`${global.config.apiHost}/users_not_read_messages?token=${token}`)
+    promise: client => client.get(`${config.apiHost}/users_not_read_messages?token=${token}`)
   };
 }
 
@@ -109,7 +111,7 @@ export function clearChatNotReadMessage(token, chatId, messageId) {
   return {
     types: [CLEAR_CHAT_NOT_READ_MESSAGE_START, CLEAR_CHAT_NOT_READ_MESSAGE, CLEAR_CHAT_NOT_READ_MESSAGE_FAIL],
     promise: client => client.put(
-      `${global.config.apiHost}/chats_users?token=${token}`,
+      `${config.apiHost}/chats_users?token=${token}`,
       {
         data: JSON.stringify({
           chatId,

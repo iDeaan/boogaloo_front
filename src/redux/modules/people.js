@@ -1,3 +1,5 @@
+const config = require('../../config');
+
 const PEOPLES_LOAD_START = 'boogaloo/friends/FRIENDS_LOAD_START';
 const PEOPLES_LOAD_SUCCESS = 'boogaloo/auth/FRIENDS_LOAD_SUCCESS';
 const PEOPLES_LOAD_FAIL = 'boogaloo/auth/FRIENDS_LOAD_FAIL';
@@ -73,7 +75,7 @@ export default function reducer(state = initialState, action = {}) {
 export function loadUsersList(idsList, limit = 20, offset = 0, order) {
   return {
     types: [PEOPLES_LOAD_START, PEOPLES_LOAD_SUCCESS, PEOPLES_LOAD_FAIL],
-    promise: client => client.get(`${global.config.apiHost}/users?limit=${limit}&offset=${offset}${idsList && idsList.length ? `&where=(id*IN*${idsList})` : ''}&relations=images`),
+    promise: client => client.get(`${config.apiHost}/users?limit=${limit}&offset=${offset}${idsList && idsList.length ? `&where=(id*IN*${idsList})` : ''}&relations=images`),
     order
   };
 }
@@ -81,6 +83,6 @@ export function loadUsersList(idsList, limit = 20, offset = 0, order) {
 export function searchUsersByString(searchString) {
   return {
     types: [SEARCH_PEOPLES_LOAD_START, SEARCH_PEOPLES_LOAD_FAIL, SEARCH_PEOPLES_LOAD_SUCCESS],
-    promise: client => client.get(`${global.config.apiHost}/search?query=${searchString}`)
+    promise: client => client.get(`${config.apiHost}/search?query=${searchString}`)
   };
 }

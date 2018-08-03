@@ -1,3 +1,5 @@
+const config = require('../../config');
+
 const USERS_ONLINE_LOAD_START = 'boogaloo/usersOnline/USERS_ONLINE_LOAD_START';
 const USERS_ONLINE_LOAD_SUCCESS = 'boogaloo/usersOnline/USERS_ONLINE_LOAD_SUCCESS';
 const USERS_ONLINE_LOAD_FAIL = 'boogaloo/usersOnline/USERS_ONLINE_LOAD_FAIL';
@@ -48,7 +50,7 @@ export default function reducer(state = initialState, action = {}) {
 export function loadUsersOnline(token, usersIds) {
   return {
     types: [USERS_ONLINE_LOAD_START, USERS_ONLINE_LOAD_SUCCESS, USERS_ONLINE_LOAD_FAIL],
-    promise: client => client.get(`${global.config.apiHost}/users_online?token=${token}&userId=${usersIds}`)
+    promise: client => client.get(`${config.apiHost}/users_online?token=${token}&userId=${usersIds}`)
   };
 }
 

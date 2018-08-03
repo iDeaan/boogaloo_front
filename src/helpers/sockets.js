@@ -1,6 +1,8 @@
+const config = require('../config');
+
 import io from 'socket.io-client'; /* eslint-disable-line */
 
-const socket = io(global.config.apiHost);
+const socket = io(config.apiHost);
 
 export function addingNewFriend(cb) {
   socket.on('adding_new_friend', userData => cb(userData));
