@@ -186,35 +186,35 @@ export default function reducer(state = initialState, action = {}) {
 export function loadUserFriendsIds(userId) {
   return {
     types: [FRIENDS_IDS_LOAD_START, FRIENDS_IDS_LOAD_SUCCESS, FRIENDS_IDS_LOAD_FAIL],
-    promise: client => client.get(`http://localhost:3030/users_friends?where=((user_id*=*${userId}),(accepted*=*1))`)
+    promise: client => client.get(`${global.config.apiHost}/users_friends?where=((user_id*=*${userId}),(accepted*=*1))`)
   };
 }
 
 export function loadUserFriendsData(usersIds) {
   return {
     types: [FRIENDS_LOAD_START, FRIENDS_LOAD_SUCCESS, FRIENDS_LOAD_FAIL],
-    promise: client => client.get(`http://localhost:3030/users?where=(id*IN*${usersIds})&relations=images&limit=20`)
+    promise: client => client.get(`${global.config.apiHost}/users?where=(id*IN*${usersIds})&relations=images&limit=20`)
   };
 }
 
 export function searchFriends(input, token) {
   return {
     types: [FRIENDS_SEARCH_START, FRIENDS_SEARCH_SUCCESS, FRIENDS_SEARCH_FAIL],
-    promise: client => client.get(`http://localhost:3030/users_friends?search=${input}&token=${token}&limit=20`)
+    promise: client => client.get(`${global.config.apiHost}/users_friends?search=${input}&token=${token}&limit=20`)
   };
 }
 
 export function loadFullUserFriendsIds(token) {
   return {
     types: [FULL_FRIENDS_IDS_LOAD_START, FULL_FRIENDS_IDS_LOAD_SUCCESS, FULL_FRIENDS_IDS_LOAD_FAIL],
-    promise: client => client.get(`http://localhost:3030/users_friends?token=${token}&idsOnly=true`)
+    promise: client => client.get(`${global.config.apiHost}/users_friends?token=${token}&idsOnly=true`)
   };
 }
 
 export function loadNewFriends(userId) {
   return {
     types: [NEW_FRIENDS_LOAD_START, NEW_FRIENDS_LOAD_SUCCESS, NEW_FRIENDS_LOAD_FAIL],
-    promise: client => client.get(`http://localhost:3030/users_friends?where=((user_id*=*${userId}),(accepted*=*2))`)
+    promise: client => client.get(`${global.config.apiHost}/users_friends?where=((user_id*=*${userId}),(accepted*=*2))`)
   };
 }
 

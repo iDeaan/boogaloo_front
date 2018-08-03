@@ -258,21 +258,21 @@ export default function reducer(state = initialState, action = {}) {
 export function loadChatsList(token, userId) {
   return {
     types: [CHAT_LOAD_START, CHAT_LOAD_SUCCESS, CHAT_LOAD_FAIL],
-    promise: client => client.get(`http://localhost:3030/chats?token=${token}&userId=${userId}`)
+    promise: client => client.get(`${global.config.apiHost}/chats?token=${token}&userId=${userId}`)
   };
 }
 
 export function loadChatsData(token, chatsIds) {
   return {
     types: [CHAT_DATA_LOAD_START, CHAT_DATA_LOAD_SUCCESS, CHAT_DATA_LOAD_FAIL],
-    promise: client => client.get(`http://localhost:3030/chats?token=${token}&where=(id*IN*${chatsIds})&order=FIELD(id)&relations=users`)
+    promise: client => client.get(`${global.config.apiHost}/chats?token=${token}&where=(id*IN*${chatsIds})&order=FIELD(id)&relations=users`)
   };
 }
 
 export function loadChatsUsers(token, usersIds) {
   return {
     types: [USERS_LOAD_START, USERS_LOAD_SUCCESS, USERS_LOAD_FAIL],
-    promise: client => client.get(`http://localhost:3030/users?token=${token}&where=(id*IN*${usersIds})&order=FIELD(id)&relations=images`)
+    promise: client => client.get(`${global.config.apiHost}/users?token=${token}&where=(id*IN*${usersIds})&order=FIELD(id)&relations=images`)
   };
 }
 
@@ -286,14 +286,14 @@ export function selectChat(chatId) {
 export function loadMessages(token, chatId, limit = 50, offset = 0) {
   return {
     types: [MESSAGES_LOAD_START, MESSAGES_LOAD_SUCCESS, MESSAGES_LOAD_FAIL],
-    promise: client => client.get(`http://localhost:3030/chats_messages?token=${token}&chat_id=${chatId}&limit=${limit}&offset=${offset}`)
+    promise: client => client.get(`${global.config.apiHost}/chats_messages?token=${token}&chat_id=${chatId}&limit=${limit}&offset=${offset}`)
   };
 }
 
 export function loadPreviousMessages(token, chatId, limit = 20, offset = 0) {
   return {
     types: [PREVIOUS_MESSAGES_LOAD_START, PREVIOUS_MESSAGES_LOAD_SUCCESS, PREVIOUS_MESSAGES_LOAD_FAIL],
-    promise: client => client.get(`http://localhost:3030/chats_messages?token=${token}&chat_id=${chatId}&limit=${limit}&offset=${offset}`)
+    promise: client => client.get(`${global.config.apiHost}/chats_messages?token=${token}&chat_id=${chatId}&limit=${limit}&offset=${offset}`)
   };
 }
 
@@ -324,7 +324,7 @@ export function sendNewMessage(token, messageData) {
   return {
     types: [SEND_MESSAGE_START, SEND_MESSAGE_SUCCESS, SEND_MESSAGE_FAIL],
     promise: client => client.post(
-      `http://localhost:3030/chats_messages?token=${token}`,
+      `${global.config.apiHost}/chats_messages?token=${token}`,
       {
         data: JSON.stringify(messageData),
         headers: [{ name: 'Content-Type', value: 'application/json' }]
@@ -337,7 +337,7 @@ export function createNewChat(token, userId) {
   return {
     types: [CHAT_CREATE_START, CHAT_CREATE_SUCCESS, CHAT_CREATE_FAIL],
     promise: client => client.post(
-      `http://localhost:3030/chats?token=${token}&userId=${userId}`,
+      `${global.config.apiHost}/chats?token=${token}&userId=${userId}`,
       {
         headers: [{ name: 'Content-Type', value: 'application/json' }]
       }
@@ -346,7 +346,6 @@ export function createNewChat(token, userId) {
 }
 
 export function addNewChatToUser(newChatId) {
-  console.log('addNewChatToUser');
   return {
     type: ADD_CHAT_TO_USER,
     newChatId

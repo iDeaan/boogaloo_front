@@ -93,7 +93,7 @@ export function loadUserNotReadMessages(token) {
   return {
     types:
       [USERS_NOT_READ_MESSAGES_LOAD_START, USERS_NOT_READ_MESSAGES_LOAD_SUCCESS, USERS_NOT_READ_MESSAGES_LOAD_FAIL],
-    promise: client => client.get(`http://localhost:3030/users_not_read_messages?token=${token}`)
+    promise: client => client.get(`${global.config.apiHost}/users_not_read_messages?token=${token}`)
   };
 }
 
@@ -109,7 +109,7 @@ export function clearChatNotReadMessage(token, chatId, messageId) {
   return {
     types: [CLEAR_CHAT_NOT_READ_MESSAGE_START, CLEAR_CHAT_NOT_READ_MESSAGE, CLEAR_CHAT_NOT_READ_MESSAGE_FAIL],
     promise: client => client.put(
-      `http://localhost:3030/chats_users?token=${token}`,
+      `${global.config.apiHost}/chats_users?token=${token}`,
       {
         data: JSON.stringify({
           chatId,

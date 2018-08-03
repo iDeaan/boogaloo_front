@@ -73,7 +73,7 @@ export default function reducer(state = initialState, action = {}) {
 export function loadUsersList(idsList, limit = 20, offset = 0, order) {
   return {
     types: [PEOPLES_LOAD_START, PEOPLES_LOAD_SUCCESS, PEOPLES_LOAD_FAIL],
-    promise: client => client.get(`http://localhost:3030/users?limit=${limit}&offset=${offset}${idsList && idsList.length ? `&where=(id*IN*${idsList})` : ''}&relations=images`),
+    promise: client => client.get(`${global.config.apiHost}/users?limit=${limit}&offset=${offset}${idsList && idsList.length ? `&where=(id*IN*${idsList})` : ''}&relations=images`),
     order
   };
 }
@@ -81,6 +81,6 @@ export function loadUsersList(idsList, limit = 20, offset = 0, order) {
 export function searchUsersByString(searchString) {
   return {
     types: [SEARCH_PEOPLES_LOAD_START, SEARCH_PEOPLES_LOAD_FAIL, SEARCH_PEOPLES_LOAD_SUCCESS],
-    promise: client => client.get(`http://localhost:3030/search?query=${searchString}`)
+    promise: client => client.get(`${global.config.apiHost}/search?query=${searchString}`)
   };
 }

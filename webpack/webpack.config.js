@@ -7,6 +7,7 @@ var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./w
 module.exports = {
   target: "web",
   entry: [
+    './src/config.js',
     'webpack-hot-middleware/client?path=http://localhost:3000/__webpack_hmr',
     'font-awesome/scss/font-awesome.scss',
     './src/client.js',

@@ -1,6 +1,6 @@
 import io from 'socket.io-client'; /* eslint-disable-line */
 
-const socket = io('http://localhost:3030');
+const socket = io(global.config.apiHost);
 
 export function addingNewFriend(cb) {
   socket.on('adding_new_friend', userData => cb(userData));

@@ -7,6 +7,7 @@ import authenticated from '../../helpers/authenticated';
 import FriendAvatar from '../../components/Friends/FriendAvatar';
 import FriendsSearch from '../../components/Friends/FriendsSearch';
 import FriendsSuggestions from '../../components/Friends/FriendsSuggestions';
+import IntervalRender from '../../components/AdditionalComponents/IntervalRender';
 
 const SEARCH_DELAY_TIME = 500;
 
@@ -154,13 +155,30 @@ export default class Friends extends Component {
   renderFriendsList() {
     const { auth } = this.props;
     const sortedFriendsList = this.returnSortedFriendsList();
+    // return (
+    //   sortedFriendsList && sortedFriendsList.length ? sortedFriendsList.map((friend, index) =>
+    //     (<FriendAvatar
+    //       friend={friend}
+    //       token={auth.token}
+    //       displayed={this.state.displayedIndexes.includes(index) || this.state.displayedIndexes[0] === 'all'}
+    //     />)) : ''
+    // );
     return (
-      sortedFriendsList && sortedFriendsList.length ? sortedFriendsList.map((friend, index) =>
-        (<FriendAvatar
-          friend={friend}
-          token={auth.token}
-          displayed={this.state.displayedIndexes.includes(index) || this.state.displayedIndexes[0] === 'all'}
-        />)) : ''
+      sortedFriendsList && sortedFriendsList.length ? (
+        <IntervalRender
+          renderInterval={1000}
+        >
+          {sortedFriendsList.map((friend, index) =>
+            <div>
+              <FriendAvatar
+                friend={friend}
+                token={auth.token}
+                displayed={true}
+              />
+            </div>
+          )}
+        </IntervalRender>
+      ) : ''
     );
   }
 

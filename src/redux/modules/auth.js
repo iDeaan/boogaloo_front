@@ -97,7 +97,7 @@ export default function reducer(state = initialState, action = {}) {
 export function signIn(login = 'admin', password = 'admin') {
   return {
     types: [SIGN_START, SIGN_SUCCESS, SIGN_FAIL],
-    promise: client => client.get(`http://localhost:3030/sign?login=${login}&password=${password}`)
+    promise: client => client.get(`${global.config.apiHost}/sign?login=${login}&password=${password}`)
   };
 }
 
@@ -105,7 +105,7 @@ export function registerNewUser(userData) {
   return {
     types: [REGISTER_START, REGISTER_SUCCESS, REGISTER_FAIL],
     promise: client => client.post(
-      'http://localhost:3030/sign',
+      `${global.config.apiHost}/sign`,
       {
         data: JSON.stringify(userData),
         headers: [{ name: 'Content-Type', value: 'application/json' }]
@@ -117,13 +117,13 @@ export function registerNewUser(userData) {
 export function checkIfTokenValid(token, userId) {
   return {
     types: [REGISTER_START, REGISTER_SUCCESS, REGISTER_FAIL],
-    promise: client => client.get(`http://localhost:3030/sign?token=${token}&userId=${userId}`)
+    promise: client => client.get(`${global.config.apiHost}/sign?token=${token}&userId=${userId}`)
   };
 }
 
 export function loadCurrentUser(token, userId) {
   return {
     types: [SIGN_START, SIGN_SUCCESS, SIGN_FAIL],
-    promise: client => client.get(`http://localhost:3030/users?token=${token}&where=(id*=*${userId})&relations=images`)
+    promise: client => client.get(`${global.config.apiHost}/users?token=${token}&where=(id*=*${userId})&relations=images`)
   };
 }
