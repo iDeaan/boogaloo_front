@@ -166,9 +166,8 @@ export default class Friends extends Component {
     return (
       sortedFriendsList && sortedFriendsList.length ? (
         <IntervalRender
-          renderInterval={1000}
+          renderInterval={400}
           containerClassName="friends-list"
-          childrenClassName="friend-avatar-container"
           transitionStyle={{
             initial: {
               opacity: 0,

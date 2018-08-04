@@ -8,13 +8,11 @@ import { createNewChat } from '../../redux/modules/chats';
 export default class FriendAvatar extends Component {
   static propTypes = {
     friend: PropTypes.object,
-    displayed: PropTypes.bool,
     token: PropTypes.string
   };
 
   static defaultProps = {
     friend: {},
-    displayed: false,
     token: ''
   };
 
@@ -39,13 +37,13 @@ export default class FriendAvatar extends Component {
   }
 
   render() {
-    const { friend, displayed } = this.props;
+    const { friend } = this.props;
 
     const avatarImage = friend.images && friend.images.find(image => image.image_type === 'avatar');
 
     require('./FriendAvatar.scss');
     return (
-      <div className={`friend-avatar-container ${displayed ? 'displayed' : 'hide'}`}>
+      <div className="friend-avatar-container">
         <div className="friend-avatar">
           {avatarImage
             ? (

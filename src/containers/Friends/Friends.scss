@@ -6,6 +6,11 @@
       display: flex;
       flex-flow: row wrap;
       justify-content: space-between;
+
+      .interval-render-item {
+        width: 48%;
+        margin-bottom: 10px;
+      }
     }
   }
 }

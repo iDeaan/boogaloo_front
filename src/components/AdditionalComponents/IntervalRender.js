@@ -24,11 +24,14 @@ export default class IntervalRender extends Component {
 
   constructor(props) {
     super(props);
-    this.startIntervalRender(props);
 
     this.state = {
       displayedItemIndex: 0,
     }
+  }
+
+  componentDidMount() {
+    this.startIntervalRender(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -47,8 +50,8 @@ export default class IntervalRender extends Component {
     this.times = 0;
 
     this.interval = setInterval(() => {
-      if (this.times < childrenCount) {
-        this.setState({ displayedItemIndex: this.state.displayedItemIndex + 1 });
+      if (this.times <= childrenCount) {
+        this.setState({ displayedItemIndex: this.times === 0 ? 0 : this.state.displayedItemIndex + 1 });
         this.times += 1;
       }
     }, renderInterval - 200);
