@@ -22,7 +22,6 @@ export default class IntervalRender extends Component {
 
     this.state = {
       displayedItemIndex: 0,
-      childrenItems: this.addClassNamesForChildrenItems(props)
     }
   }
 
@@ -31,7 +30,6 @@ export default class IntervalRender extends Component {
     const { children: nextChildren } = nextProps;
 
     if (children.length !== nextChildren.length) {
-      this.setState({ childrenItems: this.addClassNamesForChildrenItems(nextProps) });
       this.startIntervalRender(nextProps);
     }
   }
@@ -50,30 +48,12 @@ export default class IntervalRender extends Component {
     }, renderInterval - 100);
   }
 
-  addClassNamesForChildrenItems(props) {
-    const { children } = props;
-
-    return React.Children.map(children, (child, index) => {
-      const oldChildProps = child.props;
-      const newClassName =
-        `${child.props && child.props.className ? `${child.props.className} ` : ''}interval-render-item`;
-
-      const props = {
-        ...oldChildProps,
-        className: newClassName,
-        currentIndex: index
-      };
-
-      return React.createElement(child.type, props, child.props.children);
-    });
-  }
-
-  returnIfToRenderItem(child) {
+  returnIfToRenderItem(child, currentIndex) {
     const { displayedItemIndex } = this.state;
-    if (child.props.currentIndex <= displayedItemIndex) {
+    if (currentIndex <= displayedItemIndex) {
       return (
         <IntervalRenderChildren
-          currentIndex={child.props.currentIndex}
+          currentIndex={currentIndex}
         >
           {child}
         </IntervalRenderChildren>
@@ -83,11 +63,11 @@ export default class IntervalRender extends Component {
   }
 
   render() {
-    const { childrenItems } = this.state;
+    const { children: childrenItems } = this.props;
 
     return (
       <div className="interval-render-container">
-        {React.Children.map(childrenItems, child => this.returnIfToRenderItem(child))}
+        {React.Children.map(childrenItems, (child, index) => this.returnIfToRenderItem(child, index))}
       </div>
     );
   }
@@ -120,7 +100,7 @@ class IntervalRenderChildren extends Component {
     const { className } = this.state;
 
     return (
-      <div className={`item-container ${className}`}>
+      <div className={`interval-render-item ${className}`}>
         {child}
       </div>
     );
