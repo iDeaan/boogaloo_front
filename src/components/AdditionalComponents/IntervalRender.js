@@ -4,12 +4,18 @@ import PropTypes from 'prop-types';
 export default class IntervalRender extends Component {
   static propTypes = {
     children: PropTypes.array,
-    renderInterval: PropTypes.number
+    renderInterval: PropTypes.number,
+    containerClassName: PropTypes.string,
+    childrenClassName: PropTypes.string,
+    transitionStyle: PropTypes.object
   };
 
   static defaultProps = {
     children: [],
-    renderInterval: 500
+    renderInterval: 500,
+    containerClassName: '',
+    childrenClassName: '',
+    transitionStyle: {}
   };
 
   static contextTypes = {
@@ -45,15 +51,19 @@ export default class IntervalRender extends Component {
         this.setState({ displayedItemIndex: this.state.displayedItemIndex + 1 });
         this.times += 1;
       }
-    }, renderInterval - 100);
+    }, renderInterval - 200);
   }
 
   returnIfToRenderItem(child, currentIndex) {
+    const { childrenClassName, transitionStyle } = this.props;
     const { displayedItemIndex } = this.state;
+
     if (currentIndex <= displayedItemIndex) {
       return (
         <IntervalRenderChildren
           currentIndex={currentIndex}
+          childrenClassName={childrenClassName}
+          transitionStyle={transitionStyle}
         >
           {child}
         </IntervalRenderChildren>
@@ -63,10 +73,10 @@ export default class IntervalRender extends Component {
   }
 
   render() {
-    const { children: childrenItems } = this.props;
+    const { children: childrenItems, containerClassName } = this.props;
 
     return (
-      <div className="interval-render-container">
+      <div className={`interval-render-container${containerClassName ? ` ${containerClassName}` : ''}`}>
         {React.Children.map(childrenItems, (child, index) => this.returnIfToRenderItem(child, index))}
       </div>
     );
@@ -76,10 +86,14 @@ export default class IntervalRender extends Component {
 class IntervalRenderChildren extends Component {
   static propTypes = {
     children: PropTypes.object,
+    transitionStyle: PropTypes.object,
+    childrenClassName: PropTypes.string
   };
 
   static defaultProps = {
     children: {},
+    transitionStyle: {},
+    childrenClassName: ''
   };
 
   constructor(props) {
@@ -92,15 +106,23 @@ class IntervalRenderChildren extends Component {
   componentDidMount() {
     setTimeout(() =>
       this.setState({ className: 'transitioned' })
-    , 100);
+    , 200);
   }
 
   render() {
-    const { children: child } = this.props;
+    const { children: child, childrenClassName, transitionStyle } = this.props;
     const { className } = this.state;
 
+    let itemStyle = transitionStyle.initial;
+    if (className === 'transitioned') {
+      itemStyle = { ...itemStyle, ...transitionStyle.transitioned };
+    }
+
     return (
-      <div className={`interval-render-item ${className}`}>
+      <div
+        className={`interval-render-item ${className}${childrenClassName ? ` ${childrenClassName}` : ''}`}
+        style={itemStyle}
+      >
         {child}
       </div>
     );

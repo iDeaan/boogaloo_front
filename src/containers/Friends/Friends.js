@@ -167,15 +167,24 @@ export default class Friends extends Component {
       sortedFriendsList && sortedFriendsList.length ? (
         <IntervalRender
           renderInterval={1000}
+          containerClassName="friends-list"
+          childrenClassName="friend-avatar-container"
+          transitionStyle={{
+            initial: {
+              opacity: 0,
+              transition: '1s'
+            },
+            transitioned: {
+              opacity: 1
+            }
+          }}
         >
-          {sortedFriendsList.map((friend, index) =>
-            <div>
-              <FriendAvatar
-                friend={friend}
-                token={auth.token}
-                displayed={true}
-              />
-            </div>
+          {sortedFriendsList.map(friend =>
+            <FriendAvatar
+              friend={friend}
+              token={auth.token}
+              displayed={true}
+            />
           )}
         </IntervalRender>
       ) : ''
@@ -188,9 +197,9 @@ export default class Friends extends Component {
       <div className="content">
         <div className="friends-container route-container">
           <FriendsSearch onChange={event => this.handleFriendsSearch(event)} />
-          <div className="friends-list">
+          <React.Fragment>
             {this.renderFriendsList()}
-          </div>
+          </React.Fragment>
         </div>
       </div>,
       <div className="right-content">
