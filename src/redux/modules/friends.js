@@ -20,6 +20,10 @@ const NEW_FRIENDS_LOAD_START = 'boogaloo/friends/NEW_FRIENDS_LOAD_START';
 const NEW_FRIENDS_LOAD_SUCCESS = 'boogaloo/friends/NEW_FRIENDS_LOAD_SUCCESS';
 const NEW_FRIENDS_LOAD_FAIL = 'boogaloo/friends/NEW_FRIENDS_LOAD_FAIL';
 
+const FRIEND_SUBSCRIPTION_DELETE_START = 'boogaloo/friends/FRIEND_SUBSCRIPTION_DELETE_START';
+const FRIEND_SUBSCRIPTION_DELETE_SUCCESS = 'boogaloo/friends/FRIEND_SUBSCRIPTION_DELETE_SUCCESS';
+const FRIEND_SUBSCRIPTION_DELETE_FAIL = 'boogaloo/friends/FRIEND_SUBSCRIPTION_DELETE_FAIL';
+
 const FRIEND_DELETE = 'boogaloo/friends/FRIEND_DELETE';
 const FRIEND_ADD = 'boogaloo/friends/FRIEND_ADD';
 const SUBMIT_NEW_FRIEND_BY_ID = 'boogaloo/friends/SUBMIT_NEW_FRIEND_BY_ID';
@@ -33,6 +37,7 @@ const initialState = {
   loaded: false,
   fullFriendsIds: [],
   fullFriendsCount: 0,
+  fullNotAcceptedFriendsIds: [],
   error: null,
   friendSuggestionIds: [],
   friendSuggestCount: 0
@@ -80,15 +85,19 @@ export default function reducer(state = initialState, action = {}) {
         friends: action.result.data,
         error: null
       };
-    case FULL_FRIENDS_IDS_LOAD_SUCCESS:
+    case FULL_FRIENDS_IDS_LOAD_SUCCESS: {
+      const friends = action.result.data.idsList.filter(item => Number(item.accepted) === 1);
+      const notAcceptedFriends = action.result.data.idsList.filter(item => Number(item.accepted) === 0);
       return {
         ...state,
         loading: false,
         laoded: true,
-        fullFriendsIds: action.result.data.idsList,
-        fullFriendsCount: action.result.data.total,
+        fullFriendsIds: friends.length ? friends.map(friend => friend.userId) : [],
+        fullNotAcceptedFriendsIds: notAcceptedFriends.length ? notAcceptedFriends.map(friend => friend.userId) : [],
+        fullFriendsCount: friends.length,
         error: null
       };
+    }
     case FRIENDS_SEARCH_SUCCESS:
       return {
         ...state,
@@ -143,13 +152,13 @@ export default function reducer(state = initialState, action = {}) {
       };
     }
     case FRIEND_ADD: {
-      const newFriendsIds = [...state.fullFriendsIds, action.friendId];
+      const newFriendsIds = [...state.fullNotAcceptedFriendsIds, action.friendId];
       return {
         ...state,
         loading: false,
         laoded: false,
         fullFriendsCount: state.fullFriendsCount + 1,
-        fullFriendsIds: newFriendsIds
+        fullNotAcceptedFriendsIds: newFriendsIds
       };
     }
     case NEW_FRIENDS_LOAD_START:
@@ -179,6 +188,20 @@ export default function reducer(state = initialState, action = {}) {
         fullFriendsIds: [...state.fullFriendsIds, action.friendId],
         friendSuggestionIds: state.friendSuggestionIds.filter(item => item.friend_id !== action.friendId),
         friendSuggestCount: state.friendSuggestCount - 1
+      };
+    case FRIEND_SUBSCRIPTION_DELETE_START:
+      return {
+        ...state,
+      };
+    case FRIEND_SUBSCRIPTION_DELETE_SUCCESS:
+      return {
+        ...state,
+        fullNotAcceptedFriendsIds: state.fullNotAcceptedFriendsIds.filter((item) => item !== action.friendId),
+        error: action.error
+      };
+    case FRIEND_SUBSCRIPTION_DELETE_FAIL:
+      return {
+        ...state
       };
     default:
       return state;
@@ -237,6 +260,14 @@ export function addFriend(friendId) {
 export function submitNewFriendById(friendId) {
   return {
     type: SUBMIT_NEW_FRIEND_BY_ID,
+    friendId
+  };
+}
+
+export function deleteFiendFromSubscription(token, friendId) {
+  return {
+    types: [FRIEND_SUBSCRIPTION_DELETE_START, FRIEND_SUBSCRIPTION_DELETE_SUCCESS, FRIEND_SUBSCRIPTION_DELETE_FAIL],
+    promise: client => client.del(`${config.apiHost}/users_friends?token=${token}&friendId=${friendId}`),
     friendId
   };
 }

@@ -29,18 +29,21 @@ const SEARCH_DELAY_TIME = 500;
 @connect(state => ({
   people: state.people.peoples,
   friendsIds: state.friends.fullFriendsIds,
+  fullNotAcceptedFriendsIds: state.friends.fullNotAcceptedFriendsIds,
   auth: state.auth
 }))
 export default class People extends Component {
   static propTypes = {
     people: PropTypes.array,
     friendsIds: PropTypes.array,
+    fullNotAcceptedFriendsIds: PropTypes.array,
     auth: PropTypes.object
   };
 
   static defaultProps = {
     people: [],
     friendsIds: [],
+    fullNotAcceptedFriendsIds: [],
     auth: {}
   };
 
@@ -79,12 +82,13 @@ export default class People extends Component {
   }
 
   renderUsersList() {
-    const { people: peoplesList, friendsIds, auth } = this.props;
+    const { people: peoplesList, friendsIds, fullNotAcceptedFriendsIds, auth } = this.props;
     return (
       peoplesList && peoplesList.length ? peoplesList.map((people, index) =>
         (<PeopleAvatar
           people={people}
           isFriend={friendsIds.includes(people.id)}
+          isNotAcceptedFriend={fullNotAcceptedFriendsIds.includes(people.id)}
           displayed={this.state.displayedIndexes.includes(index) || this.state.displayedIndexes[0] === 'all'}
           token={auth.token}
         />)) : ''

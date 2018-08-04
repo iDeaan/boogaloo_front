@@ -4,7 +4,8 @@ import Button from '../AdditionalComponents/Button';
 import { addNewFriend, deleteFriend } from '../../helpers/functions';
 import {
   deleteFriend as deleteFriendFromStore,
-  addFriend as addFriendToStore
+  addFriend as addFriendToStore,
+  deleteFiendFromSubscription
 } from '../../redux/modules/friends';
 
 export default class PeopleAvatar extends Component {
@@ -12,6 +13,7 @@ export default class PeopleAvatar extends Component {
     people: PropTypes.object,
     displayed: PropTypes.bool,
     isFriend: PropTypes.bool,
+    isNotAcceptedFriend: PropTypes.bool,
     token: PropTypes.string
   };
 
@@ -19,6 +21,7 @@ export default class PeopleAvatar extends Component {
     people: {},
     displayed: false,
     isFriend: false,
+    isNotAcceptedFriend: false,
     token: ''
   };
 
@@ -44,8 +47,15 @@ export default class PeopleAvatar extends Component {
     });
   }
 
+  handleDeleteSubscription(people) {
+    const { dispatch } = this.context.store;
+    const { token } = this.props;
+
+    dispatch(deleteFiendFromSubscription(token, people.id));
+  }
+
   render() {
-    const { isFriend, people, displayed } = this.props;
+    const { isFriend, people, displayed, isNotAcceptedFriend } = this.props;
 
     const avatarImage = people.images && people.images.find(image => image.image_type === 'avatar');
 
@@ -69,24 +79,38 @@ export default class PeopleAvatar extends Component {
           <div className="name">{people.name}</div>
           <div className="surname">{people.surname}</div>
         </div>
-        <div className="friend-actions">
-          {isFriend
-            ? (
-              <Button
-                text="Видалити друга"
-                className="register-button"
-                onClick={() => this.handleFriendDelete(people)}
-              />
-            )
-            : (
-              <Button
-                text="Додати до друзів"
-                className="register-button"
-                onClick={() => this.handleFriendAdd(people)}
-              />
-            )
-          }
-        </div>
+        {isNotAcceptedFriend
+          ? (
+            <div className="friend-actions">
+              <div className="you-subscribed">Ви підписані</div>
+              <div
+                className="delete-subscription"
+                onClick={() => this.handleDeleteSubscription(people)}
+              >
+                відписатись
+              </div>
+            </div>
+          ) : (
+            <div className="friend-actions">
+              {isFriend
+                ? (
+                  <Button
+                    text="Видалити друга"
+                    className="register-button"
+                    onClick={() => this.handleFriendDelete(people)}
+                  />
+                )
+                : (
+                  <Button
+                    text="Додати до друзів"
+                    className="register-button"
+                    onClick={() => this.handleFriendAdd(people)}
+                  />
+                )
+              }
+            </div>
+          )
+        }
       </div>
     );
   }
