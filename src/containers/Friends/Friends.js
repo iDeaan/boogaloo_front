@@ -155,14 +155,7 @@ export default class Friends extends Component {
   renderFriendsList() {
     const { auth } = this.props;
     const sortedFriendsList = this.returnSortedFriendsList();
-    // return (
-    //   sortedFriendsList && sortedFriendsList.length ? sortedFriendsList.map((friend, index) =>
-    //     (<FriendAvatar
-    //       friend={friend}
-    //       token={auth.token}
-    //       displayed={this.state.displayedIndexes.includes(index) || this.state.displayedIndexes[0] === 'all'}
-    //     />)) : ''
-    // );
+
     return (
       sortedFriendsList && sortedFriendsList.length ? (
         <IntervalRender
@@ -178,13 +171,12 @@ export default class Friends extends Component {
             }
           }}
         >
-          {sortedFriendsList.map(friend =>
+          {sortedFriendsList.map(friend => (
             <FriendAvatar
               friend={friend}
               token={auth.token}
-              displayed={true}
             />
-          )}
+          ))}
         </IntervalRender>
       ) : ''
     );

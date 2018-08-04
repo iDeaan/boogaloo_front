@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import IntervalRenderChildren from './IntervalRenderChildren';
 
 export default class IntervalRender extends Component {
   static propTypes = {
     children: PropTypes.array,
-    renderInterval: PropTypes.number,
+    renderInterval: PropTypes.number, // eslint-disable-line
     containerClassName: PropTypes.string,
     childrenClassName: PropTypes.string,
     transitionStyle: PropTypes.object
@@ -12,7 +13,7 @@ export default class IntervalRender extends Component {
 
   static defaultProps = {
     children: [],
-    renderInterval: 500,
+    renderInterval: 500, // eslint-disable-line
     containerClassName: '',
     childrenClassName: '',
     transitionStyle: {}
@@ -26,8 +27,8 @@ export default class IntervalRender extends Component {
     super(props);
 
     this.state = {
-      displayedItemIndex: 0,
-    }
+      displayedItemIndex: 0
+    };
   }
 
   componentDidMount() {
@@ -81,52 +82,6 @@ export default class IntervalRender extends Component {
     return (
       <div className={`interval-render-container${containerClassName ? ` ${containerClassName}` : ''}`}>
         {React.Children.map(childrenItems, (child, index) => this.returnIfToRenderItem(child, index))}
-      </div>
-    );
-  }
-}
-
-class IntervalRenderChildren extends Component {
-  static propTypes = {
-    children: PropTypes.object,
-    transitionStyle: PropTypes.object,
-    childrenClassName: PropTypes.string
-  };
-
-  static defaultProps = {
-    children: {},
-    transitionStyle: {},
-    childrenClassName: ''
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      className: null
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() =>
-      this.setState({ className: 'transitioned' })
-    , 200);
-  }
-
-  render() {
-    const { children: child, childrenClassName, transitionStyle } = this.props;
-    const { className } = this.state;
-
-    let itemStyle = transitionStyle.initial;
-    if (className === 'transitioned') {
-      itemStyle = { ...itemStyle, ...transitionStyle.transitioned };
-    }
-
-    return (
-      <div
-        className={`interval-render-item ${className}${childrenClassName ? ` ${childrenClassName}` : ''}`}
-        style={itemStyle}
-      >
-        {child}
       </div>
     );
   }
