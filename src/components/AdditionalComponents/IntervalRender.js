@@ -47,7 +47,7 @@ export default class IntervalRender extends Component {
         this.setState({ displayedItemIndex: this.state.displayedItemIndex + 1 });
         this.times += 1;
       }
-    }, renderInterval);
+    }, renderInterval - 100);
   }
 
   addClassNamesForChildrenItems(props) {
@@ -71,7 +71,13 @@ export default class IntervalRender extends Component {
   returnIfToRenderItem(child) {
     const { displayedItemIndex } = this.state;
     if (child.props.currentIndex <= displayedItemIndex) {
-      return child;
+      return (
+        <IntervalRenderChildren
+          currentIndex={child.props.currentIndex}
+        >
+          {child}
+        </IntervalRenderChildren>
+      );
     }
     return null;
   }
@@ -82,6 +88,40 @@ export default class IntervalRender extends Component {
     return (
       <div className="interval-render-container">
         {React.Children.map(childrenItems, child => this.returnIfToRenderItem(child))}
+      </div>
+    );
+  }
+}
+
+class IntervalRenderChildren extends Component {
+  static propTypes = {
+    children: PropTypes.object,
+  };
+
+  static defaultProps = {
+    children: {},
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      className: null
+    };
+  }
+
+  componentDidMount() {
+    setTimeout(() =>
+      this.setState({ className: 'transitioned' })
+    , 100);
+  }
+
+  render() {
+    const { children: child } = this.props;
+    const { className } = this.state;
+
+    return (
+      <div className={`item-container ${className}`}>
+        {child}
       </div>
     );
   }
