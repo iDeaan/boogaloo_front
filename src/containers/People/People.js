@@ -82,7 +82,10 @@ export default class People extends Component {
   }
 
   renderUsersList() {
-    const { people: peoplesList, friendsIds, fullNotAcceptedFriendsIds, auth } = this.props;
+    const {
+      people: peoplesList, friendsIds, fullNotAcceptedFriendsIds, auth
+    } = this.props;
+
     return (
       peoplesList && peoplesList.length ? peoplesList.map((people, index) =>
         (<PeopleAvatar
@@ -97,6 +100,7 @@ export default class People extends Component {
 
   render() {
     require('./People.scss');
+
     return [
       <div className="content">
         <div className="friends-container route-container">

@@ -191,12 +191,12 @@ export default function reducer(state = initialState, action = {}) {
       };
     case FRIEND_SUBSCRIPTION_DELETE_START:
       return {
-        ...state,
+        ...state
       };
     case FRIEND_SUBSCRIPTION_DELETE_SUCCESS:
       return {
         ...state,
-        fullNotAcceptedFriendsIds: state.fullNotAcceptedFriendsIds.filter((item) => item !== action.friendId),
+        fullNotAcceptedFriendsIds: state.fullNotAcceptedFriendsIds.filter(item => item !== action.friendId),
         error: action.error
       };
     case FRIEND_SUBSCRIPTION_DELETE_FAIL:

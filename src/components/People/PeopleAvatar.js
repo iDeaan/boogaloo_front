@@ -55,7 +55,9 @@ export default class PeopleAvatar extends Component {
   }
 
   render() {
-    const { isFriend, people, displayed, isNotAcceptedFriend } = this.props;
+    const {
+      isFriend, people, displayed, isNotAcceptedFriend
+    } = this.props;
 
     const avatarImage = people.images && people.images.find(image => image.image_type === 'avatar');
 

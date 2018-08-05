@@ -35,18 +35,19 @@ export default class FriendAvatar extends Component {
     const { history } = this.context.router;
     const { token } = this.props;
 
-    checkIfChatWithFriendExists(token, people.id).then((response) => {
-      if (response && response.data && response.data.chat_id) {
-        dispatch(selectChat(response.data.chat_id));
-        history.push('/chats');
-      }
-    }).catch(() =>
-      dispatch(createNewChat(token, people.id))
-        .then((response) => {
+    checkIfChatWithFriendExists(token, people.id)
+      .then((response) => {
+        if (response && response.data && response.data.chat_id) {
           dispatch(selectChat(response.data.chat_id));
           history.push('/chats');
-        })
-    )
+        }
+      })
+      .catch(() =>
+        dispatch(createNewChat(token, people.id))
+          .then((response) => {
+            dispatch(selectChat(response.data.chat_id));
+            history.push('/chats');
+          }));
   }
 
   render() {
