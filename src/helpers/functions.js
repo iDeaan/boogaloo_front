@@ -22,3 +22,7 @@ export function submitNewFriend(token, userId) {
 export function rejectNewFriend(token, userId) {
   return client.post(`${config.apiHost}/users_friends?token=${token}&userId=${userId}&rejectFriend=true`);
 }
+
+export function checkIfChatWithFriendExists(token, friendId) {
+  return client.get(`${config.apiHost}/chats_users?token=${token}&friendId=${friendId}`);
+}

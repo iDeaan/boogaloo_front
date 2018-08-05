@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../AdditionalComponents/Button';
-import { deleteFriend } from '../../helpers/functions';
+import { deleteFriend, checkIfChatWithFriendExists } from '../../helpers/functions';
 import { deleteFriend as deleteFriendFromStore } from '../../redux/modules/friends';
-import { createNewChat } from '../../redux/modules/chats';
+import { createNewChat, selectChat } from '../../redux/modules/chats';
 
 export default class FriendAvatar extends Component {
   static propTypes = {
@@ -17,7 +17,8 @@ export default class FriendAvatar extends Component {
   };
 
   static contextTypes = {
-    store: PropTypes.object.isRequired
+    store: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired
   };
 
   handleFriendDelete(people) {
@@ -31,9 +32,21 @@ export default class FriendAvatar extends Component {
 
   handleWriteMessage(people) {
     const { dispatch } = this.context.store;
+    const { history } = this.context.router;
     const { token } = this.props;
 
-    dispatch(createNewChat(token, people.id));
+    checkIfChatWithFriendExists(token, people.id).then((response) => {
+      if (response && response.data && response.data.chat_id) {
+        dispatch(selectChat(response.data.chat_id));
+        history.push('/chats');
+      }
+    }).catch(() =>
+      dispatch(createNewChat(token, people.id))
+        .then((response) => {
+          dispatch(selectChat(response.data.chat_id));
+          history.push('/chats');
+        })
+    )
   }
 
   render() {
