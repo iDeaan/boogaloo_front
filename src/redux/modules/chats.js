@@ -122,7 +122,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         selectedChat: action.selectedChat,
-        messages: []
+        messages: state.selectedChat === action.selectedChat ? state.messages : []
       };
     case MESSAGES_LOAD_START:
       return {
