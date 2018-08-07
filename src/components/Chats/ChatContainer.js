@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  loadMessages
-  // loadPreviousMessages
+  loadMessages,
+  loadPreviousMessages
 } from '../../redux/modules/chats';
 import {
   userPrintingMessageInChatStart,
@@ -20,6 +20,7 @@ const CHAT_INPUT_HEIGHT = 180;
   chatsUsers: state.chats.chatsUsers,
   chatsData: state.chats.chatsData,
   messages: state.chats.messages,
+  totalMessagesCount: state.chats.totalMessagesCount,
   token: state.auth.token,
   userData: state.auth.data,
   currentUserId: state.auth.currentUserId,
@@ -28,6 +29,7 @@ const CHAT_INPUT_HEIGHT = 180;
 export default class ChatContainer extends Component {
   static propTypes = {
     selectedChat: PropTypes.number,
+    totalMessagesCount: PropTypes.number,
     messages: PropTypes.array,
     token: PropTypes.string,
     userData: PropTypes.object,
@@ -37,6 +39,7 @@ export default class ChatContainer extends Component {
 
   static defaultProps = {
     selectedChat: 0,
+    totalMessagesCount: 0,
     messages: [],
     token: '',
     userData: {},
@@ -54,8 +57,9 @@ export default class ChatContainer extends Component {
       currentChatUsers: [],
       blockHeight: 0,
       userPrintingInformation: false,
-      isToUseInstantScroll: true
-      // currentOffset: 50
+      isToUseInstantScroll: true,
+      currentOffset: 50,
+      isToIgnoreScroll: false
     };
 
     userPrintingMessageInChatStart(data => this.userPrintingMessageStart(data));
@@ -94,23 +98,19 @@ export default class ChatContainer extends Component {
     this.scrollToBottom();
   }
 
-  /*
-  handleMessagesContainerScroll(event) {
+  handlePreviousMessagesLoad() {
     const { dispatch } = this.context.store;
     const { selectedChat, token } = this.props;
     const { currentOffset } = this.state;
 
     const newMessagesToLoadNumber = 20;
 
-    const element = event.target;
-
-    if (element.scrollTop === 0) {
-      dispatch(loadPreviousMessages(token, selectedChat, newMessagesToLoadNumber, currentOffset)).then(() => {
-        this.setState({ currentOffset: currentOffset + newMessagesToLoadNumber });
-      });
-    }
+    this.state.isToIgnoreScroll = true;
+    dispatch(loadPreviousMessages(token, selectedChat, newMessagesToLoadNumber, currentOffset)).then(() => {
+      this.setState({ currentOffset: currentOffset + newMessagesToLoadNumber });
+    });
   }
-  */
+
 
   setCurrentChatUsers(props) {
     const { chatsUsers, chatsData, selectedChat } = props;
@@ -143,9 +143,11 @@ export default class ChatContainer extends Component {
   }
 
   scrollToBottom() {
-    const { isToUseInstantScroll } = this.state;
-    const scrollBehavior = isToUseInstantScroll ? 'instant' : 'smooth';
-    this.messagesEnd.scrollIntoView({ behavior: scrollBehavior });
+    const { isToUseInstantScroll, isToIgnoreScroll } = this.state;
+    if (!isToIgnoreScroll) {
+      const scrollBehavior = isToUseInstantScroll ? 'instant' : 'smooth';
+      this.messagesEnd.scrollIntoView({behavior: scrollBehavior});
+    }
   }
 
   userPrintingMessageStart(data) {
@@ -166,9 +168,9 @@ export default class ChatContainer extends Component {
 
   render() {
     const {
-      messages, currentUserId, userData, token, selectedChat, usersNotReadMessages
+      messages, currentUserId, userData, token, selectedChat, usersNotReadMessages, totalMessagesCount
     } = this.props;
-    const { currentChatUsers, blockHeight, userPrintingInformation } = this.state;
+    const { currentChatUsers, blockHeight, userPrintingInformation, currentOffset } = this.state;
     const messageListHeight = blockHeight - CHAT_INPUT_HEIGHT - 50;
     const currentChatNotReadMessages = usersNotReadMessages.find(item => item.chatId === selectedChat);
 
@@ -180,6 +182,17 @@ export default class ChatContainer extends Component {
           style={{ height: `${messageListHeight}px` }}
           id="messages-list-container"
         >
+          {currentOffset < totalMessagesCount
+            ? (
+              <div
+                className="load-more-messages-button"
+                onClick={() => this.handlePreviousMessagesLoad()}
+              >
+                Завантажити старіші повідомлення
+              </div>
+            )
+            : ''
+          }
           {messages && messages.length
             ? (
               messages

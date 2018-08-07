@@ -41,6 +41,7 @@ const initialState = {
   chatsData: [],
   chatsUsers: [],
   messages: [],
+  totalMessagesCount: 0,
   selectedChat: null,
   loading: false,
   loaded: false,
@@ -135,6 +136,7 @@ export default function reducer(state = initialState, action = {}) {
         loading: false,
         loaded: true,
         messages: Array.isArray(action.result.data) ? action.result.data : [action.result.data],
+        totalMessagesCount: action.result.meta.total,
         error: null
       };
     }
