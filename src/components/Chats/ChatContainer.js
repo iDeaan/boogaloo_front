@@ -184,11 +184,14 @@ export default class ChatContainer extends Component {
         >
           {currentOffset < totalMessagesCount
             ? (
-              <div
-                className="load-more-messages-button"
-                onClick={() => this.handlePreviousMessagesLoad()}
-              >
-                Завантажити старіші повідомлення
+              <div className="load-more-messages-button-container">
+                <div
+                  className="load-more-messages-button"
+                  onClick={() => this.handlePreviousMessagesLoad()}
+                >
+                  <i className="fa fa-angle-up" />
+                  Завантажити старіші повідомлення
+                </div>
               </div>
             )
             : ''

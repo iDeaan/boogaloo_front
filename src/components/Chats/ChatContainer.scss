@@ -57,6 +57,29 @@
       .message-item.own-message {
         justify-content: flex-end;
       }
+
+      .load-more-messages-button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+
+        .load-more-messages-button {
+          padding: 5px 20px;
+          background: #d0d0d6;
+          border: solid 1px #ff8787;
+          transition: background-color 0.5s;
+          cursor: pointer;
+
+          i {
+            margin-right: 10px;
+          }
+
+          &:hover {
+            background-color: #ababd8;
+          }
+        }
+      }
     }
 
     .user-typing-message-container {
