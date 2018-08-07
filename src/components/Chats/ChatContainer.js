@@ -72,10 +72,10 @@ export default class ChatContainer extends Component {
       this.loadMessagesList(this.props);
       this.setCurrentChatUsers(this.props);
     }
-    // if (document) {
-    //   const messagesListContainer = document.getElementById('messages-list-container');
-    //   messagesListContainer.addEventListener('scroll', event => this.handleMessagesContainerScroll(event));
-    // }
+    if (document) {
+      const messagesListContainer = document.getElementById('messages-list-container');
+      messagesListContainer.addEventListener('scroll', event => this.handleMessagesContainerScroll(event));
+    }
     this.setBlockHeight();
     this.scrollToBottom();
   }
@@ -96,6 +96,15 @@ export default class ChatContainer extends Component {
 
   componentDidUpdate() {
     this.scrollToBottom();
+  }
+
+  handleMessagesContainerScroll(event) {
+    const { isToIgnoreScroll } = this.state;
+    const element = event.target;
+
+    if (element.scrollHeight - element.scrollTop === element.offsetHeight && isToIgnoreScroll) {
+      this.setState({ isToIgnoreScroll: false });
+    }
   }
 
   handlePreviousMessagesLoad() {
