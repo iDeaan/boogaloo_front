@@ -210,7 +210,9 @@ export default class ChatContainer extends Component {
     const { token, selectedChat } = this.props;
     const { selectedMessagesList } = this.state;
 
-    dispatch(deleteMessages(token, selectedChat, selectedMessagesList));
+    dispatch(deleteMessages(token, selectedChat, selectedMessagesList)).then(() => {
+      this.setState({ selectedMessagesList: [] });
+    });
   }
 
   render() {

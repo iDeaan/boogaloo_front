@@ -87,7 +87,13 @@ export default class Message extends PureComponent {
     return (
       <div
         className={`message-item ${isNotRead || isSelected ? 'not-read-message' : ''}`}
-        onClick={() => onClick(message.id)}
+        onClick={() => {
+          if (message.user_id === currentUserId) {
+            onClick(message.id);
+          } else {
+            alert('Неможливо керувати не своїми повідомленнями!');
+          }
+        }}
       >
         <div className="left-part">
           {isToShowUserInitials
