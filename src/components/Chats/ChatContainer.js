@@ -59,7 +59,8 @@ export default class ChatContainer extends Component {
       userPrintingInformation: false,
       isToUseInstantScroll: true,
       currentOffset: 50,
-      isToIgnoreScroll: false
+      isToIgnoreScroll: false,
+      selectedMessagesList: []
     };
 
     userPrintingMessageInChatStart(data => this.userPrintingMessageStart(data));
@@ -175,17 +176,64 @@ export default class ChatContainer extends Component {
     }
   }
 
+  handleMessageClick(messageId) {
+    const { selectedMessagesList } = this.state;
+    if (selectedMessagesList.includes(messageId)) {
+      this.setState({ selectedMessagesList: selectedMessagesList.filter(item => item !== messageId) });
+    } else {
+      this.setState({ selectedMessagesList: [...selectedMessagesList, messageId] });
+    }
+  }
+
+  handleMessageEdit() {
+    const { selectedMessagesList } = this.state;
+
+    if (selectedMessagesList.length === 1) {
+      console.log('selectedMessagesList edit', selectedMessagesList);
+    }
+  }
+
+  handleMessageDelete() {
+    const { selectedMessagesList } = this.state;
+
+    console.log('selectedMessagesList delete', selectedMessagesList);
+  }
+
   render() {
     const {
       messages, currentUserId, userData, token, selectedChat, usersNotReadMessages, totalMessagesCount
     } = this.props;
-    const { currentChatUsers, blockHeight, userPrintingInformation, currentOffset } = this.state;
+    const { currentChatUsers, blockHeight, userPrintingInformation, currentOffset, selectedMessagesList } = this.state;
     const messageListHeight = blockHeight - CHAT_INPUT_HEIGHT - 50;
     const currentChatNotReadMessages = usersNotReadMessages.find(item => item.chatId === selectedChat);
 
     require('./ChatContainer.scss');
     return (
       <div className="chats-data chats-messages" id="chat-content-container">
+        <div className={`messages-actions-list ${selectedMessagesList.length ? 'displayed' : ''}`}>
+          {selectedMessagesList.length === 1
+            ? (
+              <div
+                className="action-button edit-button"
+                onClick={() => this.handleMessageEdit()}
+              >
+                <i className="fa fa-edit" />
+                <div className="text">Редагувати</div>
+              </div>
+            ) : ''
+          }
+          {selectedMessagesList.length
+            ? (
+              <div
+                className="action-button delete-button"
+                onClick={() => this.handleMessageDelete()}
+              >
+                <i className="fa fa-trash" />
+                <div className="text">Видалити</div>
+              </div>
+            ) : ''
+          }
+        </div>
         <div
           className="messages-list"
           style={{ height: `${messageListHeight}px` }}
@@ -225,6 +273,8 @@ export default class ChatContainer extends Component {
                       currentUserData={userData && userData[0] ? userData[0] : null}
                       isToShowUserInitials={isToShowUserInitials}
                       isNotRead={currentChatNotReadMessages && currentChatNotReadMessages.idsList.includes(message.id)}
+                      onClick={(value) => this.handleMessageClick(value)}
+                      isSelected={selectedMessagesList.includes(message.id)}
                     />
                   );
                 })

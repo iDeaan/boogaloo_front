@@ -8,7 +8,9 @@ export default class Message extends PureComponent {
     currentUserData: PropTypes.object,
     isToShowUserInitials: PropTypes.bool,
     isNotRead: PropTypes.bool,
-    message: PropTypes.object
+    isSelected: PropTypes.bool,
+    message: PropTypes.object,
+    onClick: PropTypes.func
   };
 
   static defaultProps = {
@@ -17,7 +19,9 @@ export default class Message extends PureComponent {
     currentUserData: {},
     isToShowUserInitials: true,
     isNotRead: true,
-    message: {}
+    isSelected: false,
+    message: {},
+    onClick: () => {}
   };
 
   returnMessageData = (message) => {
@@ -59,7 +63,7 @@ export default class Message extends PureComponent {
 
   render() {
     const {
-      message, currentUserId, currentChatUsers, currentUserData, isToShowUserInitials, isNotRead
+      message, currentUserId, currentChatUsers, currentUserData, isToShowUserInitials, isNotRead, onClick, isSelected
     } = this.props;
 
     let userAvatar = null;
@@ -81,7 +85,10 @@ export default class Message extends PureComponent {
     }
 
     return (
-      <div className={`message-item ${isNotRead ? 'not-read-message' : ''}`}>
+      <div
+        className={`message-item ${isNotRead || isSelected ? 'not-read-message' : ''}`}
+        onClick={() => onClick(message.id)}
+      >
         <div className="left-part">
           {isToShowUserInitials
             ? (
