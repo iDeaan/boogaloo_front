@@ -28,6 +28,10 @@ export function newMessage(cb) {
   socket.on('new_message', message => cb(message));
 }
 
+export function deletedMessage(cb) {
+  socket.on('deleted_message', message => cb(message));
+}
+
 export function connectNewUser(nextProps) {
   socket.emit('connect_new_user', {
     userId: nextProps.currentUserId,

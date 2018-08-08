@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   loadMessages,
-  loadPreviousMessages
+  loadPreviousMessages,
+  deleteMessages,
+  deleteMessagesFromStore
 } from '../../redux/modules/chats';
 import {
   userPrintingMessageInChatStart,
-  userPrintingMessageInChatStop
+  userPrintingMessageInChatStop,
+  deletedMessage
 } from '../../helpers/sockets';
 import AnimatedDots from '../AdditionalComponents/AnimatedDots';
 import MessageInput from './MessageInput';
@@ -65,6 +68,7 @@ export default class ChatContainer extends Component {
 
     userPrintingMessageInChatStart(data => this.userPrintingMessageStart(data));
     userPrintingMessageInChatStop(data => this.userPrintingMessageStop(data));
+    deletedMessage(data => this.deletedMessageHandle(data));
   }
 
   componentDidMount() {
@@ -176,6 +180,14 @@ export default class ChatContainer extends Component {
     }
   }
 
+  deletedMessageHandle(messagesIds) {
+    const { dispatch } = this.context.store;
+    if (messagesIds && messagesIds.idsList) {
+      const messagesIdsList = messagesIds.idsList.split(',').map(Number);
+      dispatch(deleteMessagesFromStore(messagesIdsList));
+    }
+  }
+
   handleMessageClick(messageId) {
     const { selectedMessagesList } = this.state;
     if (selectedMessagesList.includes(messageId)) {
@@ -194,9 +206,11 @@ export default class ChatContainer extends Component {
   }
 
   handleMessageDelete() {
+    const { dispatch } = this.context.store;
+    const { token, selectedChat } = this.props;
     const { selectedMessagesList } = this.state;
 
-    console.log('selectedMessagesList delete', selectedMessagesList);
+    dispatch(deleteMessages(token, selectedChat, selectedMessagesList));
   }
 
   render() {

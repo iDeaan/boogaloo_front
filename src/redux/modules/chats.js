@@ -27,6 +27,7 @@ const SEND_MESSAGE_SUCCESS = 'boogaloo/chats/SEND_MESSAGE_SUCCESS';
 const SEND_MESSAGE_FAIL = 'boogaloo/chats/SEND_MESSAGE_FAIL';
 
 const ADD_MESSAGES = 'boogaloo/chats/ADD_MESSAGES';
+const DELETE_MESSAGES = 'boogaloo/chats/DELETE_MESSAGES';
 
 const ADD_CHAT_TO_USER = 'boogaloo/chats/ADD_CHAT_TO_USER';
 const EDIT_CHAT = 'boogaloo/chats/EDIT_CHAT';
@@ -35,6 +36,10 @@ const EDIT_CHAT_LM = 'boogaloo/chats/EDIT_CHAT_LM';
 const CHAT_CREATE_START = 'boogaloo/chats/CHAT_CREATE_START';
 const CHAT_CREATE_SUCCESS = 'boogaloo/chats/CHAT_CREATE_SUCCESS';
 const CHAT_CREATE_FAIL = 'boogaloo/chats/CHAT_CREATE_FAIL';
+
+const MESSAGES_DELETE_START = 'boogaloo/chats/MESSAGES_DELETE_START';
+const MESSAGES_DELETE_SUCCESS = 'boogaloo/chats/MESSAGES_DELETE_SUCCESS';
+const MESSAGES_DELETE_FAIL = 'boogaloo/chats/MESSAGES_DELETE_FAIL';
 
 const initialState = {
   chatsList: [],
@@ -254,6 +259,24 @@ export default function reducer(state = initialState, action = {}) {
         chatsList: [...state.chatsList, action.newChatId],
         error: action.error
       };
+    case MESSAGES_DELETE_START:
+      return {
+        ...state
+      };
+    case MESSAGES_DELETE_SUCCESS:
+      return {
+        ...state,
+        messages: state.messages.filter(item => !action.messagesIds.includes(item.id))
+      };
+    case MESSAGES_DELETE_FAIL:
+      return {
+        ...state
+      };
+    case DELETE_MESSAGES:
+      return {
+        ...state,
+        messages: state.messages.filter(item => !action.messagesIds.includes(item.id))
+      };
     default:
       return state;
   }
@@ -308,6 +331,13 @@ export function addNewMessages(messages) {
   };
 }
 
+export function deleteMessagesFromStore(messagesIds) {
+  return {
+    type: DELETE_MESSAGES,
+    messagesIds
+  };
+}
+
 export function editChatOrder(chatId, messageTime) {
   return {
     type: EDIT_CHAT,
@@ -353,5 +383,13 @@ export function addNewChatToUser(newChatId) {
   return {
     type: ADD_CHAT_TO_USER,
     newChatId
+  };
+}
+
+export function deleteMessages(token, chatId, messagesIds) {
+  return {
+    types: [MESSAGES_DELETE_START, MESSAGES_DELETE_SUCCESS, MESSAGES_DELETE_FAIL],
+    promise: client => client.del(`${config.apiHost}/chats_messages?token=${token}&chatId=${chatId}&messagesIds=${messagesIds.join(',')}`),
+    messagesIds
   };
 }
