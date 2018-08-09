@@ -41,6 +41,10 @@ const MESSAGES_DELETE_START = 'boogaloo/chats/MESSAGES_DELETE_START';
 const MESSAGES_DELETE_SUCCESS = 'boogaloo/chats/MESSAGES_DELETE_SUCCESS';
 const MESSAGES_DELETE_FAIL = 'boogaloo/chats/MESSAGES_DELETE_FAIL';
 
+const MESSAGE_EDIT_START = 'boogaloo/chats/MESSAGE_EDIT_START';
+const MESSAGE_EDIT_SUCCESS = 'boogaloo/chats/MESSAGE_EDIT_SUCCESS';
+const MESSAGE_EDIT_FAIL = 'boogaloo/chats/MESSAGE_EDIT_FAIL';
+
 const initialState = {
   chatsList: [],
   chatsData: [],
@@ -277,6 +281,25 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         messages: state.messages.filter(item => !action.messagesIds.includes(item.id))
       };
+    case MESSAGE_EDIT_START:
+      return {
+        ...state
+      };
+    case MESSAGE_EDIT_SUCCESS: {
+      let editableMessage = state.messages.find(item => item.id === action.messageId);
+      editableMessage.message = action.messageData;
+
+      let restMessagesList = state.messages.filter(item => item.id !== action.messageId);
+
+      return {
+        ...state,
+        messages: [...restMessagesList, editableMessage]
+      };
+    }
+    case MESSAGE_EDIT_FAIL:
+      return {
+        ...state
+      };
     default:
       return state;
   }
@@ -391,5 +414,23 @@ export function deleteMessages(token, chatId, messagesIds) {
     types: [MESSAGES_DELETE_START, MESSAGES_DELETE_SUCCESS, MESSAGES_DELETE_FAIL],
     promise: client => client.del(`${config.apiHost}/chats_messages?token=${token}&chatId=${chatId}&messagesIds=${messagesIds.join(',')}`),
     messagesIds
+  };
+}
+
+export function editMessage(token, chatId, messageId, message) {
+  return {
+    types: [MESSAGE_EDIT_START, MESSAGE_EDIT_SUCCESS, MESSAGE_EDIT_FAIL],
+    promise: client => client.put(
+      `${config.apiHost}/chats_messages?token=${token}`,
+      {
+        data: JSON.stringify({
+          id: messageId,
+          message
+        }),
+        headers: [{ name: 'Content-Type', value: 'application/json' }]
+      }
+    ),
+    messageId,
+    messageData: message
   };
 }

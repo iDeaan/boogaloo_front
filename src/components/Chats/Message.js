@@ -13,7 +13,8 @@ export default class Message extends PureComponent {
     isEditable: PropTypes.bool,
     message: PropTypes.object,
     onClick: PropTypes.func,
-    onCancelEditing: PropTypes.func
+    onCancelEditing: PropTypes.func,
+    onSubmitEditing: PropTypes.func
   };
 
   static defaultProps = {
@@ -26,7 +27,8 @@ export default class Message extends PureComponent {
     isEditable: false,
     message: {},
     onClick: () => {},
-    onCancelEditing: () => {}
+    onCancelEditing: () => {},
+    onSubmitEditing: () => {}
   };
 
   returnMessageData = (message) => {
@@ -69,7 +71,7 @@ export default class Message extends PureComponent {
   render() {
     const {
       message, currentUserId, currentChatUsers, currentUserData, isToShowUserInitials,
-      isNotRead, onClick, isSelected, isEditable, onCancelEditing
+      isNotRead, onClick, isSelected, isEditable, onCancelEditing, onSubmitEditing
     } = this.props;
 
     let userAvatar = null;
@@ -138,6 +140,9 @@ export default class Message extends PureComponent {
               <MessageEdit
                 messageValue={message.message}
                 onCancelEditing={() => onCancelEditing()}
+                onSubmitEditing={(value) => {
+                  onSubmitEditing(value);
+                }}
               />
             )
             : ''

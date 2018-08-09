@@ -11,6 +11,7 @@ export default class MessageInput extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func,
     onCancelEditing: PropTypes.func,
+    onSubmitEditing: PropTypes.func,
     reset: PropTypes.func,
     messageValue: PropTypes.string
   };
@@ -33,7 +34,8 @@ export default class MessageInput extends Component {
   }
 
   handleSubmit(values) {
-    console.log('submitValues', values);
+    const { onSubmitEditing } = this.props;
+    onSubmitEditing(values);
   }
 
   handleKeyDown = (e, cb) => {
@@ -77,6 +79,7 @@ export default class MessageInput extends Component {
               text="Зберегти"
               className="submit-button"
               submitButton
+              onClick={handleSubmit}
             />
           </div>
         </form>

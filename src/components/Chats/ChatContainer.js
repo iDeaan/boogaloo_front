@@ -5,7 +5,8 @@ import {
   loadMessages,
   loadPreviousMessages,
   deleteMessages,
-  deleteMessagesFromStore
+  deleteMessagesFromStore,
+  editMessage
 } from '../../redux/modules/chats';
 import {
   userPrintingMessageInChatStart,
@@ -228,6 +229,16 @@ export default class ChatContainer extends Component {
     this.setState({ isEditingMessage: false });
   }
 
+  handleMessageSubmitEditing(values) {
+    const { dispatch } = this.context.store;
+    const { token, selectedChat } = this.props;
+    const { selectedMessagesList } = this.state;
+
+    const editableMessageId = selectedMessagesList && selectedMessagesList.length && selectedMessagesList[0];
+
+    dispatch(editMessage(token, selectedChat, editableMessageId, values.message));
+  }
+
   render() {
     const {
       messages, currentUserId, userData, token, selectedChat, usersNotReadMessages, totalMessagesCount
@@ -310,6 +321,9 @@ export default class ChatContainer extends Component {
                       isSelected={selectedMessagesList.includes(message.id)}
                       isEditable={isEditingMessage && editableMessageId === message.id}
                       onCancelEditing={() => this.handleMessageCancelEditing()}
+                      onSubmitEditing={(value) => {
+                        this.handleMessageSubmitEditing(value);
+                      }}
                     />
                   );
                 })
