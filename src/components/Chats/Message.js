@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import MessageEdit from './MessageEdit';
 
 export default class Message extends PureComponent {
   static propTypes = {
@@ -9,8 +10,10 @@ export default class Message extends PureComponent {
     isToShowUserInitials: PropTypes.bool,
     isNotRead: PropTypes.bool,
     isSelected: PropTypes.bool,
+    isEditable: PropTypes.bool,
     message: PropTypes.object,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    onCancelEditing: PropTypes.func
   };
 
   static defaultProps = {
@@ -20,8 +23,10 @@ export default class Message extends PureComponent {
     isToShowUserInitials: true,
     isNotRead: true,
     isSelected: false,
+    isEditable: false,
     message: {},
-    onClick: () => {}
+    onClick: () => {},
+    onCancelEditing: () => {}
   };
 
   returnMessageData = (message) => {
@@ -63,7 +68,8 @@ export default class Message extends PureComponent {
 
   render() {
     const {
-      message, currentUserId, currentChatUsers, currentUserData, isToShowUserInitials, isNotRead, onClick, isSelected
+      message, currentUserId, currentChatUsers, currentUserData, isToShowUserInitials,
+      isNotRead, onClick, isSelected, isEditable, onCancelEditing
     } = this.props;
 
     let userAvatar = null;
@@ -86,7 +92,7 @@ export default class Message extends PureComponent {
 
     return (
       <div
-        className={`message-item ${isNotRead || isSelected ? 'not-read-message' : ''}`}
+        className={`message-item ${isNotRead || isSelected ? 'not-read-message' : ''} ${isEditable ? 'editable-message' : ''}`}
         onClick={() => {
           if (message.user_id === currentUserId) {
             onClick(message.id);
@@ -127,6 +133,15 @@ export default class Message extends PureComponent {
           <div className="message">
             {this.returnMessageData(message.message)}
           </div>
+          {isEditable
+            ? (
+              <MessageEdit
+                messageValue={message.message}
+                onCancelEditing={() => onCancelEditing()}
+              />
+            )
+            : ''
+          }
         </div>
       </div>
     );

@@ -63,7 +63,8 @@ export default class ChatContainer extends Component {
       isToUseInstantScroll: true,
       currentOffset: 50,
       isToIgnoreScroll: false,
-      selectedMessagesList: []
+      selectedMessagesList: [],
+      isEditingMessage: false
     };
 
     userPrintingMessageInChatStart(data => this.userPrintingMessageStart(data));
@@ -189,11 +190,19 @@ export default class ChatContainer extends Component {
   }
 
   handleMessageClick(messageId) {
-    const { selectedMessagesList } = this.state;
+    const { selectedMessagesList, isEditingMessage } = this.state;
     if (selectedMessagesList.includes(messageId)) {
-      this.setState({ selectedMessagesList: selectedMessagesList.filter(item => item !== messageId) });
+      const newSelectedMessagesList = selectedMessagesList.filter(item => item !== messageId);
+      this.setState({
+        selectedMessagesList: newSelectedMessagesList,
+        isEditingMessage: newSelectedMessagesList.length === 0 ? false : isEditingMessage
+      });
     } else {
-      this.setState({ selectedMessagesList: [...selectedMessagesList, messageId] });
+      const newSelectedMessagesList = [...selectedMessagesList, messageId];
+      this.setState({
+        selectedMessagesList: newSelectedMessagesList,
+        isEditingMessage: newSelectedMessagesList.length > 1 ? false : isEditingMessage
+      });
     }
   }
 
@@ -201,7 +210,7 @@ export default class ChatContainer extends Component {
     const { selectedMessagesList } = this.state;
 
     if (selectedMessagesList.length === 1) {
-      console.log('selectedMessagesList edit', selectedMessagesList);
+      this.setState({ isEditingMessage: true });
     }
   }
 
@@ -215,14 +224,22 @@ export default class ChatContainer extends Component {
     });
   }
 
+  handleMessageCancelEditing() {
+    this.setState({ isEditingMessage: false });
+  }
+
   render() {
     const {
       messages, currentUserId, userData, token, selectedChat, usersNotReadMessages, totalMessagesCount
     } = this.props;
-    const { currentChatUsers, blockHeight, userPrintingInformation, currentOffset, selectedMessagesList } = this.state;
-    const messageListHeight = blockHeight - CHAT_INPUT_HEIGHT - 50;
+    const {
+      currentChatUsers, blockHeight, userPrintingInformation, currentOffset, selectedMessagesList, isEditingMessage
+    } = this.state;
+
+    const editableMessageId = selectedMessagesList && selectedMessagesList.length && selectedMessagesList[0];
     const currentChatNotReadMessages = usersNotReadMessages.find(item => item.chatId === selectedChat);
 
+    const messageListHeight = blockHeight - CHAT_INPUT_HEIGHT - 50;
     require('./ChatContainer.scss');
     return (
       <div className="chats-data chats-messages" id="chat-content-container">
@@ -291,6 +308,8 @@ export default class ChatContainer extends Component {
                       isNotRead={currentChatNotReadMessages && currentChatNotReadMessages.idsList.includes(message.id)}
                       onClick={(value) => this.handleMessageClick(value)}
                       isSelected={selectedMessagesList.includes(message.id)}
+                      isEditable={isEditingMessage && editableMessageId === message.id}
+                      onCancelEditing={() => this.handleMessageCancelEditing()}
                     />
                   );
                 })

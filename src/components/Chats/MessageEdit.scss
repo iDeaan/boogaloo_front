@@ -1,0 +1,34 @@
+:global {
+  .editable-message-data.edit-message-container {
+    form {
+      padding-right: 10px;
+
+      .data-input {
+        width: 100%;
+        height: 60px;
+        margin: 10px 0;
+        padding: 10px;
+      }
+
+      .message-actions {
+        display: flex;
+
+        button {
+          width: initial;
+          padding: 0 40px;
+          margin-right: 20px;
+
+          &.reset-button {
+            background: white;
+            color: black;
+            border: solid 1px;
+
+            &:hover {
+              background-color: #e6e6e6;
+            }
+          }
+        }
+      }
+    }
+  }
+}
